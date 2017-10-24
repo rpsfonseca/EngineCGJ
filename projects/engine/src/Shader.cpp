@@ -51,21 +51,21 @@ Shader::Shader(const GLchar* vertexPath, const GLchar* fragmentPath)
 	glShaderSource(vertex, 1, &vertexShaderSource, NULL);
 	glCompileShader(vertex);
 	// Print compile errors if any
-	PrintCompileErrors(0, vertex, infoLog);
+	printCompileErrors(0, vertex, infoLog);
 
 	// Fragment shader
 	fragment = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fragment, 1, &fragmentShaderSource, NULL);
 	glCompileShader(fragment);
 	// Print compile errors if any
-	PrintCompileErrors(1, fragment, infoLog);
+	printCompileErrors(1, fragment, infoLog);
 
 	shaderID = glCreateProgram();
 	glAttachShader(shaderID, vertex);
 	glAttachShader(shaderID, fragment);
 	glLinkProgram(shaderID);
 	// Print linking errors if any
-	PrintLinkingErrors(infoLog);
+	printLinkingErrors(infoLog);
 
 	// Delete the shaders as they're linked into our program now and no longer necessery
 	glDeleteShader(vertex);
@@ -88,63 +88,63 @@ void Shader::Compile(const GLchar* vsCode, const GLchar* fsCode)
 	glShaderSource(vertex, 1, &vsCode, NULL);
 	glCompileShader(vertex);
 	// Print compile errors if any
-	PrintCompileErrors(0, vertex, infoLog);
+	printCompileErrors(0, vertex, infoLog);
 
 	// Fragment shader
 	fragment = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fragment, 1, &fsCode, NULL);
 	glCompileShader(fragment);
 	// Print compile errors if any
-	PrintCompileErrors(1, fragment, infoLog);
+	printCompileErrors(1, fragment, infoLog);
 
 	shaderID = glCreateProgram();
 	glAttachShader(shaderID, vertex);
 	glAttachShader(shaderID, fragment);
 	glLinkProgram(shaderID);
 	// Print linking errors if any
-	PrintLinkingErrors(infoLog);
+	printLinkingErrors(infoLog);
 
 	// Delete the shaders as they're linked into our program now and no longer necessery
 	glDeleteShader(vertex);
 	glDeleteShader(fragment);
 }
 
-Shader& Shader::Use()
+Shader& Shader::use()
 {
 	glUseProgram(shaderID);
 	return *this;
 }
 
-void Shader::DeleteProgram()
+void Shader::deleteProgram()
 {
 	glDeleteProgram(shaderID);
 }
 
-void Shader::SetInteger(const GLchar* field, GLint value)
+void Shader::setInteger(const GLchar* field, GLint value)
 {
 	GLint loc = glGetUniformLocation(shaderID, field);
 	glUniform1i(loc, value);
 }
 
-void Shader::SetFloat(const GLchar* field, GLfloat value)
+void Shader::setFloat(const GLchar* field, GLfloat value)
 {
 	GLfloat loc = glGetUniformLocation(shaderID, field);
 	glUniform1f(loc, value);
 }
 
-void Shader::SetMat4(const GLchar* field, const math::Mat4& mat)
+void Shader::setMat4(const GLchar* field, const math::Mat4& mat)
 {
 	GLint loc = glGetUniformLocation(shaderID, field);
 	glUniformMatrix4fv(loc, 1, GL_FALSE, &mat.matrix[0]);
 }
 
-void Shader::SetVec3(const GLchar* field, const math::Vec3& vector)
+void Shader::setVec3(const GLchar* field, const math::Vec3& vector)
 {
 	GLint loc = glGetUniformLocation(shaderID, field);
 	glUniform3f(loc, vector.x, vector.y, vector.z);
 }
 
-void Shader::PrintCompileErrors(int vOrF, GLuint shader, GLchar* infoLog)
+void Shader::printCompileErrors(int vOrF, GLuint shader, GLchar* infoLog)
 {
 	GLint success;
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
@@ -162,7 +162,7 @@ void Shader::PrintCompileErrors(int vOrF, GLuint shader, GLchar* infoLog)
 	}
 }
 
-void Shader::PrintLinkingErrors(GLchar* infoLog)
+void Shader::printLinkingErrors(GLchar* infoLog)
 {
 	GLint success = 0;
 	glGetProgramiv(shaderID, GL_LINK_STATUS, (int *)&success);

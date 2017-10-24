@@ -37,14 +37,21 @@ void checkOpenGLError(std::string error)
 void Renderer::draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	currentShader.Use();
+	currentShader.use();
 	for (Mesh& m : meshes)
 	{
 		glBindVertexArray(m.getVao());
 
 		modelMatrix = Mat4();
+		modelMatrix.matrix[0] = 1.0f;
+		modelMatrix.matrix[5] = 1.0f;
+		modelMatrix.matrix[10] = 1.0f;
+		modelMatrix.matrix[15] = 1.0f;
+		modelMatrix = modelMatrix * modelMatrix.ScaleMatrix(m.getScale());
+		modelMatrix = modelMatrix * modelMatrix.RotationMatrixAboutAxis(Axis::AxisZ, -m.getRotation());
 		modelMatrix = modelMatrix * modelMatrix.TranslationMatrix(m.getPosition());
-		currentShader.SetMat4("Matrix", modelMatrix);
+
+		currentShader.setMat4("Matrix", modelMatrix);
 
 		glDrawElements(GL_TRIANGLES, m.getIndicesSize(), GL_UNSIGNED_INT, (GLvoid*)0);
 	}
@@ -56,23 +63,87 @@ void Renderer::setupRenderer()
 	checkOpenGLInfo();
 
 	currentShader = Shader("../../projects/engine/src/vertex_shader.glsl", "../../projects/engine/src/frag_shader.glsl");
-	checkOpenGLError("ERROR: Could not create VAOs and VBOs.");
+
 	std::vector<Vertex> v(3);
+
 	v = {
-		Vertex{ { 0.25f, 0.25f, 0.0f, 1.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
-		Vertex{ { 0.75f, 0.25f, 0.0f, 1.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
-		Vertex{ { 0.50f, 0.75f, 0.0f, 1.0f }, { 0.0f, 0.0f, 1.0f, 1.0f } }
+		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
+		Vertex{ { 0.5f, 0.5f, 0.0f, 1.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
+		Vertex{ { -0.5f, 0.5f, 0.0f, 1.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } }
 	};
 	Mesh triangle = Mesh(v, { 0,1,2 });
+	triangle.setPosition(Vec3(0.0f, 0.0f, 0.0f));
+	triangle.setRotation(-45.0f);
+	triangle.setScale(Vec3(1.0f));
 	meshes.push_back(triangle);
 
 	v = {
-		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 1.0f, 1.0f, 1.0f, 1.0f } },
-		Vertex{ { 1.0f, 0.0f, 0.0f, 1.0f },{ 1.0f, 1.0f, 1.0f, 1.0f } },
-		Vertex{ { 0.0f, 0.25f, 0.0f, 1.0f },{ 1.0f, 1.0f, 1.0f, 1.0f } }
+		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 1.0f, 0.0f, 0.0f, 1.0f } },
+		Vertex{ { 0.5f, 0.5f, 0.0f, 1.0f },{ 1.0f, 0.0f, 0.0f, 1.0f } },
+		Vertex{ { -0.5f, 0.5f, 0.0f, 1.0f },{ 1.0f, 0.0f, 0.0f, 1.0f } }
 	};
 	Mesh triangle2 = Mesh(v, { 0,1,2 });
+	triangle2.setPosition(Vec3(0.0f, 0.0f, 0.0f));
+	triangle2.setRotation(45.0f);
+	triangle2.setScale(Vec3(1.0f));
 	meshes.push_back(triangle2);
+
+	v = {
+		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 1.0f, 1.0f, 1.0f, 1.0f } },
+		Vertex{ { 0.5f, 0.5f, 0.0f, 1.0f },{ 1.0f, 1.0f, 1.0f, 1.0f } },
+		Vertex{ { -0.5f, 0.5f, 0.0f, 1.0f },{ 1.0f, 1.0f, 1.0f, 1.0f } }
+	};
+	Mesh triangle3 = Mesh(v, { 0,1,2 });
+	triangle3.setPosition(Vec3(0.0f, 0.0f, 0.0f));
+	triangle3.setRotation(-135.0f);
+	triangle3.setScale(Vec3(0.5f));
+	meshes.push_back(triangle3);
+
+	v = {
+		Vertex{ { -0.5f, 0.0f, 0.0f, 1.0f },{ 0.0f, 0.0f, 0.0f, 1.0f } },
+		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.0f, 0.0f, 0.0f, 1.0f } },
+		Vertex{ { -0.25f, 0.25f, 0.0f, 1.0f },{ 0.0f, 0.0f, 0.0f, 1.0f } },
+		Vertex{ { 0.25f, 0.25f, 0.0f, 1.0f },{ 0.0f, 0.0f, 0.0f, 1.0f } }
+	};
+	Mesh paralelogram = Mesh(v, { 0,1,2,2,1,3 });
+	paralelogram.setPosition(Vec3(0.0f, -0.5f, 0.0f));
+	paralelogram.setRotation(45.0f);
+	paralelogram.setScale(Vec3(1.0f));
+	meshes.push_back(paralelogram);
+
+	v = {
+		Vertex{ { -0.5f, -0.5f, 0.0f, 1.0f },{ 0.0f, 0.0f, 1.0f, 1.0f } },
+		Vertex{ { 0.5f, -0.5f, 0.0f, 1.0f },{ 0.0f, 0.0f, 1.0f, 1.0f } },
+		Vertex{ { -0.5f, 0.5f, 0.0f, 1.0f },{ 0.0f, 0.0f, 1.0f, 1.0f } },
+		Vertex{ { 0.5f, 0.5f, 0.0f, 1.0f },{ 0.0f, 0.0f, 1.0f, 1.0f } }
+	};
+	Mesh square = Mesh(v, { 0,1,2,2,1,3 });
+	square.setPosition(Vec3(0.5f, -0.5f, 0.0f));
+	square.setRotation(0.0f);
+	square.setScale(Vec3(0.35f));
+	meshes.push_back(square);
+
+	v = {
+		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.0f, 1.0f, 1.0f, 1.0f } },
+		Vertex{ { 0.5f, 0.5f, 0.0f, 1.0f },{ 0.0f, 1.0f, 1.0f, 1.0f } },
+		Vertex{ { -0.5f, 0.5f, 0.0f, 1.0f },{ 0.0f, 1.0f, 1.0f, 1.0f } }
+	};
+	Mesh triangle4 = Mesh(v, { 0,1,2 });
+	triangle4.setPosition(Vec3(-0.5f, 0.5f, 0.0f));
+	triangle4.setRotation(135.0f);
+	triangle4.setScale(Vec3(0.5f));
+	meshes.push_back(triangle4);
+
+	v = {
+		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 1.0f, 0.0f, 1.0f, 1.0f } },
+		Vertex{ { 0.5f, 0.5f, 0.0f, 1.0f },{ 1.0f, 0.0f, 1.0f, 1.0f } },
+		Vertex{ { -0.5f, 0.5f, 0.0f, 1.0f },{ 1.0f, 0.0f, 1.0f, 1.0f } }
+	};
+	Mesh triangle5 = Mesh(v, { 0,1,2 });
+	triangle5.setPosition(Vec3(0.0f, -1.0f, 0.0f));
+	triangle5.setRotation(0.0f);
+	triangle5.setScale(Vec3(0.70f));
+	meshes.push_back(triangle5);
 
 	glClearColor(CLEAR_COLOR.x, CLEAR_COLOR.y, CLEAR_COLOR.z, 1.0f);
 	glEnable(GL_DEPTH_TEST);
@@ -83,8 +154,6 @@ void Renderer::setupRenderer()
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 	glFrontFace(GL_CCW);
-
-
 }
 
 void Renderer::reshapeViewport(int _newWidth, int _newHeight)

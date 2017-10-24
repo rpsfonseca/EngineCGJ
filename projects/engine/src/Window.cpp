@@ -5,7 +5,7 @@
 
 #include <iostream>
 
-int Window::HEIGHT = 480;
+int Window::HEIGHT = 640;
 int Window::WIDTH = 640;
 std::string Window::TITLE = "EngineCGJ - Development";
 

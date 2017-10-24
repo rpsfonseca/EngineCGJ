@@ -1,7 +1,8 @@
 #include "Mat4.h"
+#include <iostream>
 namespace math
 {
-	const Mat4 Identity[16] = {
+	const Mat4 Identity = {
 		1.0f, 0.0f, 0.0f, 0.0f,
 		0.0f, 1.0f, 0.0f, 0.0f,
 		0.0f, 0.0f, 1.0f, 0.0f,
@@ -10,10 +11,10 @@ namespace math
 
 	Mat4::Mat4()
 		: matrix{
-		1.0f, 0.0f, 0.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f,
-		0.0f, 0.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f
+		0.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 0.0f
 	}
 	{
 	}
@@ -21,6 +22,30 @@ namespace math
 	Mat4::Mat4(const float& _matrix)
 		: matrix{ _matrix }
 	{
+	}
+
+	Mat4::Mat4(
+		const float& _m0, const float& _m1, const float& _m2, const float& _m3,
+		const float& _m4, const float& _m5, const float& _m6, const float& _m7, 
+		const float& _m8, const float& _m9, const float& _m10, const float& _m11, 
+		const float& _m12, const float& _m13, const float& _m14, const float& _m15)
+	{
+		matrix[0] = _m0;
+		matrix[1] = _m4;
+		matrix[2] = _m8;
+		matrix[3] = _m12;
+		matrix[4] = _m1;
+		matrix[5] = _m5;
+		matrix[6] = _m9;
+		matrix[7] = _m13;
+		matrix[8] = _m2;
+		matrix[9] = _m6;
+		matrix[10] = _m10;
+		matrix[11] = _m14;
+		matrix[12] = _m3;
+		matrix[13] = _m7;
+		matrix[14] = _m11;
+		matrix[15] = _m15;
 	}
 
 
@@ -274,8 +299,8 @@ namespace math
 		Mat4 result;
 
 		float angleRad = angle * 0.0174532925f;
-		float angleCos = std::cos(angleRad);
-		float angleSin = std::sin(angleRad);
+		float angleCos = cos(angleRad);
+		float angleSin = sin(angleRad);
 
 		switch (axis)
 		{
@@ -305,6 +330,7 @@ namespace math
 		}
 
 		result.matrix[15] = 1.0f;
+
 
 		return result;
 	}
@@ -383,6 +409,34 @@ namespace math
 		result.matrix[5] = 1.0f;
 		result.matrix[10] = 1.0f;
 		result.matrix[15] = 1.0f;
+
+		return result;
+	}
+
+	Mat4 Mat4::orthographic(const float& right, const float& left, const float& top, const float& bottom, const float& near, const float& far)
+	{
+		Mat4 result;
+		
+		result.matrix[0] = 2.0f / (right - left);
+		result.matrix[5] = 2.0f / (top - bottom);
+		result.matrix[10] = -2.0f / (far - near);
+		result.matrix[12] = -((right + left) / (right - left));
+		result.matrix[13] = -((top + bottom) / (top - bottom));
+		result.matrix[14] = -((far + near) / (far - near));
+		result.matrix[15] = 1.0f;
+
+		return result;
+	}
+	
+	Mat4 Mat4::perspective(const float& fov, const float& aspectRatio, const float& near, const float& far)
+	{
+		Mat4 result;
+
+		result.matrix[0] = 1.0f / (aspectRatio * std::tan(fov / 2));
+		result.matrix[5] = 1.0f / std::tan(fov / 2);
+		result.matrix[10] = -((far + near) / (far - near));
+		result.matrix[11] = -1.0f;
+		result.matrix[14] = -((2 * far * near) / (far - near));
 
 		return result;
 	}

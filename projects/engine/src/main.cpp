@@ -41,7 +41,7 @@ int main()
 	mat2 += mat2;
 	std::cout << mat2 << std::endl;*/
 
-	Vec3 Vi = Vec3(0.5f, 0.0f, 0.0f);
+	/*Vec3 Vi = Vec3(0.5f, 0.0f, 0.0f);
 	Vec4 Vi4 = Vec4(Vi);
 	Vec3 Ni = Vec3(0.0f, 1.0f, 0.0f);
 
@@ -65,7 +65,7 @@ int main()
 	std::cout << std::endl;
 
 	std::cout << Normal << std::endl;
-	std::cout << Normal * Ni << std::endl;
+	std::cout << Normal * Ni << std::endl;*/
 
 	Application app = Application(3, 3);
 	app.setupApp();

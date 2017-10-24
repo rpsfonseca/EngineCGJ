@@ -7,6 +7,8 @@
 Mesh::Mesh(std::vector<Vertex> _vertices, std::vector<unsigned int> _indices)
 	: vertices(_vertices), indices(_indices)
 {
+	worldPosition = Vec3::Zero;
+	worldRotation = 0.0f;
 	setupMesh();
 }
 
@@ -24,9 +26,7 @@ void Mesh::setupMesh()
 
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	// A great thing about structs is that their memory layout is sequential for all its items.
-	// The effect is that we can simply pass a pointer to the struct and it translates perfectly to a glm::vec3/2 array which
-	// again translates to 3/2 floats which translates to a byte array.
+
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
@@ -67,4 +67,29 @@ unsigned int Mesh::getIndicesSize()
 Vec3 Mesh::getPosition()
 {
 	return worldPosition;
+}
+
+void Mesh::setPosition(Vec3& pos)
+{
+	worldPosition = Vec3(pos);
+}
+
+float Mesh::getRotation()
+{
+	return worldRotation;
+}
+
+void Mesh::setRotation(float rot)
+{
+	worldRotation = rot;
+}
+
+Vec3 Mesh::getScale()
+{
+	return worldScale;
+}
+
+void Mesh::setScale(Vec3& sc)
+{
+	worldScale = Vec3(sc);
 }

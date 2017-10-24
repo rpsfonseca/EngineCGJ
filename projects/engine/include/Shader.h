@@ -23,18 +23,18 @@ public:
 	void Compile(const GLchar* vsCode, const GLchar* fsCode);
 
 	/* Use program */
-	Shader& Use();
-	void DeleteProgram();
+	Shader& use();
+	void deleteProgram();
 
-	void SetName(std::string name) { mName = name; }
+	void setName(std::string name) { mName = name; }
 
-	void SetInteger(const GLchar* field, GLint value);
-	void SetFloat(const GLchar* field, GLfloat value);
-	void SetMat4(const GLchar* field, const math::Mat4& matrix);
-	void SetVec3(const GLchar* field, const math::Vec3& vector);
+	void setInteger(const GLchar* field, GLint value);
+	void setFloat(const GLchar* field, GLfloat value);
+	void setMat4(const GLchar* field, const math::Mat4& matrix);
+	void setVec3(const GLchar* field, const math::Vec3& vector);
 
-	void PrintCompileErrors(int vOrF, GLuint shader, GLchar* infoLog);
-	void PrintLinkingErrors(GLchar* infoLog);
+	void printCompileErrors(int vOrF, GLuint shader, GLchar* infoLog);
+	void printLinkingErrors(GLchar* infoLog);
 	GLuint shaderID;
 
 };
