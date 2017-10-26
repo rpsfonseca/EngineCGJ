@@ -10,12 +10,9 @@ Camera::~Camera()
 
 Mat4 Camera::getViewMatrix()
 {
-	Vec3 zAxis = (Position - Vec3(0.0f)).Normalize();
-	//std::cout << "ZAXIS: " << zAxis << std::endl;
+	Vec3 zAxis = (Position - (Position + Front)).Normalize();
 	Vec3 xAxis = Vec3::CrossProduct(WorldUp, zAxis).Normalize();
-	//std::cout << "XAXIS: " << xAxis << std::endl;
 	Vec3 yAxis = Vec3::CrossProduct(zAxis, xAxis);
-	//std::cout << "YAXIS: " << yAxis << std::endl;
 
 	Mat4 translation = Mat4::TranslationMatrix(-Position);
 	Mat4 rotation = 
@@ -40,7 +37,17 @@ Mat4 Camera::getViewMatrix()
 
 Mat4 Camera::getProjectionMatrix()
 {
-	Mat4 projectionMatrix = Mat4::perspective(30.0f, 640.0f / 480.0f, 1.0f, 10.0f);
+	Mat4 projectionMatrix;
+	if (currentProjectionType == Projection_Type::PERSPECTIVE)
+	{
+		projectionMatrix = Mat4::perspective(30.0f, 640.0f / 480.0f, 0.1f, 100.0f);
+	}
+	else
+	{
+		std::cout << "HELLO" << std::endl;
+		projectionMatrix = Mat4::orthographic(2.0f, -2.0f, 2.0f, -2.0f, 0.1f, 100.0f);
+	}
+
 	return projectionMatrix;
 }
 
@@ -55,4 +62,9 @@ void Camera::updateCameraVectors()
 	// Also re-calculate the Right and Up vector
 	Right = Vec3::CrossProduct(Front, WorldUp).Normalize(); // Normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
 	Up = Vec3::CrossProduct(Right, Front).Normalize();
+}
+
+void Camera::changeProjection()
+{
+	currentProjectionType = currentProjectionType == PERSPECTIVE ? ORTHOGRAPHIC : PERSPECTIVE;
 }

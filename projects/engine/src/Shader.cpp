@@ -144,6 +144,12 @@ void Shader::setVec3(const GLchar* field, const math::Vec3& vector)
 	glUniform3f(loc, vector.x, vector.y, vector.z);
 }
 
+void Shader::setVec4(const GLchar* field, const math::Vec4& vector)
+{
+	GLint loc = glGetUniformLocation(shaderID, field);
+	glUniform4f(loc, vector.x, vector.y, vector.z, vector.w);
+}
+
 void Shader::printCompileErrors(int vOrF, GLuint shader, GLchar* infoLog)
 {
 	GLint success;

@@ -28,7 +28,6 @@ Mesh::~Mesh()
 
 void Mesh::setupMesh()
 {
-	// create buffers/arrays
 	glGenVertexArrays(1, &vao);
 	glGenBuffers(1, &vbo);
 
@@ -101,6 +100,17 @@ void Mesh::setRotation(float rot)
 	worldRotation = rot;
 }
 
+
+Vec3 Mesh::get3DRotation()
+{
+	return world3DRotation;
+}
+
+void Mesh::set3DRotation(Vec3 angle)
+{
+	world3DRotation = angle;
+}
+
 Vec3 Mesh::getScale()
 {
 	return worldScale;
@@ -109,4 +119,15 @@ Vec3 Mesh::getScale()
 void Mesh::setScale(Vec3& sc)
 {
 	worldScale = Vec3(sc);
+}
+
+
+Vec4 Mesh::getColor()
+{
+	return topColor;
+}
+
+void Mesh::setColor(Vec4& sc)
+{
+	topColor = Vec4(sc);
 }

@@ -7,7 +7,7 @@ SceneManager::SceneManager()
 SceneManager::SceneManager(std::shared_ptr<Renderer> rendererRef)
 	: renderer(rendererRef)
 {
-	currentCamera = std::make_shared<Camera>(Vec3(5));
+	currentCamera = std::make_shared<Camera>(Vec3(0.0f, 0.0f, 10.0f));
 
 	//setupSceneManager();
 }
@@ -29,10 +29,27 @@ void SceneManager::setupSceneManager()
 	renderer->uboId = uniformBlockId;
 }
 
+
+
 void SceneManager::renderScene()
 {
 	//std::cout << currentCamera->getViewMatrix() << std::endl;
 	renderer->setProjectionMatrix(currentCamera->getProjectionMatrix());
 	renderer->setViewMatrix(currentCamera->getViewMatrix());
 	renderer->draw();
+}
+
+void SceneManager::changeCameraProjection()
+{
+	currentCamera->changeProjection();
+}
+
+void SceneManager::rotateCamera(float x, float y)
+{
+	currentCamera->processMouseMovement(x, y);
+}
+
+void SceneManager::updateCamera(Camera_Movement movement)
+{
+	currentCamera->processKeyboard(movement, 0.0005f);
 }

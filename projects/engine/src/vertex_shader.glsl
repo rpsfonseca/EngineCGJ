@@ -4,6 +4,7 @@ layout(location = 1) in vec4 bColor;
 
 out vec4 aColor;
 
+uniform vec4 topColor;
 uniform mat4 modelMatrix;
 
 uniform SharedMatrices

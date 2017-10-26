@@ -23,6 +23,11 @@ namespace math
 
 	}
 
+	Vec4::Vec4(const Vec4 & vec4)
+		: x(vec4.x), y(vec4.y), z(vec4.z), w(vec4.w)
+	{
+
+	}
 
 	Vec4::~Vec4()
 	{

@@ -51,9 +51,9 @@ void Renderer::draw()
 		modelMatrix.matrix[5] = 1.0f;
 		modelMatrix.matrix[10] = 1.0f;
 		modelMatrix.matrix[15] = 1.0f;
-		modelMatrix = modelMatrix * modelMatrix.ScaleMatrix(m.getScale());
-		modelMatrix = modelMatrix * modelMatrix.RotationMatrixAboutAxis(Axis::AxisZ, -m.getRotation());
 		modelMatrix = modelMatrix * modelMatrix.TranslationMatrix(m.getPosition());
+		modelMatrix = modelMatrix * modelMatrix.RotationMatrixAboutAxis(Axis::AxisZ, -m.getRotation());
+		modelMatrix = modelMatrix * modelMatrix.ScaleMatrix(m.getScale());
 
 		currentShader.setMat4("modelMatrix", modelMatrix);
 
@@ -173,6 +173,7 @@ void Renderer::setupRenderer()
 	};
 
 	Mesh cube = Mesh(v, { 0,1,2,2,3,0,1,5,6,6,2,1,2,6,7,7,3,2,5,4,7,7,6,5,4,0,3,3,7,4,0,4,5,5,1,0 });*/
+
 	v = {
 		Vertex{ { 0.0f, 0.0f, 1.0f, 1.0f }, { 0.9f, 0.0f, 0.0f, 1.0f }}, // 0 - FRONT
 		Vertex{ { 1.0f, 0.0f, 1.0f, 1.0f },{ 0.9f, 0.0f, 0.0f, 1.0f } }, // 1
@@ -219,11 +220,200 @@ void Renderer::setupRenderer()
 
 	Mesh cube = Mesh(v);
 
-	cube.setPosition(Vec3(0));
+	cube.setPosition(Vec3(-0.5f, -0.65f, 0.0f));
 	cube.setRotation(0.0f);
-	cube.setScale(Vec3(1.0f));
+	cube.setScale(Vec3(0.25f));
+	cube.setColor(Vec4());
 
 	meshes.push_back(cube);
+
+	std::vector<Vertex> Pyramid =
+	{
+		//front
+		Vertex { { 0.0f, 0.0f, 0.25f, 1.0f }, {} },
+		Vertex { { 0.25f, 0.0f, 0.25f, 1.0f },{} },
+		Vertex{ { 0.25f, 0.25f, 0.25f, 1.0f },{} },
+
+		//right
+		Vertex{ { 0.25f, 0.0f, 0.25f, 1.0f },{} },
+		Vertex{ { 0.25f, 0.0f, 0.0f, 1.0f },{} },
+		Vertex{ { 0.25f, 0.25f, 0.0f, 1.0f },{} },
+		Vertex{ { 0.25f, 0.25f, 0.0f, 1.0f },{} },
+		Vertex{ { 0.25f, 0.25f, 0.25f, 1.0f },{} },
+		Vertex{ { 0.25f, 0.0f, 0.25f, 1.0f },{} },
+
+		//back
+		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{} },
+		Vertex{ { 0.25f, 0.25f, 0.0f, 1.0f },{} },
+		Vertex{ { 0.25f, 0.0f, 0.0f, 1.0f },{} },
+
+		//top
+		Vertex{ { 0.0f, 0.0f, 0.25f, 1.0f },{} },
+		Vertex{ { 0.25f, 0.25f, 0.25f, 1.0f },{} },
+		Vertex{ { 0.25f, 0.25f, 0.0f, 1.0f },{} },
+		Vertex{ { 0.25f, 0.25f, 0.0f, 1.0f },{} },
+		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{} },
+		Vertex{ { 0.0f, 0.0f, 0.25f, 1.0f },{} },
+
+		//bottom
+		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{} },
+		Vertex{ { 0.25f, 0.0f, 0.0f, 1.0f },{} },
+		Vertex{ { 0.25f, 0.0f, 0.25f, 1.0f },{} },
+		Vertex{ { 0.25f, 0.0f, 0.25f, 1.0f },{} },
+		Vertex{ { 0.0f, 0.0f, 0.25f, 1.0f },{} },
+		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{} },
+
+	};
+
+	Mesh pyramid = Mesh(Pyramid);
+
+	/*pyramid.setPosition(Vec3(0.0f, 0.25f, 0.0f));
+	pyramid.setRotation(0.0f);
+	pyramid.setScale(Vec3(1.0f));
+	pyramid.setColor(Vec4());
+
+	meshes.push_back(pyramid);*/
+
+	/*std::vector<Vertex> Cube =
+	{
+		//front
+		Vector4(0.0f, 0.0f, 0.25f, 1.0f),
+		Vector4(0.25f, 0.0f, 0.25f, 1.0f),
+		Vector4(0.25f, 0.25f, 0.25f, 1.0f),
+		Vector4(0.25f, 0.25f, 0.25f, 1.0f),
+		Vector4(0.0f, 0.25f, 0.25f, 1.0f),
+		Vector4(0.0f, 0.0f, 0.25f, 1.0f),
+
+		//right
+		Vector4(0.25f, 0.0f, 0.25f, 1.0f),
+		Vector4(0.25f, 0.0f, 0.0f, 1.0f),
+		Vector4(0.25f, 0.25f, 0.0f, 1.0f),
+		Vector4(0.25f, 0.25f, 0.0f, 1.0f),
+		Vector4(0.25f, 0.25f, 0.25f, 1.0f),
+		Vector4(0.25f, 0.0f, 0.25f, 1.0f),
+
+		//top
+		Vector4(0.25f, 0.25f, 0.25f, 1.0f),
+		Vector4(0.25f, 0.25f, 0.0f, 1.0f),
+		Vector4(0.0f, 0.25f, 0.0f, 1.0f),
+		Vector4(0.0f, 0.25f, 0.0f, 1.0f),
+		Vector4(0.0f, 0.25f, 0.25f, 1.0f),
+		Vector4(0.25f, 0.25f, 0.25f, 1.0f),
+
+		//back
+		Vector4(0.25f, 0.0f, 0.0f, 1.0f),
+		Vector4(0.0f, 0.0f, 0.0f, 1.0f),
+		Vector4(0.0f, 0.25f, 0.0f, 1.0f),
+		Vector4(0.0f, 0.25f, 0.0f, 1.0f),
+		Vector4(0.25f, 0.25f, 0.0f, 1.0f),
+		Vector4(0.25f, 0.0f, 0.0f, 1.0f),
+
+		//left
+		Vector4(0.0f, 0.0f, 0.0f, 1.0f),
+		Vector4(0.0f, 0.0f, 0.25f, 1.0f),
+		Vector4(0.0f, 0.25f, 0.25f, 1.0f),
+		Vector4(0.0f, 0.25f, 0.25f, 1.0f),
+		Vector4(0.0f, 0.25f, 0.0f, 1.0f),
+		Vector4(0.0f, 0.0f, 0.0f, 1.0f),
+
+		//bottom
+		Vector4(0.0f, 0.0f, 0.0f, 1.0f),
+		Vector4(0.25f, 0.0f, 0.0f, 1.0f),
+		Vector4(0.25f, 0.0f, 0.25f, 1.0f),
+		Vector4(0.25f, 0.0f, 0.25f, 1.0f),
+		Vector4(0.0f, 0.0f, 0.25f, 1.0f),
+		Vector4(0.0f, 0.0f, 0.0f, 1.0f),
+
+	};*/
+
+	std::vector<Vertex> Parallelipiped =
+	{
+		Vertex{ { 0.0f, 0.0f, 0.25f, 1.0f },{ 0.9f, 0.0f, 0.0f, 1.0f } }, // 0 - FRONT
+		Vertex{ { 0.425f, 0.0f, 0.25f, 1.0f },{ 0.9f, 0.0f, 0.0f, 1.0f } }, // 1
+		Vertex{ { 0.25f, 0.175f, 0.25f, 1.0f },{ 0.9f, 0.0f, 0.0f, 1.0f } }, // 2
+		Vertex{ { 0.25f, 0.175f, 0.25f, 1.0f },{ 0.9f, 0.0f, 0.0f, 1.0f } }, // 2	
+		Vertex{ { -0.175f, 0.175f, 0.25f, 1.0f },{ 0.9f, 0.0f, 0.0f, 1.0f } }, // 3
+		Vertex{ { 0.0f, 0.0f, 0.25f, 1.0f },{ 0.9f, 0.0f, 0.0f, 1.0f } }, // 0
+
+		Vertex{ { 0.425f, 0.0f, 0.25f, 1.0f },{ 0.0f, 0.9f, 0.0f, 1.0f } }, // 1 - RIGHT
+		Vertex{ { 0.425f, 0.0f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.0f, 1.0f } }, // 5
+		Vertex{ { 0.25f, 0.175f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.0f, 1.0f } }, // 6
+		Vertex{ { 0.25f, 0.175f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.0f, 1.0f } }, // 6	
+		Vertex{ { 0.25f, 0.175f, 0.25f, 1.0f },{ 0.0f, 0.9f, 0.0f, 1.0f } }, // 2
+		Vertex{ { 0.425f, 0.0f, 0.25f, 1.0f },{ 0.0f, 0.9f, 0.0f, 1.0f } }, // 1
+
+		Vertex{ { 0.25f, 0.175f, 0.25f, 1.0f },{ 0.0f, 0.0f, 0.9f, 1.0f } }, // 2 - TOP
+		Vertex{ { 0.25f, 0.175f, 0.0f, 1.0f },{ 0.0f, 0.0f, 0.9f, 1.0f } }, // 6
+		Vertex{ { -0.175f, 0.175f, 0.0f, 1.0f },{ 0.0f, 0.0f, 0.9f, 1.0f } }, // 7
+		Vertex{ { -0.175f, 0.175f, 0.0f, 1.0f },{ 0.0f, 0.0f, 0.9f, 1.0f } }, // 7	
+		Vertex{ { -0.175f, 0.175f, 0.25f, 1.0f },{ 0.0f, 0.0f, 0.9f, 1.0f } }, // 3
+		Vertex{ { 0.25f, 0.175f, 0.25f, 1.0f },{ 0.0f, 0.0f, 0.9f, 1.0f } }, // 2
+
+		Vertex{ { 0.425f, 0.0f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.9f, 1.0f } }, // 5 - BACK
+		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.9f, 1.0f } }, // 4
+		Vertex{ { -0.175f, 0.175f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.9f, 1.0f } }, // 7
+		Vertex{ { -0.175f, 0.175f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.9f, 1.0f } }, // 7	
+		Vertex{ { 0.25f, 0.175f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.9f, 1.0f } }, // 6
+		Vertex{ { 0.425f, 0.0f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.9f, 1.0f } }, // 5
+
+		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.9f, 0.0f, 0.9f, 1.0f } }, // 4 - LEFT
+		Vertex{ { 0.0f, 0.0f, 0.25f, 1.0f },{ 0.9f, 0.0f, 0.9f, 1.0f } }, // 0
+		Vertex{ { -0.175f, 0.175f, 0.25f, 1.0f },{ 0.9f, 0.0f, 0.9f, 1.0f } }, // 3
+		Vertex{ { -0.175f, 0.175f, 0.25f, 1.0f },{ 0.9f, 0.0f, 0.9f, 1.0f } }, // 3	
+		Vertex{ { -0.175f, 0.175f, 0.0f, 1.0f },{ 0.9f, 0.0f, 0.9f, 1.0f } }, // 7
+		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.9f, 0.0f, 0.9f, 1.0f } }, // 4
+
+		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.9f, 0.9f, 0.0f, 1.0f } }, // 0 - BOTTOM
+		Vertex{ { 0.425f, 0.0f, 0.0f, 1.0f },{ 0.9f, 0.9f, 0.0f, 1.0f } }, // 4
+		Vertex{ { 0.425f, 0.0f, 0.25f, 1.0f },{ 0.9f, 0.9f, 0.0f, 1.0f } }, // 5
+		Vertex{ { 0.425f, 0.0f, 0.25f, 1.0f },{ 0.9f, 0.9f, 0.0f, 1.0f } }, // 5	
+		Vertex{ { 0.0f, 0.0f, 0.25f, 1.0f },{ 0.9f, 0.9f, 0.0f, 1.0f } }, // 1
+		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.9f, 0.9f, 0.0f, 1.0f } }  // 0
+	};
+
+	Mesh parallelipiped = Mesh(Parallelipiped);
+
+	parallelipiped.setPosition(Vec3(0.35f, -0.35f, 0.0f));
+	parallelipiped.setRotation(135.0f);
+	parallelipiped.setScale(Vec3(1.0f));
+	parallelipiped.setColor(Vec4());
+
+	meshes.push_back(parallelipiped);
+
+	pyramid.setPosition(Vec3(0.0f, -0.65f, 0.0f));
+	pyramid.set3DRotation(Vec3(0.0f, 180.0f, 0.0f));
+	pyramid.setScale(Vec3(-1.0f, 1.0f, 1.0f));
+	pyramid.setColor(Vec4());
+
+	meshes.push_back(pyramid);
+
+	pyramid.setPosition(Vec3(-0.25f, -0.35f, 0.0f));
+	pyramid.setRotation(45.0f);
+	pyramid.setScale(Vec3(1.5f, 1.5f, 1.0f));
+	pyramid.setColor(Vec4());
+
+	meshes.push_back(pyramid);
+
+	pyramid.setPosition(Vec3(-0.50f, -0.65f, 0.0f));
+	pyramid.setRotation(-90.0f);
+	pyramid.setScale(Vec3(1.0f, 1.0f, 1.0f));
+	pyramid.setColor(Vec4());
+
+	meshes.push_back(pyramid);
+
+	pyramid.setPosition(Vec3(-1.0f, -0.15f, 0.0f));
+	pyramid.setRotation(20.0f);
+	pyramid.setScale(Vec3(3.0f, 3.0f, 1.0f));
+	pyramid.setColor(Vec4());
+
+	meshes.push_back(pyramid);
+
+	pyramid.setPosition(Vec3(-0.50f, -0.15f, 0.0f));
+	pyramid.setRotation(20.0f);
+	pyramid.setScale(Vec3(3.0f, 3.0f, 1.0f));
+	pyramid.setColor(Vec4());
+
+	meshes.push_back(pyramid);
 
 	glClearColor(CLEAR_COLOR.x, CLEAR_COLOR.y, CLEAR_COLOR.z, 1.0f);
 	glEnable(GL_DEPTH_TEST);

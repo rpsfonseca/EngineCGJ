@@ -32,6 +32,7 @@ public:
 	void setFloat(const GLchar* field, GLfloat value);
 	void setMat4(const GLchar* field, const math::Mat4& matrix);
 	void setVec3(const GLchar* field, const math::Vec3& vector);
+	void setVec4(const GLchar* field, const math::Vec4& vector);
 
 	void printCompileErrors(int vOrF, GLuint shader, GLchar* infoLog);
 	void printLinkingErrors(GLchar* infoLog);

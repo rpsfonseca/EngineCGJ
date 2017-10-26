@@ -36,8 +36,14 @@ public:
 	float getRotation();
 	void setRotation(float angle);
 
+	Vec3 get3DRotation();
+	void set3DRotation(Vec3 angle);
+
 	Vec3 getScale();
 	void setScale(Vec3& sc);
+
+	Vec4 getColor();
+	void setColor(Vec4& sc);
 private:
 	unsigned int vao, vbo, ebo, ubo;
 	std::vector<Vertex> vertices;
@@ -45,7 +51,10 @@ private:
 
 	Vec3 worldPosition;
 	float worldRotation;
+	Vec3 world3DRotation;
 	Vec3 worldScale;
+
+	Vec4 topColor;
 
 	void setupMesh();
 };

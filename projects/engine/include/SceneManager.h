@@ -23,4 +23,8 @@ public:
 	void setupSceneManager();
 
 	void renderScene();
+
+	void changeCameraProjection();
+	void rotateCamera(float x, float y);
+	void updateCamera(Camera_Movement movement);
 };

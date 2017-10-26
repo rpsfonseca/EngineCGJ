@@ -16,6 +16,12 @@ enum Camera_Movement
 	RIGHT
 };
 
+enum Projection_Type
+{
+	ORTHOGRAPHIC,
+	PERSPECTIVE
+};
+
 // Default camera values
 const float YAW = -90.0f;
 const float PITCH = 0.0f;
@@ -42,6 +48,8 @@ public:
 	float MouseSensitivity;
 	float Zoom;
 
+	Projection_Type currentProjectionType;
+
 	// Constructor with vectors
 	Camera(Vec3 position = Vec3(0.0f, 0.0f, 0.0f), Vec3 up = Vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH)
 		: Front(Vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
@@ -50,6 +58,7 @@ public:
 		WorldUp = up;
 		Yaw = yaw;
 		Pitch = pitch;
+		currentProjectionType = Projection_Type::PERSPECTIVE;
 		updateCameraVectors();
 	}
 
@@ -61,6 +70,7 @@ public:
 		WorldUp = Vec3(upX, upY, upZ);
 		Yaw = yaw;
 		Pitch = pitch;
+		currentProjectionType = Projection_Type::PERSPECTIVE;
 		updateCameraVectors();
 	}
 
@@ -72,7 +82,7 @@ public:
 	Mat4 getProjectionMatrix();
 
 	// Processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
-	void ProcessKeyboard(Camera_Movement direction, float deltaTime)
+	void processKeyboard(Camera_Movement direction, float deltaTime)
 	{
 		float velocity = MovementSpeed * deltaTime;
 		if (direction == FORWARD)
@@ -117,6 +127,8 @@ public:
 		if (Zoom >= 45.0f)
 			Zoom = 45.0f;
 	}
+
+	void changeProjection();
 
 private:
 	// Calculates the front vector from the Camera's (updated) Eular Angles
