@@ -1,4 +1,5 @@
 #include "Mat4.h"
+#include "MathUtils.h"
 #include <iostream>
 namespace math
 {
@@ -432,8 +433,8 @@ namespace math
 	{
 		Mat4 result;
 
-		result.matrix[0] = 1.0f / (aspectRatio * std::tan(fov / 2));
-		result.matrix[5] = 1.0f / std::tan(fov / 2);
+		result.matrix[0] = 1.0f / (aspectRatio * std::tan(MathUtils::radians(fov / 2)));
+		result.matrix[5] = 1.0f / std::tan(MathUtils::radians(fov / 2));
 		result.matrix[10] = -((far + near) / (far - near));
 		result.matrix[11] = -1.0f;
 		result.matrix[14] = -((2 * far * near) / (far - near));

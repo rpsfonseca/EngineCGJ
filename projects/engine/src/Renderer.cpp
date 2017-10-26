@@ -13,7 +13,6 @@ Renderer::Renderer()
 Renderer::~Renderer()
 {
 }
-
 bool isOpenGLError() {
 	bool isError = false;
 	GLenum errCode;
@@ -33,10 +32,15 @@ void checkOpenGLError(std::string error)
 		exit(EXIT_FAILURE);
 	}
 }
-
 void Renderer::draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glBindBuffer(GL_UNIFORM_BUFFER, uboId);
+	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(Mat4), &viewMatrix);
+	glBufferSubData(GL_UNIFORM_BUFFER, sizeof(Mat4), sizeof(Mat4), &projectionMatrix);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
 	currentShader.use();
 	for (Mesh& m : meshes)
 	{
@@ -51,11 +55,20 @@ void Renderer::draw()
 		modelMatrix = modelMatrix * modelMatrix.RotationMatrixAboutAxis(Axis::AxisZ, -m.getRotation());
 		modelMatrix = modelMatrix * modelMatrix.TranslationMatrix(m.getPosition());
 
-		currentShader.setMat4("Matrix", modelMatrix);
+		currentShader.setMat4("modelMatrix", modelMatrix);
 
-		glDrawElements(GL_TRIANGLES, m.getIndicesSize(), GL_UNSIGNED_INT, (GLvoid*)0);
+		if (m.usingIndices)
+		{
+			glDrawElements(GL_TRIANGLES, m.getIndicesSize(), GL_UNSIGNED_INT, (GLvoid*)0);
+		}
+		else
+		{
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
 	}
+	glUseProgram(0);
 	glBindVertexArray(0);
+	checkOpenGLError("ERROR: Could not draw scene.");
 }
 
 void Renderer::setupRenderer()
@@ -63,8 +76,9 @@ void Renderer::setupRenderer()
 	checkOpenGLInfo();
 
 	currentShader = Shader("../../projects/engine/src/vertex_shader.glsl", "../../projects/engine/src/frag_shader.glsl");
+	uboBp = currentShader.uniformBlockBinding();
 
-	std::vector<Vertex> v(3);
+	/*std::vector<Vertex> v(3);
 
 	v = {
 		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
@@ -143,7 +157,73 @@ void Renderer::setupRenderer()
 	triangle5.setPosition(Vec3(0.0f, -1.0f, 0.0f));
 	triangle5.setRotation(0.0f);
 	triangle5.setScale(Vec3(0.70f));
-	meshes.push_back(triangle5);
+	meshes.push_back(triangle5);*/
+
+	std::vector<Vertex> v(36);
+
+	/*v = {
+		Vertex{ { 0.0f, 0.0f, 1.0f, 1.0f },{ 0.0f, 1.0f, 0.0f, 1.0f } },
+		Vertex{ { 1.0f, 0.0f, 1.0f, 1.0f },{ 0.0f, 1.0f, 0.0f, 1.0f } },
+		Vertex{ { 1.0f, 1.0f, 1.0f, 1.0f },{ 1.0f, 1.0f, 0.0f, 1.0f } },
+		Vertex{ { 0.0f, 1.0f, 1.0f, 1.0f },{ 0.0f, 1.0f, 1.0f, 1.0f } },
+		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 1.0f, 1.0f, 0.0f, 1.0f } },
+		Vertex{ { 1.0f, 0.0f, 0.0f, 1.0f },{ 0.0f, 1.0f, 1.0f, 1.0f } },
+		Vertex{ { 1.0f, 1.0f, 0.0f, 1.0f },{ 0.0f, 1.0f, 1.0f, 1.0f } },
+		Vertex{ { 0.0f, 1.0f, 0.0f, 1.0f },{ 0.0f, 1.0f, 0.0f, 1.0f } },
+	};
+
+	Mesh cube = Mesh(v, { 0,1,2,2,3,0,1,5,6,6,2,1,2,6,7,7,3,2,5,4,7,7,6,5,4,0,3,3,7,4,0,4,5,5,1,0 });*/
+	v = {
+		Vertex{ { 0.0f, 0.0f, 1.0f, 1.0f }, { 0.9f, 0.0f, 0.0f, 1.0f }}, // 0 - FRONT
+		Vertex{ { 1.0f, 0.0f, 1.0f, 1.0f },{ 0.9f, 0.0f, 0.0f, 1.0f } }, // 1
+		Vertex{ { 1.0f, 1.0f, 1.0f, 1.0f },{ 0.9f, 0.0f, 0.0f, 1.0f } }, // 2
+		Vertex{ { 1.0f, 1.0f, 1.0f, 1.0f },{ 0.9f, 0.0f, 0.0f, 1.0f } }, // 2	
+		Vertex{ { 0.0f, 1.0f, 1.0f, 1.0f },{ 0.9f, 0.0f, 0.0f, 1.0f } }, // 3
+		Vertex{ { 0.0f, 0.0f, 1.0f, 1.0f },{ 0.9f, 0.0f, 0.0f, 1.0f } }, // 0
+
+		Vertex{ { 1.0f, 0.0f, 1.0f, 1.0f },{ 0.0f, 0.9f, 0.0f, 1.0f } }, // 1 - RIGHT
+		Vertex{ { 1.0f, 0.0f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.0f, 1.0f } }, // 5
+		Vertex{ { 1.0f, 1.0f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.0f, 1.0f } }, // 6
+		Vertex{ { 1.0f, 1.0f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.0f, 1.0f } }, // 6	
+		Vertex{ { 1.0f, 1.0f, 1.0f, 1.0f },{ 0.0f, 0.9f, 0.0f, 1.0f } }, // 2
+		Vertex{ { 1.0f, 0.0f, 1.0f, 1.0f },{ 0.0f, 0.9f, 0.0f, 1.0f } }, // 1
+
+		Vertex{ { 1.0f, 1.0f, 1.0f, 1.0f },{ 0.0f, 0.0f, 0.9f, 1.0f } }, // 2 - TOP
+		Vertex{ { 1.0f, 1.0f, 0.0f, 1.0f },{ 0.0f, 0.0f, 0.9f, 1.0f } }, // 6
+		Vertex{ { 0.0f, 1.0f, 0.0f, 1.0f },{ 0.0f, 0.0f, 0.9f, 1.0f } }, // 7
+		Vertex{ { 0.0f, 1.0f, 0.0f, 1.0f },{ 0.0f, 0.0f, 0.9f, 1.0f } }, // 7	
+		Vertex{ { 0.0f, 1.0f, 1.0f, 1.0f },{ 0.0f, 0.0f, 0.9f, 1.0f } }, // 3
+		Vertex{ { 1.0f, 1.0f, 1.0f, 1.0f },{ 0.0f, 0.0f, 0.9f, 1.0f } }, // 2
+
+		Vertex{ { 1.0f, 0.0f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.9f, 1.0f } }, // 5 - BACK
+		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.9f, 1.0f } }, // 4
+		Vertex{ { 0.0f, 1.0f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.9f, 1.0f } }, // 7
+		Vertex{ { 0.0f, 1.0f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.9f, 1.0f } }, // 7	
+		Vertex{ { 1.0f, 1.0f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.9f, 1.0f } }, // 6
+		Vertex{ { 1.0f, 0.0f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.9f, 1.0f } }, // 5
+
+		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.9f, 0.0f, 0.9f, 1.0f } }, // 4 - LEFT
+		Vertex{ { 0.0f, 0.0f, 1.0f, 1.0f },{ 0.9f, 0.0f, 0.9f, 1.0f } }, // 0
+		Vertex{ { 0.0f, 1.0f, 1.0f, 1.0f },{ 0.9f, 0.0f, 0.9f, 1.0f } }, // 3
+		Vertex{ { 0.0f, 1.0f, 1.0f, 1.0f },{ 0.9f, 0.0f, 0.9f, 1.0f } }, // 3	
+		Vertex{ { 0.0f, 1.0f, 0.0f, 1.0f },{ 0.9f, 0.0f, 0.9f, 1.0f } }, // 7
+		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.9f, 0.0f, 0.9f, 1.0f } }, // 4
+
+		Vertex{ { 0.0f, 0.0f, 1.0f, 1.0f },{ 0.9f, 0.9f, 0.0f, 1.0f } }, // 0 - BOTTOM
+		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.9f, 0.9f, 0.0f, 1.0f } }, // 4
+		Vertex{ { 1.0f, 0.0f, 0.0f, 1.0f },{ 0.9f, 0.9f, 0.0f, 1.0f } }, // 5
+		Vertex{ { 1.0f, 0.0f, 0.0f, 1.0f },{ 0.9f, 0.9f, 0.0f, 1.0f } }, // 5	
+		Vertex{ { 1.0f, 0.0f, 1.0f, 1.0f },{ 0.9f, 0.9f, 0.0f, 1.0f } }, // 1
+		Vertex{ { 0.0f, 0.0f, 1.0f, 1.0f },{ 0.9f, 0.9f, 0.0f, 1.0f } }  // 0
+	};
+
+	Mesh cube = Mesh(v);
+
+	cube.setPosition(Vec3(0));
+	cube.setRotation(0.0f);
+	cube.setScale(Vec3(1.0f));
+
+	meshes.push_back(cube);
 
 	glClearColor(CLEAR_COLOR.x, CLEAR_COLOR.y, CLEAR_COLOR.z, 1.0f);
 	glEnable(GL_DEPTH_TEST);
@@ -159,6 +239,16 @@ void Renderer::setupRenderer()
 void Renderer::reshapeViewport(int _newWidth, int _newHeight)
 {
 	glViewport(0, 0, _newWidth, _newHeight);
+}
+
+void Renderer::setProjectionMatrix(const Mat4& mat)
+{
+	projectionMatrix = mat;
+}
+
+void Renderer::setViewMatrix(const Mat4& mat)
+{
+	viewMatrix = mat;
 }
 
 void Renderer::checkOpenGLInfo()

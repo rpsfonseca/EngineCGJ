@@ -2,6 +2,7 @@
 
 #include "Window.h"
 #include "Renderer.h"
+#include "SceneManager.h"
 
 #include <memory>
 
@@ -11,6 +12,7 @@ class Application
 
 	std::shared_ptr<Window> windowRef;
 	std::shared_ptr<Renderer> rendererRef;
+	std::shared_ptr<SceneManager> sceneManagerRef;
 	
 	int versionMajor;
 	int versionMinor;
@@ -28,7 +30,7 @@ public:
 	void setupApp();
 	void mainLoop();
 
-public:
+private:
 	static void display();
 	static void cleanup();
 	static void idle();

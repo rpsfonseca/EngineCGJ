@@ -172,3 +172,11 @@ void Shader::printLinkingErrors(GLchar* infoLog)
 		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
 	}
 }
+
+GLuint Shader::uniformBlockBinding()
+{
+	GLuint test = 0;
+	GLint uboID = glGetUniformBlockIndex(shaderID, "SharedMatrices");
+	glUniformBlockBinding(shaderID, uboID, test);
+	return test;
+}

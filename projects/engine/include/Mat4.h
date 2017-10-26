@@ -65,6 +65,5 @@ namespace math
 
 		static Mat4 orthographic(const float& right, const float& left, const float& top, const float& bottom, const float& near, const float& far);
 		static Mat4 perspective(const float& fov, const float& aspectRatio, const float& near, const float& far);
-
 	};
 }

@@ -37,5 +37,7 @@ public:
 	void printLinkingErrors(GLchar* infoLog);
 	GLuint shaderID;
 
+	GLuint uniformBlockBinding();
+
 };
 

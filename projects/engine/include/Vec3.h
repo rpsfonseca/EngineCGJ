@@ -16,6 +16,7 @@ namespace math
 		Vec3();
 		Vec3(const float& scalar);
 		Vec3(const float& x, const float& y, const float& z);
+		Vec3(const Vec3& vec);
 		~Vec3();
 
 		Vec3 operator-();

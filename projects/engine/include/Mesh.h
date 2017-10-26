@@ -16,12 +16,17 @@ struct Vertex
 class Mesh
 {
 public:
+	bool usingIndices = true;
+
+	Mesh(std::vector<Vertex> vertices);
 	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices);
 	~Mesh();
 
 	unsigned int getVao();
 	inline unsigned int getVbo();
 	unsigned int getEbo();
+
+	void setUbo(unsigned int uboId);
 
 	unsigned int getIndicesSize();
 
@@ -34,7 +39,7 @@ public:
 	Vec3 getScale();
 	void setScale(Vec3& sc);
 private:
-	unsigned int vao, vbo, ebo;
+	unsigned int vao, vbo, ebo, ubo;
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
 

@@ -14,6 +14,11 @@ public:
 	static Vec3 CLEAR_COLOR;
 	Shader currentShader;
 	Mat4 modelMatrix;
+	Mat4 projectionMatrix;
+	Mat4 viewMatrix;
+
+	unsigned int uboBp;
+	unsigned int uboId;
 
 private:
 	std::vector<Mesh> meshes;
@@ -28,6 +33,9 @@ public:
 	void setupRenderer();
 
 	void reshapeViewport(int _newWidth, int _newHeight);
+
+	void setProjectionMatrix(const Mat4& mat);
+	void setViewMatrix(const Mat4& mat);
 
 private:
 	void checkOpenGLInfo();

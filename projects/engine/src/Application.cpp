@@ -19,6 +19,7 @@ Application::Application(int _versionMajor, int _versionMinor)
 {
 	windowRef = std::make_shared<Window>();
 	rendererRef = std::make_shared<Renderer>();
+	sceneManagerRef = std::make_shared<SceneManager>(rendererRef);
 
 	windowWidth = windowRef->WIDTH;
 	windowHeight = windowRef->HEIGHT;
@@ -31,6 +32,8 @@ Application::Application(int _versionMajor, int _versionMinor, int _width, int _
 {
 	windowRef = std::make_shared<Window>(windowWidth, windowHeight);
 	rendererRef = std::make_shared<Renderer>();
+	sceneManagerRef = std::make_shared<SceneManager>(rendererRef);
+
 	instance = this;
 }
 
@@ -47,7 +50,8 @@ void Application::display()
 {
 	++FRAME_COUNT;
 
-	instance->rendererRef->draw();
+	//instance->rendererRef->draw();
+	instance->sceneManagerRef->renderScene();
 	instance->windowRef->swapBuffers();
 }
 
@@ -93,6 +97,7 @@ void Application::setupApp()
 	GLenum err_code = glGetError();
 
 	rendererRef->setupRenderer();
+	sceneManagerRef->setupSceneManager();
 
 	setupCallbacks();
 }
