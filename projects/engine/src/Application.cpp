@@ -93,6 +93,7 @@ void Application::reshape(int _w, int _h)
 {
 	instance->windowWidth = _w;
 	instance->windowHeight = _h;
+	instance->sceneManagerRef->updateAspectRatio((float)_w / (float)_h);
 	instance->windowRef->reshape(_w, _h);
 	instance->rendererRef->reshapeViewport(_w, _h);
 }
@@ -161,6 +162,14 @@ void Application::mouse(int x, int y)
 	instance->sceneManagerRef->rotateCamera(mouseX, mouseY);
 }
 
+void Application::entry(int state)
+{
+	if (state == GLUT_LEFT)
+	{
+		firstTimeMoving = true;
+	}
+}
+
 void Application::keyboard(int key, int x, int y)
 {
 	directions[0] = 0.0f;
@@ -225,6 +234,8 @@ void Application::setupCallbacks()
 	glutSpecialFunc(keyboard);
 	glutSpecialUpFunc(keyboard_up);
 	glutPassiveMotionFunc(mouse);
+	glutWarpPointer(320,240);
+	glutEntryFunc(entry);
 }
 
 void Application::mainLoop()

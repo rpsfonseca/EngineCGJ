@@ -1,5 +1,5 @@
 #include "Camera.h"
-#include "../include/MathUtils.h""
+#include "../include/MathUtils.h"
 
 #include <cmath>
 #include <iostream>
@@ -40,11 +40,10 @@ Mat4 Camera::getProjectionMatrix()
 	Mat4 projectionMatrix;
 	if (currentProjectionType == Projection_Type::PERSPECTIVE)
 	{
-		projectionMatrix = Mat4::perspective(30.0f, 640.0f / 480.0f, 0.1f, 100.0f);
+		projectionMatrix = Mat4::perspective(30.0f, aspectRatio, 0.1f, 100.0f);
 	}
 	else
 	{
-		std::cout << "HELLO" << std::endl;
 		projectionMatrix = Mat4::orthographic(2.0f, -2.0f, 2.0f, -2.0f, 0.1f, 100.0f);
 	}
 

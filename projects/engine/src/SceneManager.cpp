@@ -53,3 +53,8 @@ void SceneManager::updateCamera(Camera_Movement movement)
 {
 	currentCamera->processKeyboard(movement, 0.0005f);
 }
+
+void SceneManager::updateAspectRatio(float aspectRatio)
+{
+	currentCamera->aspectRatio = aspectRatio;
+}

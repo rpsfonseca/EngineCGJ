@@ -46,7 +46,7 @@ private:
 	static void keyboard(int key, int x, int y);
 	static void keyboard_up(int key, int x, int y);
 	static void mouse(int x, int y);
-
+	static void entry(int state);
 private:
 	void setupCallbacks();
 };

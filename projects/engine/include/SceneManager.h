@@ -27,4 +27,5 @@ public:
 	void changeCameraProjection();
 	void rotateCamera(float x, float y);
 	void updateCamera(Camera_Movement movement);
+	void updateAspectRatio(float aspectRatio);
 };

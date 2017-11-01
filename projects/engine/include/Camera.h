@@ -48,6 +48,8 @@ public:
 	float MouseSensitivity;
 	float Zoom;
 
+	float aspectRatio;
+
 	Projection_Type currentProjectionType;
 
 	// Constructor with vectors
