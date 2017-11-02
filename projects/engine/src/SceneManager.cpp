@@ -7,7 +7,7 @@ SceneManager::SceneManager()
 SceneManager::SceneManager(std::shared_ptr<Renderer> rendererRef)
 	: renderer(rendererRef)
 {
-	currentCamera = std::make_shared<Camera>(Vec3(0.0f, 0.0f, 10.0f));
+	currentCamera = std::make_shared<Camera>(Vec3(0.0f, 0.0f, 5.0f));
 
 	//setupSceneManager();
 }
@@ -46,7 +46,7 @@ void SceneManager::changeCameraProjection()
 
 void SceneManager::rotateCamera(float x, float y)
 {
-	currentCamera->processMouseMovement(x, y);
+	currentCamera->processMouseMovement(x, y, false);
 }
 
 void SceneManager::updateCamera(Camera_Movement movement)

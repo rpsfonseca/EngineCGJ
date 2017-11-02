@@ -2,7 +2,10 @@
 
 #include "Vec3.h"
 #include "Mat4.h"
+#include "MathUtils.h"
 #include "GL\glew.h"
+
+#include "Quat.h"
 
 #include <vector>
 
@@ -23,7 +26,7 @@ enum Projection_Type
 };
 
 // Default camera values
-const float YAW = -90.0f;
+const float YAW = -45.0f;
 const float PITCH = 0.0f;
 const float SPEED = 2.5f;
 const float SENSITIVITY = 0.1f;
@@ -51,6 +54,9 @@ public:
 	float aspectRatio;
 
 	Projection_Type currentProjectionType;
+
+	bool arcballCam = true;
+	bool gimbalLock = true;
 
 	// Constructor with vectors
 	Camera(Vec3 position = Vec3(0.0f, 0.0f, 0.0f), Vec3 up = Vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH)
@@ -87,14 +93,17 @@ public:
 	void processKeyboard(Camera_Movement direction, float deltaTime)
 	{
 		float velocity = MovementSpeed * deltaTime;
-		if (direction == FORWARD)
-			Position += Front * velocity;
-		if (direction == BACKWARD)
-			Position -= Front * velocity;
-		if (direction == LEFT)
-			Position -= Right * velocity;
-		if (direction == RIGHT)
-			Position += Right * velocity;
+		if (!arcballCam)
+		{
+			if (direction == FORWARD)
+				Position += Front * velocity;
+			if (direction == BACKWARD)
+				Position -= Front * velocity;
+			if (direction == LEFT)
+				Position -= Right * velocity;
+			if (direction == RIGHT)
+				Position += Right * velocity;
+		}
 	}
 
 	// Processes input received from a mouse input system. Expects the offset value in both the x and y direction.

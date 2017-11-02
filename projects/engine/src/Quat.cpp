@@ -183,7 +183,7 @@ namespace math
 
 	void Quat::clean(Quat& q)
 	{
-		if (std::fabs(q.v.w) < Q_THRESHOLD) q.v.t = 0.0f;
+		if (std::fabs(q.v.w) < Q_THRESHOLD) q.v.w = 0.0f;
 		if (std::fabs(q.v.x) < Q_THRESHOLD) q.v.x = 0.0f;
 		if (std::fabs(q.v.y) < Q_THRESHOLD) q.v.y = 0.0f;
 		if (std::fabs(q.v.z) < Q_THRESHOLD) q.v.z = 0.0f;
