@@ -15,6 +15,10 @@ namespace math
 
 		Mat3();
 		Mat3(const float& _matrix);
+		Mat3(
+			const float& _m0, const float& _m1, const float& _m2,
+			const float& _m3, const float& _m4, const float& _m5,
+			const float& _m6, const float& _m7, const float& _m8);
 		~Mat3();
 
 		Mat3 operator-();
@@ -45,5 +49,7 @@ namespace math
 		Mat3 Transpose(const Mat3& mat);
 		float Determinant(const Mat3& mat);
 		float Determinant(const float & a, const float & d, const float & b, const float & c);
+
+		static Mat3 RodriguezRotation(const Vec3& axis, const float angle);
 	};
 }

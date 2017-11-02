@@ -1,9 +1,10 @@
 #include "Mat3.h"
+#include "MathUtils.h"
 
 namespace math
 {
 
-	const float Identity[9] = {
+	const Mat3 Mat3::Identity = {
 		1.0f, 0.0f, 0.0f,
 		0.0f, 1.0f, 0.0f,
 		0.0f, 0.0f, 1.0f
@@ -21,6 +22,22 @@ namespace math
 	Mat3::Mat3(const float& _matrix)
 		: matrix { _matrix }
 	{
+	}
+
+	Mat3::Mat3(
+		const float& _m0, const float& _m1, const float& _m2,
+		const float& _m3, const float& _m4, const float& _m5,
+		const float& _m6, const float& _m7, const float& _m8)
+	{
+		matrix[0] = _m0;
+		matrix[1] = _m3;
+		matrix[2] = _m6;
+		matrix[3] = _m1;
+		matrix[4] = _m4;
+		matrix[5] = _m7;
+		matrix[6] = _m2;
+		matrix[7] = _m5;
+		matrix[8] = _m8;
 	}
 
 	Mat3::~Mat3()
@@ -287,8 +304,22 @@ namespace math
 
 	float Mat3::Determinant(const float & a, const float & d, const float & b, const float & c)
 	{
-		//std::cout << "a * d = " << a << " * " << d << std::endl;
-		//std::cout << "b * c = " << b << " * " << c << std::endl;
 		return a*d - b*c;
+	}
+	Mat3 Mat3::RodriguezRotation(const Vec3& axis, const float angle)
+	{
+		Mat3 K = Mat3(
+			0.0f, -axis.z, axis.y,
+			axis.z, 0.0f, -axis.x,
+			-axis.y, axis.x, 0.0f
+		);
+
+		Mat3 KSquared = K * K; /*Mat3(
+			-(axis.z * axis.z) * -(axis.y * axis.y), axis.y * axis.x, axis.z * axis.x,
+			axis.x * axis.y, -(axis.z * axis.z) * -(axis.x * axis.x), axis.z * axis.y,
+			axis.x * axis.z, axis.y * axis.z, -(axis.y * axis.y) * -(axis.x * axis.x)
+		);*/
+
+		return Mat3::Identity + (K * std::sin(MathUtils::radians(angle))) + (KSquared * (1 - std::cos(MathUtils::radians(angle))));
 	}
 }
