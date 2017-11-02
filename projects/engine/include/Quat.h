@@ -16,7 +16,7 @@ namespace math
 		Quat();
 		Quat(float x, float y, float z, float w);
 		Quat(const Vec4& v);
-		Quat(float angle, Vec3& axis);
+		Quat(float angle, const Vec3& axis);
 		~Quat();
 
 		friend Quat operator+(const Quat& left, const Quat& right);
@@ -27,6 +27,7 @@ namespace math
 
 		friend std::ostream& operator<<(std::ostream& stream, const Quat& q);
 
+		Mat4 getMatrix();
 		void getMatrix(Mat4& matrix);
 		void getRotate(float& angle, Vec3& axis);
 

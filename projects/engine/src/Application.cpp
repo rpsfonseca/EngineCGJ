@@ -115,6 +115,9 @@ void Application::char_keyboard(unsigned char key, int x, int y)
 
 	switch (key)
 	{
+	case 'g':
+		instance->sceneManagerRef->toggleGimbalLock();
+		break;
 	case 'p':
 		instance->sceneManagerRef->changeCameraProjection();
 		break;

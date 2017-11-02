@@ -58,6 +58,8 @@ public:
 	bool arcballCam = true;
 	bool gimbalLock = true;
 
+	Quat cameraQuaternion;
+
 	// Constructor with vectors
 	Camera(Vec3 position = Vec3(0.0f, 0.0f, 0.0f), Vec3 up = Vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH)
 		: Front(Vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
@@ -140,6 +142,7 @@ public:
 	}
 
 	void changeProjection();
+	void toggleGimbalLock();
 
 private:
 	// Calculates the front vector from the Camera's (updated) Eular Angles

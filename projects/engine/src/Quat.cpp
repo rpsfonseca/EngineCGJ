@@ -8,6 +8,7 @@
 namespace math
 {
 	Quat::Quat()
+		: v{ 0.0f, 0.0f, 0.0f, 1.0f }
 	{
 	}
 
@@ -21,9 +22,9 @@ namespace math
 	{
 	}
 
-	Quat::Quat(float angle, Vec3& axis)
+	Quat::Quat(float angle, const Vec3& axis)
 	{
-		axis = axis.Normalize();
+		//axis = axis.Normalize();
 
 		float angleRad = MathUtils::radians(angle) / 2.0f;
 		float s = std::sin(angleRad);
@@ -82,6 +83,44 @@ namespace math
 	{
 		stream << "Quat(" << q.v.w << ", " << q.v.x << ", " << q.v.y << ", " << q.v.z << ")";
 		return stream;
+	}
+
+	Mat4 Quat::getMatrix()
+	{
+		Mat4 matrix;
+		Quat qNormalized = Quat::Normalize(*this);
+
+		float xx = qNormalized.v.x * qNormalized.v.x;
+		float xy = qNormalized.v.x * qNormalized.v.y;
+		float xz = qNormalized.v.x * qNormalized.v.z;
+		float xt = qNormalized.v.x * qNormalized.v.w;
+		float yy = qNormalized.v.y * qNormalized.v.y;
+		float yz = qNormalized.v.y * qNormalized.v.z;
+		float yt = qNormalized.v.y * qNormalized.v.w;
+		float zz = qNormalized.v.z * qNormalized.v.z;
+		float zt = qNormalized.v.z * qNormalized.v.w;
+
+		matrix.matrix[0] = 1.0f - 2.0f * (yy + zz);
+		matrix.matrix[1] = 2.0f * (xy + zt);
+		matrix.matrix[2] = 2.0f * (xz - yt);
+		matrix.matrix[3] = 0.0f;
+
+		matrix.matrix[4] = 2.0f * (xy - zt);
+		matrix.matrix[5] = 1.0f - 2.0f * (xx + zz);
+		matrix.matrix[6] = 2.0f * (yz + xt);
+		matrix.matrix[7] = 0.0f;
+
+		matrix.matrix[8] = 2.0f * (xz + yt);
+		matrix.matrix[9] = 2.0f * (yz - xt);
+		matrix.matrix[10] = 1.0f - 2.0f * (xx + yy);
+		matrix.matrix[11] = 0.0f;
+
+		matrix.matrix[12] = 0.0f;
+		matrix.matrix[13] = 0.0f;
+		matrix.matrix[14] = 0.0f;
+		matrix.matrix[15] = 1.0f;
+
+		return matrix;
 	}
 
 	void Quat::getMatrix(Mat4& matrix)

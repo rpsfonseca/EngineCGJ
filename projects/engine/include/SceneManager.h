@@ -24,6 +24,7 @@ public:
 
 	void renderScene();
 
+	void toggleGimbalLock();
 	void changeCameraProjection();
 	void rotateCamera(float x, float y);
 	void updateCamera(Camera_Movement movement);

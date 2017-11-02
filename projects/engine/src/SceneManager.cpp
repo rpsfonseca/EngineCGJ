@@ -44,6 +44,11 @@ void SceneManager::changeCameraProjection()
 	currentCamera->changeProjection();
 }
 
+void SceneManager::toggleGimbalLock()
+{
+	currentCamera->toggleGimbalLock();
+}
+
 void SceneManager::rotateCamera(float x, float y)
 {
 	currentCamera->processMouseMovement(x, y, false);
