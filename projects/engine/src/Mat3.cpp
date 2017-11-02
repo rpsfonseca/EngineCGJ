@@ -314,11 +314,11 @@ namespace math
 			-axis.y, axis.x, 0.0f
 		);
 
-		Mat3 KSquared = K * K; /*Mat3(
-			-(axis.z * axis.z) * -(axis.y * axis.y), axis.y * axis.x, axis.z * axis.x,
-			axis.x * axis.y, -(axis.z * axis.z) * -(axis.x * axis.x), axis.z * axis.y,
-			axis.x * axis.z, axis.y * axis.z, -(axis.y * axis.y) * -(axis.x * axis.x)
-		);*/
+		Mat3 KSquared = Mat3(
+			-(axis.z * axis.z) - (axis.y * axis.y), axis.y * axis.x, axis.z * axis.x,
+			axis.x * axis.y, -(axis.z * axis.z) - (axis.x * axis.x), axis.z * axis.y,
+			axis.x * axis.z, axis.y * axis.z, -(axis.y * axis.y) - (axis.x * axis.x)
+		);
 
 		return Mat3::Identity + (K * std::sin(MathUtils::radians(angle))) + (KSquared * (1 - std::cos(MathUtils::radians(angle))));
 	}
