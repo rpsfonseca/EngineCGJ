@@ -25,6 +25,26 @@ namespace math
 	{
 	}
 
+	Mat4::Mat4(const Mat3& _matrix3x3)
+	{
+		matrix[0] = _matrix3x3.matrix[0];
+		matrix[1] = _matrix3x3.matrix[1];
+		matrix[2] = _matrix3x3.matrix[2];
+		matrix[3] = 0.0f;
+		matrix[4] = _matrix3x3.matrix[3];
+		matrix[5] = _matrix3x3.matrix[4];
+		matrix[6] = _matrix3x3.matrix[5];
+		matrix[7] = 0.0f;
+		matrix[8] = _matrix3x3.matrix[6];
+		matrix[9] = _matrix3x3.matrix[7];
+		matrix[10] = _matrix3x3.matrix[8];
+		matrix[11] = 0.0f;
+		matrix[12] = 0.0f;
+		matrix[13] = 0.0f;
+		matrix[14] = 0.0f;
+		matrix[15] = 1.0f;
+	}
+
 	Mat4::Mat4(
 		const float& _m0, const float& _m1, const float& _m2, const float& _m3,
 		const float& _m4, const float& _m5, const float& _m6, const float& _m7, 

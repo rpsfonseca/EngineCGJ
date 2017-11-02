@@ -24,6 +24,7 @@ namespace math
 
 		Mat4();
 		Mat4(const float& _matrix);
+		Mat4(const Mat3& _matrix3x3);
 		Mat4(const float& _m0, const float& _m1, const float& _m2, const float& _m3,
 			const float& _m4, const float& _m5, const float& _m6, const float& _m7,
 			const float& _m8, const float& _m9, const float& _m10, const float& _m11,
