@@ -115,6 +115,9 @@ void Application::char_keyboard(unsigned char key, int x, int y)
 
 	switch (key)
 	{
+	case 'a':
+		instance->sceneManagerRef->toggleArcballCam();
+		break;
 	case 'g':
 		instance->sceneManagerRef->toggleGimbalLock();
 		break;
@@ -149,7 +152,7 @@ void Application::keyboard_up(int key, int x, int y)
 
 void Application::mouse(int x, int y)
 {
-	if (instance->firstTimeMoving)
+	/*if (instance->firstTimeMoving)
 	{
 		previousX = x;
 		previousY = y;
@@ -162,7 +165,26 @@ void Application::mouse(int x, int y)
 	previousX = x;
 	previousY = y;
 
-	instance->sceneManagerRef->rotateCamera(mouseX, mouseY);
+	instance->sceneManagerRef->rotateCamera(mouseX, mouseY);*/
+
+	previousX = x;
+	previousY = y;
+
+	int cx = (instance->windowWidth >> 1);
+	int cy = (instance->windowHeight >> 1);
+
+	float deltaX = float(cx - previousX) / 10;
+	float deltaY = float(cy - previousY);
+
+	if (abs(deltaX) > 0.5f)
+	{
+		glutWarpPointer(cx, y);
+	}
+	if (abs(deltaY) > 0.5f) {
+		glutWarpPointer(x, cy);
+	}
+
+	instance->sceneManagerRef->rotateCamera(deltaX, deltaY);
 }
 
 void Application::entry(int state)

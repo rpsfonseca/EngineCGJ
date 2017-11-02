@@ -24,6 +24,7 @@ public:
 
 	void renderScene();
 
+	void toggleArcballCam();
 	void toggleGimbalLock();
 	void changeCameraProjection();
 	void rotateCamera(float x, float y);

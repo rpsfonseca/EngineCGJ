@@ -44,6 +44,11 @@ void SceneManager::changeCameraProjection()
 	currentCamera->changeProjection();
 }
 
+void SceneManager::toggleArcballCam()
+{
+	currentCamera->toggleArcballCam();
+}
+
 void SceneManager::toggleGimbalLock()
 {
 	currentCamera->toggleGimbalLock();

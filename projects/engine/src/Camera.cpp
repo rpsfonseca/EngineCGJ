@@ -4,6 +4,28 @@
 #include <cmath>
 #include <iostream>
 
+Camera::Camera(Vec3 position, Vec3 up, float yaw, float pitch)
+	: Front(Vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
+{
+	Position = position;
+	WorldUp = up;
+	Yaw = yaw;
+	Pitch = pitch;
+	currentProjectionType = Projection_Type::PERSPECTIVE;
+	updateCameraVectors();
+}
+
+Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch)
+	: Front(Vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
+{
+	Position = Vec3(posX, posY, posZ);
+	WorldUp = Vec3(upX, upY, upZ);
+	Yaw = yaw;
+	Pitch = pitch;
+	currentProjectionType = Projection_Type::PERSPECTIVE;
+	updateCameraVectors();
+}
+
 Camera::~Camera()
 {
 }
@@ -16,7 +38,7 @@ Mat4 Camera::getViewMatrix()
 
 	if (gimbalLock)
 	{
-		std::cout << "GIMBAL LOCK ACTIVATED" << std::endl;
+		//std::cout << "GIMBAL LOCK ACTIVATED" << std::endl;
 		//Vec3 zAxis = (Position - (Position + Front)).Normalize();
 		Vec3 zAxis = (Position - Vec3(0.0f, 0.0f, 0.0f)).Normalize();
 		Vec3 xAxis = Vec3::CrossProduct(WorldUp, zAxis).Normalize();
@@ -36,7 +58,7 @@ Mat4 Camera::getViewMatrix()
 	}
 	else
 	{
-		std::cout << "GIMBAL LOCK DEACTIVATED" << std::endl;
+		//std::cout << "GIMBAL LOCK DEACTIVATED" << std::endl;
 		Quat tempQuat = Quat::Normalize(Quat(Pitch, Vec3::UnitX) * Quat(Yaw, Vec3::UnitY));
 
 		Pitch = 0.0f;
@@ -81,9 +103,59 @@ void Camera::updateCameraVectors()
 	}
 }
 
+void Camera::processKeyboard(Camera_Movement direction, float deltaTime)
+{
+	float velocity = MovementSpeed * deltaTime;
+	if (!arcballCam)
+	{
+		if (direction == FORWARD)
+			Position += Front * velocity;
+		if (direction == BACKWARD)
+			Position -= Front * velocity;
+		if (direction == LEFT)
+			Position -= Right * velocity;
+		if (direction == RIGHT)
+			Position += Right * velocity;
+	}
+}
+
+void Camera::processMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch)
+{
+	xoffset *= MouseSensitivity;
+	yoffset *= MouseSensitivity;
+
+	Yaw += xoffset;
+	Pitch += yoffset;
+
+	if (constrainPitch)
+	{
+		if (Pitch > 89.0f)
+			Pitch = 89.0f;
+		if (Pitch < -89.0f)
+			Pitch = -89.0f;
+	}
+
+	updateCameraVectors();
+}
+
+void Camera::processMouseScroll(float yoffset)
+{
+	if (Zoom >= 1.0f && Zoom <= 45.0f)
+		Zoom -= yoffset;
+	if (Zoom <= 1.0f)
+		Zoom = 1.0f;
+	if (Zoom >= 45.0f)
+		Zoom = 45.0f;
+}
+
 void Camera::changeProjection()
 {
 	currentProjectionType = currentProjectionType == PERSPECTIVE ? ORTHOGRAPHIC : PERSPECTIVE;
+}
+
+void Camera::toggleArcballCam()
+{
+	arcballCam ? arcballCam = false : arcballCam = true;
 }
 
 void Camera::toggleGimbalLock()
