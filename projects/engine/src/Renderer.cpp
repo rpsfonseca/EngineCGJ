@@ -2,6 +2,7 @@
 #include "Mesh.h"
 #include "GL\glew.h"
 
+#include <ctime>
 #include <iostream>
 
 Vec3 Renderer::CLEAR_COLOR = Vec3(0.1f, 0.1f, 0.1f);
@@ -328,91 +329,120 @@ void Renderer::setupRenderer()
 
 	std::vector<Vertex> Parallelipiped =
 	{
-		Vertex{ { 0.0f, 0.0f, 0.25f, 1.0f },{ 0.9f, 0.0f, 0.0f, 1.0f } }, // 0 - FRONT
-		Vertex{ { 0.425f, 0.0f, 0.25f, 1.0f },{ 0.9f, 0.0f, 0.0f, 1.0f } }, // 1
-		Vertex{ { 0.25f, 0.175f, 0.25f, 1.0f },{ 0.9f, 0.0f, 0.0f, 1.0f } }, // 2
-		Vertex{ { 0.25f, 0.175f, 0.25f, 1.0f },{ 0.9f, 0.0f, 0.0f, 1.0f } }, // 2	
-		Vertex{ { -0.175f, 0.175f, 0.25f, 1.0f },{ 0.9f, 0.0f, 0.0f, 1.0f } }, // 3
-		Vertex{ { 0.0f, 0.0f, 0.25f, 1.0f },{ 0.9f, 0.0f, 0.0f, 1.0f } }, // 0
+		Vertex{ { 0.0f, 0.0f, 0.25f, 1.0f },{ 0.8f, 0.9f, 0.7f, 1.0f } }, // 0 - FRONT
+		Vertex{ { 0.425f, 0.0f, 0.25f, 1.0f },{ 0.8f, 0.9f, 0.7f, 1.0f } }, // 1
+		Vertex{ { 0.25f, 0.175f, 0.25f, 1.0f },{ 0.8f, 0.9f, 0.7f, 1.0f } }, // 2
+		Vertex{ { 0.25f, 0.175f, 0.25f, 1.0f },{ 0.8f, 0.9f, 0.7f, 1.0f } }, // 2	
+		Vertex{ { -0.175f, 0.175f, 0.25f, 1.0f },{ 0.8f, 0.9f, 0.7f, 1.0f } }, // 3
+		Vertex{ { 0.0f, 0.0f, 0.25f, 1.0f },{ 0.8f, 0.9f, 0.7f, 1.0f } }, // 0
 
-		Vertex{ { 0.425f, 0.0f, 0.25f, 1.0f },{ 0.0f, 0.9f, 0.0f, 1.0f } }, // 1 - RIGHT
-		Vertex{ { 0.425f, 0.0f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.0f, 1.0f } }, // 5
-		Vertex{ { 0.25f, 0.175f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.0f, 1.0f } }, // 6
-		Vertex{ { 0.25f, 0.175f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.0f, 1.0f } }, // 6	
-		Vertex{ { 0.25f, 0.175f, 0.25f, 1.0f },{ 0.0f, 0.9f, 0.0f, 1.0f } }, // 2
-		Vertex{ { 0.425f, 0.0f, 0.25f, 1.0f },{ 0.0f, 0.9f, 0.0f, 1.0f } }, // 1
+		Vertex{ { 0.425f, 0.0f, 0.25f, 1.0f },{ 0.8f, 0.35f, 0.5f, 1.0f } }, // 1 - RIGHT
+		Vertex{ { 0.425f, 0.0f, 0.0f, 1.0f },{ 0.8f, 0.35f, 0.5f, 1.0f } }, // 5
+		Vertex{ { 0.25f, 0.175f, 0.0f, 1.0f },{ 0.8f, 0.35f, 0.5f, 1.0f } }, // 6
+		Vertex{ { 0.25f, 0.175f, 0.0f, 1.0f },{ 0.8f, 0.35f, 0.5f, 1.0f } }, // 6	
+		Vertex{ { 0.25f, 0.175f, 0.25f, 1.0f },{ 0.8f, 0.35f, 0.5f, 1.0f } }, // 2
+		Vertex{ { 0.425f, 0.0f, 0.25f, 1.0f },{ 0.8f, 0.35f, 0.5f, 1.0f } }, // 1
 
-		Vertex{ { 0.25f, 0.175f, 0.25f, 1.0f },{ 0.0f, 0.0f, 0.9f, 1.0f } }, // 2 - TOP
-		Vertex{ { 0.25f, 0.175f, 0.0f, 1.0f },{ 0.0f, 0.0f, 0.9f, 1.0f } }, // 6
-		Vertex{ { -0.175f, 0.175f, 0.0f, 1.0f },{ 0.0f, 0.0f, 0.9f, 1.0f } }, // 7
-		Vertex{ { -0.175f, 0.175f, 0.0f, 1.0f },{ 0.0f, 0.0f, 0.9f, 1.0f } }, // 7	
-		Vertex{ { -0.175f, 0.175f, 0.25f, 1.0f },{ 0.0f, 0.0f, 0.9f, 1.0f } }, // 3
-		Vertex{ { 0.25f, 0.175f, 0.25f, 1.0f },{ 0.0f, 0.0f, 0.9f, 1.0f } }, // 2
+		Vertex{ { 0.25f, 0.175f, 0.25f, 1.0f },{ 0.8f, 0.5f, 0.35f, 1.0f } }, // 2 - TOP
+		Vertex{ { 0.25f, 0.175f, 0.0f, 1.0f },{ 0.8f, 0.5f, 0.35f, 1.0f } }, // 6
+		Vertex{ { -0.175f, 0.175f, 0.0f, 1.0f },{ 0.8f, 0.5f, 0.35f, 1.0f } }, // 7
+		Vertex{ { -0.175f, 0.175f, 0.0f, 1.0f },{ 0.8f, 0.5f, 0.35f, 1.0f } }, // 7	
+		Vertex{ { -0.175f, 0.175f, 0.25f, 1.0f },{ 0.8f, 0.5f, 0.35f, 1.0f } }, // 3
+		Vertex{ { 0.25f, 0.175f, 0.25f, 1.0f },{ 0.8f, 0.5f, 0.35f, 1.0f } }, // 2
 
-		Vertex{ { 0.425f, 0.0f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.9f, 1.0f } }, // 5 - BACK
-		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.9f, 1.0f } }, // 4
-		Vertex{ { -0.175f, 0.175f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.9f, 1.0f } }, // 7
-		Vertex{ { -0.175f, 0.175f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.9f, 1.0f } }, // 7	
-		Vertex{ { 0.25f, 0.175f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.9f, 1.0f } }, // 6
-		Vertex{ { 0.425f, 0.0f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.9f, 1.0f } }, // 5
+		Vertex{ { 0.425f, 0.0f, 0.0f, 1.0f },{ 0.8f, 0.9f, 0.2f, 1.0f } }, // 5 - BACK
+		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.8f, 0.9f, 0.2f, 1.0f } }, // 4
+		Vertex{ { -0.175f, 0.175f, 0.0f, 1.0f },{ 0.8f, 0.9f, 0.2f, 1.0f } }, // 7
+		Vertex{ { -0.175f, 0.175f, 0.0f, 1.0f },{ 0.8f, 0.9f, 0.2f, 1.0f } }, // 7	
+		Vertex{ { 0.25f, 0.175f, 0.0f, 1.0f },{ 0.8f, 0.9f, 0.2f, 1.0f } }, // 6
+		Vertex{ { 0.425f, 0.0f, 0.0f, 1.0f },{ 0.8f, 0.9f, 0.2f, 1.0f } }, // 5
 
-		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.9f, 0.0f, 0.9f, 1.0f } }, // 4 - LEFT
-		Vertex{ { 0.0f, 0.0f, 0.25f, 1.0f },{ 0.9f, 0.0f, 0.9f, 1.0f } }, // 0
-		Vertex{ { -0.175f, 0.175f, 0.25f, 1.0f },{ 0.9f, 0.0f, 0.9f, 1.0f } }, // 3
-		Vertex{ { -0.175f, 0.175f, 0.25f, 1.0f },{ 0.9f, 0.0f, 0.9f, 1.0f } }, // 3	
-		Vertex{ { -0.175f, 0.175f, 0.0f, 1.0f },{ 0.9f, 0.0f, 0.9f, 1.0f } }, // 7
-		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.9f, 0.0f, 0.9f, 1.0f } }, // 4
+		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.8f, 0.75f, 0.5f, 1.0f } }, // 4 - LEFT
+		Vertex{ { 0.0f, 0.0f, 0.25f, 1.0f },{ 0.8f, 0.75f, 0.5f, 1.0f } }, // 0
+		Vertex{ { -0.175f, 0.175f, 0.25f, 1.0f },{ 0.8f, 0.75f, 0.5f, 1.0f } }, // 3
+		Vertex{ { -0.175f, 0.175f, 0.25f, 1.0f },{ 0.8f, 0.75f, 0.5f, 1.0f } }, // 3	
+		Vertex{ { -0.175f, 0.175f, 0.0f, 1.0f },{ 0.8f, 0.75f, 0.5f, 1.0f } }, // 7
+		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.8f, 0.75f, 0.5f, 1.0f } }, // 4
 
-		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.9f, 0.9f, 0.0f, 1.0f } }, // 0 - BOTTOM
-		Vertex{ { 0.425f, 0.0f, 0.0f, 1.0f },{ 0.9f, 0.9f, 0.0f, 1.0f } }, // 4
-		Vertex{ { 0.425f, 0.0f, 0.25f, 1.0f },{ 0.9f, 0.9f, 0.0f, 1.0f } }, // 5
-		Vertex{ { 0.425f, 0.0f, 0.25f, 1.0f },{ 0.9f, 0.9f, 0.0f, 1.0f } }, // 5	
-		Vertex{ { 0.0f, 0.0f, 0.25f, 1.0f },{ 0.9f, 0.9f, 0.0f, 1.0f } }, // 1
-		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.9f, 0.9f, 0.0f, 1.0f } }  // 0
+		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.8f, 0.45f, 0.45f, 1.0f } }, // 0 - BOTTOM
+		Vertex{ { 0.425f, 0.0f, 0.0f, 1.0f },{ 0.8f, 0.45f, 0.45f, 1.0f } }, // 4
+		Vertex{ { 0.425f, 0.0f, 0.25f, 1.0f },{ 0.8f, 0.45f, 0.45f, 1.0f } }, // 5
+		Vertex{ { 0.425f, 0.0f, 0.25f, 1.0f },{ 0.8f, 0.45f, 0.45f, 1.0f } }, // 5	
+		Vertex{ { 0.0f, 0.0f, 0.25f, 1.0f },{ 0.8f, 0.45f, 0.45f, 1.0f } }, // 1
+		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.8f, 0.45f, 0.45f, 1.0f } }  // 0
 	};
 
 	Mesh parallelipiped = Mesh(Parallelipiped);
 
-	parallelipiped.setPosition(Vec3(0.35f, -0.35f, 0.0f));
+	parallelipiped.setPosition(Vec3(0.295f, -0.365f, 0.0f));
 	parallelipiped.setRotation(135.0f);
 	parallelipiped.setScale(Vec3(1.0f, 1.0f, 0.5f));
 	parallelipiped.setColor(Vec4());
-
 	meshes.push_back(parallelipiped);
+
+	float random = 0.05f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (0.95f - 0.05f)));
+	for (int i = 0; i < Pyramid.size(); i++)
+	{
+		Pyramid[i].rgba.x = random;
+	}
+	pyramid = Mesh(Pyramid);
 
 	pyramid.setPosition(Vec3(0.0f, -0.65f, 0.0f));
 	pyramid.set3DRotation(Vec3(0.0f, 180.0f, 0.0f));
 	pyramid.setScale(Vec3(-1.0f, 1.0f, 0.85f));
 	pyramid.setColor(Vec4());
-
 	meshes.push_back(pyramid);
 
-	pyramid.setPosition(Vec3(-0.25f, -0.35f, 0.0f));
+	random = 0.05f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (0.95f - 0.05f)));
+	for (int i = 0; i < Pyramid.size(); i++)
+	{
+		Pyramid[i].rgba.x = random;
+	}
+	pyramid = Mesh(Pyramid);
+
+	pyramid.setPosition(Vec3(-0.25f, -0.385f, 0.0f));
 	pyramid.setRotation(45.0f);
 	pyramid.setScale(Vec3(1.5f, 1.5f, 0.25f));
 	pyramid.setColor(Vec4());
-
 	meshes.push_back(pyramid);
+
+	random = 0.05f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (0.95f - 0.05f)));
+	for (int i = 0; i < Pyramid.size(); i++)
+	{
+		Pyramid[i].rgba.x = random;
+	}
+	pyramid = Mesh(Pyramid);
 
 	pyramid.setPosition(Vec3(-0.50f, -0.65f, 0.0f));
 	pyramid.setRotation(-90.0f);
 	pyramid.setScale(Vec3(1.0f, 1.0f, 0.15f));
 	pyramid.setColor(Vec4());
-
 	meshes.push_back(pyramid);
 
-	pyramid.setPosition(Vec3(-1.0f, -0.15f, 0.0f));
-	pyramid.setRotation(20.0f);
-	pyramid.setScale(Vec3(3.0f, 3.0f, 0.5f));
-	pyramid.setColor(Vec4());
+	random = 0.05f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (0.95f - 0.05f)));
+	for (int i = 0; i < Pyramid.size(); i++)
+	{
+		Pyramid[i].rgba.x = random;
+	}
+	pyramid = Mesh(Pyramid);
 
+	pyramid.setPosition(Vec3(-0.85f, -0.23f, 0.0f));
+	pyramid.setRotation(20.0f);
+	pyramid.setScale(Vec3(2.0f, 2.0f, 0.5f));
+	pyramid.setColor(Vec4());
 	meshes.push_back(pyramid);
 
-	pyramid.setPosition(Vec3(-0.50f, -0.15f, 0.0f));
-	pyramid.setRotation(20.0f);
-	pyramid.setScale(Vec3(3.0f, 3.0f, 0.7f));
-	pyramid.setColor(Vec4());
+	random = 0.05f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (0.95f - 0.05f)));
+	for (int i = 0; i < Pyramid.size(); i++)
+	{
+		Pyramid[i].rgba.x = random;
+	}
+	pyramid = Mesh(Pyramid);
 
+	pyramid.setPosition(Vec3(-0.25f, -0.23f, 0.0f));
+	pyramid.setRotation(20.0f);
+	pyramid.setScale(Vec3(2.0f, 2.0f, 0.7f));
+	pyramid.setColor(Vec4());
 	meshes.push_back(pyramid);
 
 	glClearColor(CLEAR_COLOR.x, CLEAR_COLOR.y, CLEAR_COLOR.z, 1.0f);

@@ -7,7 +7,7 @@ SceneManager::SceneManager()
 SceneManager::SceneManager(std::shared_ptr<Renderer> rendererRef)
 	: renderer(rendererRef)
 {
-	currentCamera = std::make_shared<Camera>(Vec3(0.0f, 0.0f, 5.0f));
+	currentCamera = std::make_shared<Camera>(Vec3(0.0f, -0.25f, 5.0f));
 
 	//setupSceneManager();
 }
