@@ -173,8 +173,8 @@ void Application::mouse(int x, int y)
 	int cx = (instance->windowWidth >> 1);
 	int cy = (instance->windowHeight >> 1);
 
-	float deltaX = float(cx - previousX) / 10;
-	float deltaY = float(cy - previousY);
+	float deltaX = float(previousX - cx) / 10;
+	float deltaY = float(previousY - cy);
 
 	if (abs(deltaX) > 0.5f)
 	{
@@ -258,7 +258,7 @@ void Application::setupCallbacks()
 	glutKeyboardFunc(char_keyboard);
 	glutSpecialFunc(keyboard);
 	glutSpecialUpFunc(keyboard_up);
-	glutPassiveMotionFunc(mouse);
+	glutMotionFunc(mouse);
 	glutWarpPointer(320,240);
 	glutEntryFunc(entry);
 }

@@ -40,7 +40,7 @@ Mat4 Camera::getViewMatrix()
 	{
 		//std::cout << "GIMBAL LOCK ACTIVATED" << std::endl;
 		//Vec3 zAxis = (Position - (Position + Front)).Normalize();
-		Vec3 zAxis = (Position - Vec3(0.0f, 0.0f, 0.0f)).Normalize();
+		/*Vec3 zAxis = (Position - Vec3(0.0f, 0.0f, 0.0f)).Normalize();
 		Vec3 xAxis = Vec3::CrossProduct(WorldUp, zAxis).Normalize();
 		Vec3 yAxis = Vec3::CrossProduct(zAxis, xAxis);
 
@@ -52,7 +52,7 @@ Mat4 Camera::getViewMatrix()
 			0.0f,0.0f,0.0f,  1.0f
 		};
 
-		viewMatrix = rotation * translation;
+		viewMatrix = rotation * translation;*/
 		
 		viewMatrix = translation * Mat4(Mat3::RodriguezRotation(Vec3::UnitX, Pitch)) * Mat4(Mat3::RodriguezRotation(Vec3::UnitY, Yaw));
 	}
@@ -119,7 +119,7 @@ void Camera::processKeyboard(Camera_Movement direction, float deltaTime)
 	}
 }
 
-void Camera::processMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch)
+void Camera::processMouseMovement(float xoffset, float yoffset, bool constrainPitch)
 {
 	xoffset *= MouseSensitivity;
 	yoffset *= MouseSensitivity;

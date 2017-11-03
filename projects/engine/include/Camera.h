@@ -72,7 +72,7 @@ public:
 
 	void processKeyboard(Camera_Movement direction, float deltaTime);
 
-	void processMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);
+	void processMouseMovement(float xoffset, float yoffset, bool constrainPitch = true);
 
 	void processMouseScroll(float yoffset);
 
