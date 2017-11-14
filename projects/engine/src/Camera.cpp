@@ -12,6 +12,7 @@ Camera::Camera(Vec3 position, Vec3 up, float yaw, float pitch)
 	Yaw = yaw;
 	Pitch = pitch;
 	currentProjectionType = Projection_Type::PERSPECTIVE;
+	currentCameraType = Camera_Type::ARCBALL;
 	updateCameraVectors();
 }
 
@@ -23,6 +24,7 @@ Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float u
 	Yaw = yaw;
 	Pitch = pitch;
 	currentProjectionType = Projection_Type::PERSPECTIVE;
+	currentCameraType = Camera_Type::ARCBALL;
 	updateCameraVectors();
 }
 
@@ -32,15 +34,52 @@ Camera::~Camera()
 
 Mat4 Camera::getViewMatrix()
 {
-	Mat4 viewMatrix;
-
 	Mat4 translation = Mat4::TranslationMatrix(-Position);
-
-	if (gimbalLock)
+	if (currentCameraType == Camera_Type::ARCBALL)
 	{
-		//std::cout << "GIMBAL LOCK ACTIVATED" << std::endl;
-		//Vec3 zAxis = (Position - (Position + Front)).Normalize();
-		/*Vec3 zAxis = (Position - Vec3(0.0f, 0.0f, 0.0f)).Normalize();
+		if (gimbalLock)
+		{
+			viewMatrix = translation * Mat4(Mat3::RodriguezRotation(Vec3::UnitX, Pitch)) * Mat4(Mat3::RodriguezRotation(Vec3::UnitY, Yaw));
+		}
+		else
+		{
+			Quat orientation = Quat::Normalize(Quat(Pitch, Vec3::UnitX) * Quat(Yaw, Vec3::UnitY));
+			
+			Pitch = 0.0f;
+			Yaw = 0.0f;
+
+			cameraQuaternion = (orientation * cameraQuaternion);
+			viewMatrix = translation * cameraQuaternion.getMatrix();
+		}
+	}
+	else if (currentCameraType == Camera_Type::FPS)
+	{
+		Mat4 rotation;
+		if (gimbalLock)
+		{
+			Vec3 zAxis = (Position - (Position + Front)).Normalize();
+			Vec3 xAxis = Vec3::CrossProduct(WorldUp, zAxis).Normalize();
+			Vec3 yAxis = Vec3::CrossProduct(zAxis, xAxis);
+
+			rotation =
+			{
+				xAxis.x,            xAxis.y,            xAxis.z,       0.0f,
+				yAxis.x,            yAxis.y,            yAxis.z,       0.0f,
+				zAxis.x,            zAxis.y,            zAxis.z,       0.0f,
+				   0.0f,			   0.0f,			   0.0f,	   1.0f
+			};
+		}
+		else
+		{
+
+			rotation = cameraQuaternion.getMatrix();
+		}
+
+		viewMatrix = rotation * translation;
+	}
+	else if (currentCameraType == Camera_Type::FREE_CAM)
+	{
+		Vec3 zAxis = (Position - (Position + Front)).Normalize();
 		Vec3 xAxis = Vec3::CrossProduct(WorldUp, zAxis).Normalize();
 		Vec3 yAxis = Vec3::CrossProduct(zAxis, xAxis);
 
@@ -49,23 +88,10 @@ Mat4 Camera::getViewMatrix()
 			xAxis.x,            xAxis.y,            xAxis.z,       0.0f,
 			yAxis.x,            yAxis.y,            yAxis.z,       0.0f,
 			zAxis.x,            zAxis.y,            zAxis.z,       0.0f,
-			0.0f,0.0f,0.0f,  1.0f
+			0.0f,			   0.0f,			   0.0f,	   1.0f
 		};
 
-		viewMatrix = rotation * translation;*/
-		
-		viewMatrix = translation * Mat4(Mat3::RodriguezRotation(Vec3::UnitX, Pitch)) * Mat4(Mat3::RodriguezRotation(Vec3::UnitY, Yaw));
-	}
-	else
-	{
-		//std::cout << "GIMBAL LOCK DEACTIVATED" << std::endl;
-		Quat tempQuat = Quat::Normalize(Quat(Pitch, Vec3::UnitX) * Quat(Yaw, Vec3::UnitY));
-
-		Pitch = 0.0f;
-		Yaw = 0.0f;
-
-		cameraQuaternion = (tempQuat * cameraQuaternion);
-		viewMatrix = translation * cameraQuaternion.getMatrix();
+		viewMatrix = rotation * translation;
 	}
 
 	return viewMatrix;
@@ -88,7 +114,7 @@ Mat4 Camera::getProjectionMatrix()
 
 void Camera::updateCameraVectors()
 {
-	if (!arcballCam)
+	if (currentCameraType != Camera_Type::ARCBALL)
 	{
 		// Calculate the new Front vector
 		Vec3 front;
@@ -100,13 +126,15 @@ void Camera::updateCameraVectors()
 		// Also re-calculate the Right and Up vector
 		Right = Vec3::CrossProduct(Front, WorldUp).Normalize(); // Normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
 		Up = Vec3::CrossProduct(Right, Front).Normalize();
+
+		std::cout << "HERE!!!!" << std::endl;
 	}
 }
 
 void Camera::processKeyboard(Camera_Movement direction, float deltaTime)
 {
 	float velocity = MovementSpeed * deltaTime;
-	if (!arcballCam)
+	if (currentCameraType != Camera_Type::ARCBALL)
 	{
 		if (direction == FORWARD)
 			Position += Front * velocity;
@@ -121,11 +149,16 @@ void Camera::processKeyboard(Camera_Movement direction, float deltaTime)
 
 void Camera::processMouseMovement(float xoffset, float yoffset, bool constrainPitch)
 {
-	xoffset *= MouseSensitivity;
-	yoffset *= MouseSensitivity;
-
-	Yaw += xoffset;
-	Pitch += yoffset;
+	if (xoffset != 0.0f)
+	{
+		xoffset *= MouseSensitivity;
+		Yaw += xoffset;
+	}
+	if (yoffset != 0.0f)
+	{
+		yoffset *= MouseSensitivity;
+		Pitch += yoffset;
+	}
 
 	if (constrainPitch)
 	{
@@ -155,7 +188,7 @@ void Camera::changeProjection()
 
 void Camera::toggleArcballCam()
 {
-	arcballCam ? arcballCam = false : arcballCam = true;
+	currentCameraType == Camera_Type::ARCBALL ? currentCameraType = Camera_Type::FPS : currentCameraType = Camera_Type::ARCBALL;
 }
 
 void Camera::toggleGimbalLock()

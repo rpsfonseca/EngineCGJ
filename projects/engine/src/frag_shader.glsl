@@ -1,6 +1,8 @@
 #version 330 core
 
-in vec4 aColor;
+in vec4 exPosition;
+in vec2 exTexcoord;
+in vec3 exNormal;
 out vec4 FragColor;
 
 vec3 rgb2hsv(vec3 c)
@@ -71,8 +73,10 @@ void main(void)
 	temp = hsl2rgb(vec3(0, 1.0 - (gl_PrimitiveID * 0.02), 0.50 - (gl_PrimitiveID * 0.02)));
 	FragColor = vec4(temp,1.0);*/
 
-	vec3 temp = aColor.rgb;
-	temp = hsl2rgb(temp);
+	/*vec3 temp = aColor.rgb;
+	temp = hsl2rgb(temp);*/
 	/*aColor = vec4(temp,1.0);*/
+
+    vec3 temp = (exNormal + vec3(1.0)) * 0.5;
 	FragColor = vec4(temp,1.0);
 }

@@ -1,27 +1,34 @@
 #pragma once
 
+#include "Mesh.h"
+#include "Vec2.h"
 #include "Vec3.h"
-#include "Vec4.h"
-#include "GL\glew.h"
-#include <vector>
 
-using namespace math;
-
-struct Vertex
+struct AdvancedVertex
 {
 	Vec4 position;
-	Vec4 rgba;
+	Vec2 texCoords;
+	Vec3 normals;
 };
 
-class Mesh
+class Model
 {
 public:
-	bool usingIndices = true;
+	//Mesh modelMesh;
+	std::vector<AdvancedVertex> vertices;
+	std::vector<Vec3> positions;
+	std::vector<Vec3> normals;
+	std::vector<Vec2> texCoords;
+	std::vector<unsigned int> indices;
+	unsigned int vao, vbo, ebo, ubo;
+	GLuint VboVertices, VboTexcoords, VboNormals;
 
-	Mesh();
-	Mesh(std::vector<Vertex> vertices);
-	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices);
-	~Mesh();
+public:
+	Model();
+	Model(std::string& filename);
+	~Model();
+
+	void setupModel();
 
 	unsigned int getVao();
 	inline unsigned int getVbo();
@@ -45,10 +52,7 @@ public:
 
 	Vec4 getColor();
 	void setColor(Vec4& sc);
-private:
-	unsigned int vao, vbo, ebo, ubo;
-	std::vector<Vertex> vertices;
-	std::vector<unsigned int> indices;
+
 
 	Vec3 worldPosition;
 	float worldRotation;
@@ -56,6 +60,5 @@ private:
 	Vec3 worldScale;
 
 	Vec4 topColor;
-
-	void setupMesh();
 };
+

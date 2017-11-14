@@ -1,7 +1,6 @@
-#include "Window.h"
 
-#include "GL\glew.h"
 #include "GL\freeglut.h"
+#include "Window.h"
 
 #include <iostream>
 
@@ -25,11 +24,29 @@ Window::~Window()
 
 void Window::setupWindow(const int& _versionMajor, const int& _versionMinor)
 {
-	int argc = 1;
+	/*int argc = 1;
 	char *argv[1] = { (char*)"Something" };
-	glutInit(&argc, argv);
+	glutInit(&argc, argv);*/
 
-	glutInitContextVersion(_versionMajor, _versionMinor);
+	if (!glfwInit())
+	{
+		exit(EXIT_FAILURE);
+	}
+
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, _versionMajor);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, _versionMinor);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+	window = glfwCreateWindow(WIDTH, HEIGHT, TITLE.c_str(), NULL, NULL);
+	if (!window)
+	{
+		glfwTerminate();
+		exit(EXIT_FAILURE);
+	}
+
+	glfwMakeContextCurrent(window);
+
+	/*glutInitContextVersion(_versionMajor, _versionMinor);
 	glutInitContextFlags(GLUT_FORWARD_COMPATIBLE);
 	glutInitContextProfile(GLUT_CORE_PROFILE);
 
@@ -42,12 +59,18 @@ void Window::setupWindow(const int& _versionMajor, const int& _versionMinor)
 	{
 		std::cerr << "ERROR: Could not create a new rendering window." << std::endl;
 		exit(EXIT_FAILURE);
-	}
+	}*/
+}
+
+bool Window::shouldWindowClose()
+{
+	return glfwWindowShouldClose(window);
 }
 
 void Window::swapBuffers()
 {
-	glutSwapBuffers();
+	//glutSwapBuffers();
+	glfwSwapBuffers(window);
 }
 
 void Window::reshape(int _newWidth, int _newHeight)

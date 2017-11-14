@@ -1,10 +1,12 @@
 #version 330 core
 layout(location = 0) in vec4 bPosition;
-layout(location = 1) in vec4 bColor;
+layout(location = 1) in vec2 bTexCoord;
+layout(location = 2) in vec3 bNormal;
 
-out vec4 aColor;
+out vec4 exPosition;
+out vec2 exTexcoord;
+out vec3 exNormal;
 
-uniform vec4 topColor;
 uniform mat4 modelMatrix;
 
 uniform SharedMatrices
@@ -15,6 +17,9 @@ uniform SharedMatrices
 
 void main()
 {
+	exPosition = bPosition;
+	exTexcoord = bTexCoord;
+	exNormal = bNormal;
+
 	gl_Position = projectionMatrix * viewMatrix * modelMatrix * bPosition;
-	aColor = bColor;
 }

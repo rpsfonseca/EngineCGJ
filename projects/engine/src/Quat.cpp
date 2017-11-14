@@ -24,7 +24,7 @@ namespace math
 
 	Quat::Quat(float angle, const Vec3& axis)
 	{
-		//axis = axis.Normalize();
+		// TODO: Axis normalization
 
 		float angleRad = MathUtils::radians(angle) / 2.0f;
 		float s = std::sin(angleRad);

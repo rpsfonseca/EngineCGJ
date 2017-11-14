@@ -1,8 +1,9 @@
 #pragma once
 
-#include "Window.h"
 #include "Renderer.h"
 #include "SceneManager.h"
+#include "Window.h"
+#include "GLFW\glfw3.h"
 
 #include <memory>
 
@@ -39,13 +40,18 @@ public:
 private:
 	static void display();
 	static void cleanup();
+	static void cleanup(GLFWwindow* window);
 	static void idle();
 	static void reshape(int _w, int _h);
+	static void reshapeWindow(GLFWwindow* window, int _w, int _h);
+	static void reshapeFramebuffer(GLFWwindow* window, int _w, int _h);
 	static void timer(int _val);
 	static void char_keyboard(unsigned char key, int x, int y);
 	static void keyboard(int key, int x, int y);
+	static void keyboard(GLFWwindow* window, int key, int scancode, int action, int mode);
 	static void keyboard_up(int key, int x, int y);
 	static void mouse(int x, int y);
+	static void mouse(GLFWwindow* window, double x, double y);
 	static void entry(int state);
 private:
 	void setupCallbacks();

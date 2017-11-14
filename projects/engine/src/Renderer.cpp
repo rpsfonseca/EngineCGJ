@@ -1,5 +1,6 @@
 #include "Renderer.h"
 #include "Mesh.h"
+#include "OpenGLError.h"
 #include "GL\glew.h"
 
 #include <ctime>
@@ -14,25 +15,7 @@ Renderer::Renderer()
 Renderer::~Renderer()
 {
 }
-bool isOpenGLError() {
-	bool isError = false;
-	GLenum errCode;
-	const GLubyte *errString;
-	while ((errCode = glGetError()) != GL_NO_ERROR) {
-		isError = true;
-		errString = gluErrorString(errCode);
-		std::cerr << "OpenGL ERROR [" << errString << "]." << std::endl;
-	}
-	return isError;
-}
 
-void checkOpenGLError(std::string error)
-{
-	if (isOpenGLError()) {
-		std::cerr << error << std::endl;
-		exit(EXIT_FAILURE);
-	}
-}
 void Renderer::draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -43,7 +26,7 @@ void Renderer::draw()
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 	currentShader.use();
-	for (Mesh& m : meshes)
+	/*for (Mesh& m : meshes)
 	{
 		glBindVertexArray(m.getVao());
 
@@ -66,10 +49,31 @@ void Renderer::draw()
 		{
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
+	}*/
+
+	for (Model& m : models)
+	{
+		glBindVertexArray(m.getVao());
+
+		modelMatrix = Mat4();
+		modelMatrix.matrix[0] = 1.0f;
+		modelMatrix.matrix[5] = 1.0f;
+		modelMatrix.matrix[10] = 1.0f;
+		modelMatrix.matrix[15] = 1.0f;
+		modelMatrix = modelMatrix * modelMatrix.TranslationMatrix(m.getPosition());
+		modelMatrix = modelMatrix * modelMatrix.RotationMatrixAboutAxis(Axis::AxisZ, -m.getRotation());
+		modelMatrix = modelMatrix * modelMatrix.ScaleMatrix(m.getScale());
+
+		currentShader.setMat4("modelMatrix", modelMatrix);
+
+		glDrawElements(GL_TRIANGLES, m.getIndicesSize(), GL_UNSIGNED_INT, (GLvoid*)0);
+		//glDrawArrays(GL_TRIANGLES, 0, (GLsizei)m.positions.size());
 	}
+
 	glUseProgram(0);
 	glBindVertexArray(0);
-	checkOpenGLError("ERROR: Could not draw scene.");
+
+	OpenGLError::checkOpenGLError("ERROR: Could not draw scene.");
 }
 
 void Renderer::setupRenderer()
@@ -175,275 +179,282 @@ void Renderer::setupRenderer()
 
 	Mesh cube = Mesh(v, { 0,1,2,2,3,0,1,5,6,6,2,1,2,6,7,7,3,2,5,4,7,7,6,5,4,0,3,3,7,4,0,4,5,5,1,0 });*/
 
-	v = {
-		Vertex{ { 0.0f, 0.0f, 1.0f, 1.0f },{ 0.0f, 0.95f, 0.90f, 1.0f }}, // 0 - FRONT
-		Vertex{ { 1.0f, 0.0f, 1.0f, 1.0f },{ 0.0f, 0.95f, 0.90f, 1.0f } }, // 1
-		Vertex{ { 1.0f, 1.0f, 1.0f, 1.0f },{ 0.0f, 0.95f, 0.90f, 1.0f } }, // 2
-		Vertex{ { 1.0f, 1.0f, 1.0f, 1.0f },{ 0.0f, 0.95f, 0.90f, 1.0f } }, // 2	
-		Vertex{ { 0.0f, 1.0f, 1.0f, 1.0f },{ 0.0f, 0.95f, 0.90f, 1.0f } }, // 3
-		Vertex{ { 0.0f, 0.0f, 1.0f, 1.0f },{ 0.0f, 0.95f, 0.90f, 1.0f } }, // 0
+	//v = {
+	//	Vertex{ { 0.0f, 0.0f, 1.0f, 1.0f },{ 0.0f, 0.95f, 0.90f, 1.0f }}, // 0 - FRONT
+	//	Vertex{ { 1.0f, 0.0f, 1.0f, 1.0f },{ 0.0f, 0.95f, 0.90f, 1.0f } }, // 1
+	//	Vertex{ { 1.0f, 1.0f, 1.0f, 1.0f },{ 0.0f, 0.95f, 0.90f, 1.0f } }, // 2
+	//	Vertex{ { 1.0f, 1.0f, 1.0f, 1.0f },{ 0.0f, 0.95f, 0.90f, 1.0f } }, // 2	
+	//	Vertex{ { 0.0f, 1.0f, 1.0f, 1.0f },{ 0.0f, 0.95f, 0.90f, 1.0f } }, // 3
+	//	Vertex{ { 0.0f, 0.0f, 1.0f, 1.0f },{ 0.0f, 0.95f, 0.90f, 1.0f } }, // 0
 
-		Vertex{ { 1.0f, 0.0f, 1.0f, 1.0f },{ 0.0f, 0.90f, 0.85f, 1.0f } }, // 1 - RIGHT
-		Vertex{ { 1.0f, 0.0f, 0.0f, 1.0f },{ 0.0f, 0.90f, 0.85f, 1.0f } }, // 5
-		Vertex{ { 1.0f, 1.0f, 0.0f, 1.0f },{ 0.0f, 0.90f, 0.85f, 1.0f } }, // 6
-		Vertex{ { 1.0f, 1.0f, 0.0f, 1.0f },{ 0.0f, 0.90f, 0.85f, 1.0f } }, // 6	
-		Vertex{ { 1.0f, 1.0f, 1.0f, 1.0f },{ 0.0f, 0.90f, 0.85f, 1.0f } }, // 2
-		Vertex{ { 1.0f, 0.0f, 1.0f, 1.0f },{ 0.0f, 0.90f, 0.85f, 1.0f } }, // 1
+	//	Vertex{ { 1.0f, 0.0f, 1.0f, 1.0f },{ 0.0f, 0.90f, 0.85f, 1.0f } }, // 1 - RIGHT
+	//	Vertex{ { 1.0f, 0.0f, 0.0f, 1.0f },{ 0.0f, 0.90f, 0.85f, 1.0f } }, // 5
+	//	Vertex{ { 1.0f, 1.0f, 0.0f, 1.0f },{ 0.0f, 0.90f, 0.85f, 1.0f } }, // 6
+	//	Vertex{ { 1.0f, 1.0f, 0.0f, 1.0f },{ 0.0f, 0.90f, 0.85f, 1.0f } }, // 6	
+	//	Vertex{ { 1.0f, 1.0f, 1.0f, 1.0f },{ 0.0f, 0.90f, 0.85f, 1.0f } }, // 2
+	//	Vertex{ { 1.0f, 0.0f, 1.0f, 1.0f },{ 0.0f, 0.90f, 0.85f, 1.0f } }, // 1
 
-		Vertex{ { 1.0f, 1.0f, 1.0f, 1.0f },{ 0.0f, 0.75f, 0.88f, 1.0f } }, // 2 - TOP
-		Vertex{ { 1.0f, 1.0f, 0.0f, 1.0f },{ 0.0f, 0.75f, 0.88f, 1.0f } }, // 6
-		Vertex{ { 0.0f, 1.0f, 0.0f, 1.0f },{ 0.0f, 0.75f, 0.88f, 1.0f } }, // 7
-		Vertex{ { 0.0f, 1.0f, 0.0f, 1.0f },{ 0.0f, 0.75f, 0.88f, 1.0f } }, // 7	
-		Vertex{ { 0.0f, 1.0f, 1.0f, 1.0f },{ 0.0f, 0.75f, 0.88f, 1.0f } }, // 3
-		Vertex{ { 1.0f, 1.0f, 1.0f, 1.0f },{ 0.0f, 0.75f, 0.88f, 1.0f } }, // 2
+	//	Vertex{ { 1.0f, 1.0f, 1.0f, 1.0f },{ 0.0f, 0.75f, 0.88f, 1.0f } }, // 2 - TOP
+	//	Vertex{ { 1.0f, 1.0f, 0.0f, 1.0f },{ 0.0f, 0.75f, 0.88f, 1.0f } }, // 6
+	//	Vertex{ { 0.0f, 1.0f, 0.0f, 1.0f },{ 0.0f, 0.75f, 0.88f, 1.0f } }, // 7
+	//	Vertex{ { 0.0f, 1.0f, 0.0f, 1.0f },{ 0.0f, 0.75f, 0.88f, 1.0f } }, // 7	
+	//	Vertex{ { 0.0f, 1.0f, 1.0f, 1.0f },{ 0.0f, 0.75f, 0.88f, 1.0f } }, // 3
+	//	Vertex{ { 1.0f, 1.0f, 1.0f, 1.0f },{ 0.0f, 0.75f, 0.88f, 1.0f } }, // 2
 
-		Vertex{ { 1.0f, 0.0f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.75f, 1.0f } }, // 5 - BACK
-		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.75f, 1.0f } }, // 4
-		Vertex{ { 0.0f, 1.0f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.75f, 1.0f } }, // 7
-		Vertex{ { 0.0f, 1.0f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.75f, 1.0f } }, // 7	
-		Vertex{ { 1.0f, 1.0f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.75f, 1.0f } }, // 6
-		Vertex{ { 1.0f, 0.0f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.75f, 1.0f } }, // 5
+	//	Vertex{ { 1.0f, 0.0f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.75f, 1.0f } }, // 5 - BACK
+	//	Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.75f, 1.0f } }, // 4
+	//	Vertex{ { 0.0f, 1.0f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.75f, 1.0f } }, // 7
+	//	Vertex{ { 0.0f, 1.0f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.75f, 1.0f } }, // 7	
+	//	Vertex{ { 1.0f, 1.0f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.75f, 1.0f } }, // 6
+	//	Vertex{ { 1.0f, 0.0f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.75f, 1.0f } }, // 5
 
-		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.0f, 0.65f, 0.9f, 1.0f } }, // 4 - LEFT
-		Vertex{ { 0.0f, 0.0f, 1.0f, 1.0f },{ 0.0f, 0.65f, 0.9f, 1.0f } }, // 0
-		Vertex{ { 0.0f, 1.0f, 1.0f, 1.0f },{ 0.0f, 0.65f, 0.9f, 1.0f } }, // 3
-		Vertex{ { 0.0f, 1.0f, 1.0f, 1.0f },{ 0.0f, 0.65f, 0.9f, 1.0f } }, // 3	
-		Vertex{ { 0.0f, 1.0f, 0.0f, 1.0f },{ 0.0f, 0.65f, 0.9f, 1.0f } }, // 7
-		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.0f, 0.65f, 0.9f, 1.0f } }, // 4
+	//	Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.0f, 0.65f, 0.9f, 1.0f } }, // 4 - LEFT
+	//	Vertex{ { 0.0f, 0.0f, 1.0f, 1.0f },{ 0.0f, 0.65f, 0.9f, 1.0f } }, // 0
+	//	Vertex{ { 0.0f, 1.0f, 1.0f, 1.0f },{ 0.0f, 0.65f, 0.9f, 1.0f } }, // 3
+	//	Vertex{ { 0.0f, 1.0f, 1.0f, 1.0f },{ 0.0f, 0.65f, 0.9f, 1.0f } }, // 3	
+	//	Vertex{ { 0.0f, 1.0f, 0.0f, 1.0f },{ 0.0f, 0.65f, 0.9f, 1.0f } }, // 7
+	//	Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.0f, 0.65f, 0.9f, 1.0f } }, // 4
 
-		Vertex{ { 0.0f, 0.0f, 1.0f, 1.0f },{ 0.0f, 0.9f, 0.65f, 1.0f } }, // 0 - BOTTOM
-		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.65f, 1.0f } }, // 4
-		Vertex{ { 1.0f, 0.0f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.65f, 1.0f } }, // 5
-		Vertex{ { 1.0f, 0.0f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.65f, 1.0f } }, // 5	
-		Vertex{ { 1.0f, 0.0f, 1.0f, 1.0f },{ 0.0f, 0.9f, 0.65f, 1.0f } }, // 1
-		Vertex{ { 0.0f, 0.0f, 1.0f, 1.0f },{ 0.0f, 0.9f, 0.65f, 1.0f } }  // 0
-	};
+	//	Vertex{ { 0.0f, 0.0f, 1.0f, 1.0f },{ 0.0f, 0.9f, 0.65f, 1.0f } }, // 0 - BOTTOM
+	//	Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.65f, 1.0f } }, // 4
+	//	Vertex{ { 1.0f, 0.0f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.65f, 1.0f } }, // 5
+	//	Vertex{ { 1.0f, 0.0f, 0.0f, 1.0f },{ 0.0f, 0.9f, 0.65f, 1.0f } }, // 5	
+	//	Vertex{ { 1.0f, 0.0f, 1.0f, 1.0f },{ 0.0f, 0.9f, 0.65f, 1.0f } }, // 1
+	//	Vertex{ { 0.0f, 0.0f, 1.0f, 1.0f },{ 0.0f, 0.9f, 0.65f, 1.0f } }  // 0
+	//};
 
-	Mesh cube = Mesh(v);
+	//Mesh cube = Mesh(v);
 
-	cube.setPosition(Vec3(-0.5f, -0.65f, 0.0f));
-	cube.setRotation(0.0f);
-	cube.setScale(Vec3(0.25f));
-	cube.setColor(Vec4());
+	//cube.setPosition(Vec3(-0.5f, -0.65f, 0.0f));
+	//cube.setRotation(0.0f);
+	//cube.setScale(Vec3(0.25f));
+	//cube.setColor(Vec4());
 
-	meshes.push_back(cube);
+	//meshes.push_back(cube);
 
-	std::vector<Vertex> Pyramid =
-	{
-		//front
-		Vertex { { 0.0f, 0.0f, 0.25f, 1.0f },{ 0.5f, 0.3f, 0.7f, 1.0f } },
-		Vertex { { 0.25f, 0.0f, 0.25f, 1.0f }, { 0.5f, 0.3f, 0.7f, 1.0f } },
-		Vertex{ { 0.25f, 0.25f, 0.25f, 1.0f }, { 0.5f, 0.3f, 0.7f, 1.0f } },
+	//std::vector<Vertex> Pyramid =
+	//{
+	//	//front
+	//	Vertex { { 0.0f, 0.0f, 0.25f, 1.0f },{ 0.5f, 0.3f, 0.7f, 1.0f } },
+	//	Vertex { { 0.25f, 0.0f, 0.25f, 1.0f }, { 0.5f, 0.3f, 0.7f, 1.0f } },
+	//	Vertex{ { 0.25f, 0.25f, 0.25f, 1.0f }, { 0.5f, 0.3f, 0.7f, 1.0f } },
 
-		//right
-		Vertex{ { 0.25f, 0.0f, 0.25f, 1.0f },{ 0.5f, 0.7f, 0.45f, 1.0f } },
-		Vertex{ { 0.25f, 0.0f, 0.0f, 1.0f }, { 0.5f, 0.7f, 0.45f, 1.0f } },
-		Vertex{ { 0.25f, 0.25f, 0.0f, 1.0f }, { 0.5f, 0.7f, 0.45f, 1.0f } },
-		Vertex{ { 0.25f, 0.25f, 0.0f, 1.0f }, { 0.5f, 0.7f, 0.45f, 1.0f } },
-		Vertex{ { 0.25f, 0.25f, 0.25f, 1.0f }, { 0.5f, 0.7f, 0.45f, 1.0f } },
-		Vertex{ { 0.25f, 0.0f, 0.25f, 1.0f }, { 0.5f, 0.7f, 0.45f, 1.0f } },
+	//	//right
+	//	Vertex{ { 0.25f, 0.0f, 0.25f, 1.0f },{ 0.5f, 0.7f, 0.45f, 1.0f } },
+	//	Vertex{ { 0.25f, 0.0f, 0.0f, 1.0f }, { 0.5f, 0.7f, 0.45f, 1.0f } },
+	//	Vertex{ { 0.25f, 0.25f, 0.0f, 1.0f }, { 0.5f, 0.7f, 0.45f, 1.0f } },
+	//	Vertex{ { 0.25f, 0.25f, 0.0f, 1.0f }, { 0.5f, 0.7f, 0.45f, 1.0f } },
+	//	Vertex{ { 0.25f, 0.25f, 0.25f, 1.0f }, { 0.5f, 0.7f, 0.45f, 1.0f } },
+	//	Vertex{ { 0.25f, 0.0f, 0.25f, 1.0f }, { 0.5f, 0.7f, 0.45f, 1.0f } },
 
-		//back
-		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.5f, 0.5f, 0.65f, 1.0f } },
-		Vertex{ { 0.25f, 0.25f, 0.0f, 1.0f },{ 0.5f, 0.5f, 0.65f, 1.0f } },
-		Vertex{ { 0.25f, 0.0f, 0.0f, 1.0f },{ 0.5f, 0.5f, 0.65f, 1.0f } },
+	//	//back
+	//	Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.5f, 0.5f, 0.65f, 1.0f } },
+	//	Vertex{ { 0.25f, 0.25f, 0.0f, 1.0f },{ 0.5f, 0.5f, 0.65f, 1.0f } },
+	//	Vertex{ { 0.25f, 0.0f, 0.0f, 1.0f },{ 0.5f, 0.5f, 0.65f, 1.0f } },
 
-		//top
-		Vertex{ { 0.0f, 0.0f, 0.25f, 1.0f },{ 0.5f, 0.6f, 0.3f, 1.0f } },
-		Vertex{ { 0.25f, 0.25f, 0.25f, 1.0f },{ 0.5f, 0.6f, 0.3f, 1.0f } },
-		Vertex{ { 0.25f, 0.25f, 0.0f, 1.0f },{ 0.5f, 0.6f, 0.3f, 1.0f } },
-		Vertex{ { 0.25f, 0.25f, 0.0f, 1.0f },{ 0.5f, 0.6f, 0.3f, 1.0f } },
-		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.5f, 0.6f, 0.3f, 1.0f } },
-		Vertex{ { 0.0f, 0.0f, 0.25f, 1.0f },{ 0.5f, 0.6f, 0.3f, 1.0f } },
+	//	//top
+	//	Vertex{ { 0.0f, 0.0f, 0.25f, 1.0f },{ 0.5f, 0.6f, 0.3f, 1.0f } },
+	//	Vertex{ { 0.25f, 0.25f, 0.25f, 1.0f },{ 0.5f, 0.6f, 0.3f, 1.0f } },
+	//	Vertex{ { 0.25f, 0.25f, 0.0f, 1.0f },{ 0.5f, 0.6f, 0.3f, 1.0f } },
+	//	Vertex{ { 0.25f, 0.25f, 0.0f, 1.0f },{ 0.5f, 0.6f, 0.3f, 1.0f } },
+	//	Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.5f, 0.6f, 0.3f, 1.0f } },
+	//	Vertex{ { 0.0f, 0.0f, 0.25f, 1.0f },{ 0.5f, 0.6f, 0.3f, 1.0f } },
 
-		//bottom
-		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.5f, 0.35f, 0.45f, 1.0f } },
-		Vertex{ { 0.25f, 0.0f, 0.0f, 1.0f },{ 0.5f, 0.35f, 0.45f, 1.0f } },
-		Vertex{ { 0.25f, 0.0f, 0.25f, 1.0f },{ 0.5f, 0.35f, 0.45f, 1.0f } },
-		Vertex{ { 0.25f, 0.0f, 0.25f, 1.0f },{ 0.5f, 0.35f, 0.45f, 1.0f } },
-		Vertex{ { 0.0f, 0.0f, 0.25f, 1.0f },{ 0.5f, 0.35f, 0.45f, 1.0f } },
-		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.5f, 0.35f, 0.45f, 1.0f } },
+	//	//bottom
+	//	Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.5f, 0.35f, 0.45f, 1.0f } },
+	//	Vertex{ { 0.25f, 0.0f, 0.0f, 1.0f },{ 0.5f, 0.35f, 0.45f, 1.0f } },
+	//	Vertex{ { 0.25f, 0.0f, 0.25f, 1.0f },{ 0.5f, 0.35f, 0.45f, 1.0f } },
+	//	Vertex{ { 0.25f, 0.0f, 0.25f, 1.0f },{ 0.5f, 0.35f, 0.45f, 1.0f } },
+	//	Vertex{ { 0.0f, 0.0f, 0.25f, 1.0f },{ 0.5f, 0.35f, 0.45f, 1.0f } },
+	//	Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.5f, 0.35f, 0.45f, 1.0f } },
 
-	};
+	//};
 
-	Mesh pyramid = Mesh(Pyramid);
+	//Mesh pyramid = Mesh(Pyramid);
 
-	/*pyramid.setPosition(Vec3(0.0f, 0.25f, 0.0f));
-	pyramid.setRotation(0.0f);
-	pyramid.setScale(Vec3(1.0f));
-	pyramid.setColor(Vec4());
+	///*pyramid.setPosition(Vec3(0.0f, 0.25f, 0.0f));
+	//pyramid.setRotation(0.0f);
+	//pyramid.setScale(Vec3(1.0f));
+	//pyramid.setColor(Vec4());
 
-	meshes.push_back(pyramid);*/
+	//meshes.push_back(pyramid);*/
 
-	/*std::vector<Vertex> Cube =
-	{
-		//front
-		Vector4(0.0f, 0.0f, 0.25f, 1.0f),
-		Vector4(0.25f, 0.0f, 0.25f, 1.0f),
-		Vector4(0.25f, 0.25f, 0.25f, 1.0f),
-		Vector4(0.25f, 0.25f, 0.25f, 1.0f),
-		Vector4(0.0f, 0.25f, 0.25f, 1.0f),
-		Vector4(0.0f, 0.0f, 0.25f, 1.0f),
+	///*std::vector<Vertex> Cube =
+	//{
+	//	//front
+	//	Vector4(0.0f, 0.0f, 0.25f, 1.0f),
+	//	Vector4(0.25f, 0.0f, 0.25f, 1.0f),
+	//	Vector4(0.25f, 0.25f, 0.25f, 1.0f),
+	//	Vector4(0.25f, 0.25f, 0.25f, 1.0f),
+	//	Vector4(0.0f, 0.25f, 0.25f, 1.0f),
+	//	Vector4(0.0f, 0.0f, 0.25f, 1.0f),
 
-		//right
-		Vector4(0.25f, 0.0f, 0.25f, 1.0f),
-		Vector4(0.25f, 0.0f, 0.0f, 1.0f),
-		Vector4(0.25f, 0.25f, 0.0f, 1.0f),
-		Vector4(0.25f, 0.25f, 0.0f, 1.0f),
-		Vector4(0.25f, 0.25f, 0.25f, 1.0f),
-		Vector4(0.25f, 0.0f, 0.25f, 1.0f),
+	//	//right
+	//	Vector4(0.25f, 0.0f, 0.25f, 1.0f),
+	//	Vector4(0.25f, 0.0f, 0.0f, 1.0f),
+	//	Vector4(0.25f, 0.25f, 0.0f, 1.0f),
+	//	Vector4(0.25f, 0.25f, 0.0f, 1.0f),
+	//	Vector4(0.25f, 0.25f, 0.25f, 1.0f),
+	//	Vector4(0.25f, 0.0f, 0.25f, 1.0f),
 
-		//top
-		Vector4(0.25f, 0.25f, 0.25f, 1.0f),
-		Vector4(0.25f, 0.25f, 0.0f, 1.0f),
-		Vector4(0.0f, 0.25f, 0.0f, 1.0f),
-		Vector4(0.0f, 0.25f, 0.0f, 1.0f),
-		Vector4(0.0f, 0.25f, 0.25f, 1.0f),
-		Vector4(0.25f, 0.25f, 0.25f, 1.0f),
+	//	//top
+	//	Vector4(0.25f, 0.25f, 0.25f, 1.0f),
+	//	Vector4(0.25f, 0.25f, 0.0f, 1.0f),
+	//	Vector4(0.0f, 0.25f, 0.0f, 1.0f),
+	//	Vector4(0.0f, 0.25f, 0.0f, 1.0f),
+	//	Vector4(0.0f, 0.25f, 0.25f, 1.0f),
+	//	Vector4(0.25f, 0.25f, 0.25f, 1.0f),
 
-		//back
-		Vector4(0.25f, 0.0f, 0.0f, 1.0f),
-		Vector4(0.0f, 0.0f, 0.0f, 1.0f),
-		Vector4(0.0f, 0.25f, 0.0f, 1.0f),
-		Vector4(0.0f, 0.25f, 0.0f, 1.0f),
-		Vector4(0.25f, 0.25f, 0.0f, 1.0f),
-		Vector4(0.25f, 0.0f, 0.0f, 1.0f),
+	//	//back
+	//	Vector4(0.25f, 0.0f, 0.0f, 1.0f),
+	//	Vector4(0.0f, 0.0f, 0.0f, 1.0f),
+	//	Vector4(0.0f, 0.25f, 0.0f, 1.0f),
+	//	Vector4(0.0f, 0.25f, 0.0f, 1.0f),
+	//	Vector4(0.25f, 0.25f, 0.0f, 1.0f),
+	//	Vector4(0.25f, 0.0f, 0.0f, 1.0f),
 
-		//left
-		Vector4(0.0f, 0.0f, 0.0f, 1.0f),
-		Vector4(0.0f, 0.0f, 0.25f, 1.0f),
-		Vector4(0.0f, 0.25f, 0.25f, 1.0f),
-		Vector4(0.0f, 0.25f, 0.25f, 1.0f),
-		Vector4(0.0f, 0.25f, 0.0f, 1.0f),
-		Vector4(0.0f, 0.0f, 0.0f, 1.0f),
+	//	//left
+	//	Vector4(0.0f, 0.0f, 0.0f, 1.0f),
+	//	Vector4(0.0f, 0.0f, 0.25f, 1.0f),
+	//	Vector4(0.0f, 0.25f, 0.25f, 1.0f),
+	//	Vector4(0.0f, 0.25f, 0.25f, 1.0f),
+	//	Vector4(0.0f, 0.25f, 0.0f, 1.0f),
+	//	Vector4(0.0f, 0.0f, 0.0f, 1.0f),
 
-		//bottom
-		Vector4(0.0f, 0.0f, 0.0f, 1.0f),
-		Vector4(0.25f, 0.0f, 0.0f, 1.0f),
-		Vector4(0.25f, 0.0f, 0.25f, 1.0f),
-		Vector4(0.25f, 0.0f, 0.25f, 1.0f),
-		Vector4(0.0f, 0.0f, 0.25f, 1.0f),
-		Vector4(0.0f, 0.0f, 0.0f, 1.0f),
+	//	//bottom
+	//	Vector4(0.0f, 0.0f, 0.0f, 1.0f),
+	//	Vector4(0.25f, 0.0f, 0.0f, 1.0f),
+	//	Vector4(0.25f, 0.0f, 0.25f, 1.0f),
+	//	Vector4(0.25f, 0.0f, 0.25f, 1.0f),
+	//	Vector4(0.0f, 0.0f, 0.25f, 1.0f),
+	//	Vector4(0.0f, 0.0f, 0.0f, 1.0f),
 
-	};*/
+	//};*/
 
-	std::vector<Vertex> Parallelipiped =
-	{
-		Vertex{ { 0.0f, 0.0f, 0.25f, 1.0f },{ 0.8f, 0.9f, 0.7f, 1.0f } }, // 0 - FRONT
-		Vertex{ { 0.425f, 0.0f, 0.25f, 1.0f },{ 0.8f, 0.9f, 0.7f, 1.0f } }, // 1
-		Vertex{ { 0.25f, 0.175f, 0.25f, 1.0f },{ 0.8f, 0.9f, 0.7f, 1.0f } }, // 2
-		Vertex{ { 0.25f, 0.175f, 0.25f, 1.0f },{ 0.8f, 0.9f, 0.7f, 1.0f } }, // 2	
-		Vertex{ { -0.175f, 0.175f, 0.25f, 1.0f },{ 0.8f, 0.9f, 0.7f, 1.0f } }, // 3
-		Vertex{ { 0.0f, 0.0f, 0.25f, 1.0f },{ 0.8f, 0.9f, 0.7f, 1.0f } }, // 0
+	//std::vector<Vertex> Parallelipiped =
+	//{
+	//	Vertex{ { 0.0f, 0.0f, 0.25f, 1.0f },{ 0.8f, 0.9f, 0.7f, 1.0f } }, // 0 - FRONT
+	//	Vertex{ { 0.425f, 0.0f, 0.25f, 1.0f },{ 0.8f, 0.9f, 0.7f, 1.0f } }, // 1
+	//	Vertex{ { 0.25f, 0.175f, 0.25f, 1.0f },{ 0.8f, 0.9f, 0.7f, 1.0f } }, // 2
+	//	Vertex{ { 0.25f, 0.175f, 0.25f, 1.0f },{ 0.8f, 0.9f, 0.7f, 1.0f } }, // 2	
+	//	Vertex{ { -0.175f, 0.175f, 0.25f, 1.0f },{ 0.8f, 0.9f, 0.7f, 1.0f } }, // 3
+	//	Vertex{ { 0.0f, 0.0f, 0.25f, 1.0f },{ 0.8f, 0.9f, 0.7f, 1.0f } }, // 0
 
-		Vertex{ { 0.425f, 0.0f, 0.25f, 1.0f },{ 0.8f, 0.35f, 0.5f, 1.0f } }, // 1 - RIGHT
-		Vertex{ { 0.425f, 0.0f, 0.0f, 1.0f },{ 0.8f, 0.35f, 0.5f, 1.0f } }, // 5
-		Vertex{ { 0.25f, 0.175f, 0.0f, 1.0f },{ 0.8f, 0.35f, 0.5f, 1.0f } }, // 6
-		Vertex{ { 0.25f, 0.175f, 0.0f, 1.0f },{ 0.8f, 0.35f, 0.5f, 1.0f } }, // 6	
-		Vertex{ { 0.25f, 0.175f, 0.25f, 1.0f },{ 0.8f, 0.35f, 0.5f, 1.0f } }, // 2
-		Vertex{ { 0.425f, 0.0f, 0.25f, 1.0f },{ 0.8f, 0.35f, 0.5f, 1.0f } }, // 1
+	//	Vertex{ { 0.425f, 0.0f, 0.25f, 1.0f },{ 0.8f, 0.35f, 0.5f, 1.0f } }, // 1 - RIGHT
+	//	Vertex{ { 0.425f, 0.0f, 0.0f, 1.0f },{ 0.8f, 0.35f, 0.5f, 1.0f } }, // 5
+	//	Vertex{ { 0.25f, 0.175f, 0.0f, 1.0f },{ 0.8f, 0.35f, 0.5f, 1.0f } }, // 6
+	//	Vertex{ { 0.25f, 0.175f, 0.0f, 1.0f },{ 0.8f, 0.35f, 0.5f, 1.0f } }, // 6	
+	//	Vertex{ { 0.25f, 0.175f, 0.25f, 1.0f },{ 0.8f, 0.35f, 0.5f, 1.0f } }, // 2
+	//	Vertex{ { 0.425f, 0.0f, 0.25f, 1.0f },{ 0.8f, 0.35f, 0.5f, 1.0f } }, // 1
 
-		Vertex{ { 0.25f, 0.175f, 0.25f, 1.0f },{ 0.8f, 0.5f, 0.35f, 1.0f } }, // 2 - TOP
-		Vertex{ { 0.25f, 0.175f, 0.0f, 1.0f },{ 0.8f, 0.5f, 0.35f, 1.0f } }, // 6
-		Vertex{ { -0.175f, 0.175f, 0.0f, 1.0f },{ 0.8f, 0.5f, 0.35f, 1.0f } }, // 7
-		Vertex{ { -0.175f, 0.175f, 0.0f, 1.0f },{ 0.8f, 0.5f, 0.35f, 1.0f } }, // 7	
-		Vertex{ { -0.175f, 0.175f, 0.25f, 1.0f },{ 0.8f, 0.5f, 0.35f, 1.0f } }, // 3
-		Vertex{ { 0.25f, 0.175f, 0.25f, 1.0f },{ 0.8f, 0.5f, 0.35f, 1.0f } }, // 2
+	//	Vertex{ { 0.25f, 0.175f, 0.25f, 1.0f },{ 0.8f, 0.5f, 0.35f, 1.0f } }, // 2 - TOP
+	//	Vertex{ { 0.25f, 0.175f, 0.0f, 1.0f },{ 0.8f, 0.5f, 0.35f, 1.0f } }, // 6
+	//	Vertex{ { -0.175f, 0.175f, 0.0f, 1.0f },{ 0.8f, 0.5f, 0.35f, 1.0f } }, // 7
+	//	Vertex{ { -0.175f, 0.175f, 0.0f, 1.0f },{ 0.8f, 0.5f, 0.35f, 1.0f } }, // 7	
+	//	Vertex{ { -0.175f, 0.175f, 0.25f, 1.0f },{ 0.8f, 0.5f, 0.35f, 1.0f } }, // 3
+	//	Vertex{ { 0.25f, 0.175f, 0.25f, 1.0f },{ 0.8f, 0.5f, 0.35f, 1.0f } }, // 2
 
-		Vertex{ { 0.425f, 0.0f, 0.0f, 1.0f },{ 0.8f, 0.9f, 0.2f, 1.0f } }, // 5 - BACK
-		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.8f, 0.9f, 0.2f, 1.0f } }, // 4
-		Vertex{ { -0.175f, 0.175f, 0.0f, 1.0f },{ 0.8f, 0.9f, 0.2f, 1.0f } }, // 7
-		Vertex{ { -0.175f, 0.175f, 0.0f, 1.0f },{ 0.8f, 0.9f, 0.2f, 1.0f } }, // 7	
-		Vertex{ { 0.25f, 0.175f, 0.0f, 1.0f },{ 0.8f, 0.9f, 0.2f, 1.0f } }, // 6
-		Vertex{ { 0.425f, 0.0f, 0.0f, 1.0f },{ 0.8f, 0.9f, 0.2f, 1.0f } }, // 5
+	//	Vertex{ { 0.425f, 0.0f, 0.0f, 1.0f },{ 0.8f, 0.9f, 0.2f, 1.0f } }, // 5 - BACK
+	//	Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.8f, 0.9f, 0.2f, 1.0f } }, // 4
+	//	Vertex{ { -0.175f, 0.175f, 0.0f, 1.0f },{ 0.8f, 0.9f, 0.2f, 1.0f } }, // 7
+	//	Vertex{ { -0.175f, 0.175f, 0.0f, 1.0f },{ 0.8f, 0.9f, 0.2f, 1.0f } }, // 7	
+	//	Vertex{ { 0.25f, 0.175f, 0.0f, 1.0f },{ 0.8f, 0.9f, 0.2f, 1.0f } }, // 6
+	//	Vertex{ { 0.425f, 0.0f, 0.0f, 1.0f },{ 0.8f, 0.9f, 0.2f, 1.0f } }, // 5
 
-		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.8f, 0.75f, 0.5f, 1.0f } }, // 4 - LEFT
-		Vertex{ { 0.0f, 0.0f, 0.25f, 1.0f },{ 0.8f, 0.75f, 0.5f, 1.0f } }, // 0
-		Vertex{ { -0.175f, 0.175f, 0.25f, 1.0f },{ 0.8f, 0.75f, 0.5f, 1.0f } }, // 3
-		Vertex{ { -0.175f, 0.175f, 0.25f, 1.0f },{ 0.8f, 0.75f, 0.5f, 1.0f } }, // 3	
-		Vertex{ { -0.175f, 0.175f, 0.0f, 1.0f },{ 0.8f, 0.75f, 0.5f, 1.0f } }, // 7
-		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.8f, 0.75f, 0.5f, 1.0f } }, // 4
+	//	Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.8f, 0.75f, 0.5f, 1.0f } }, // 4 - LEFT
+	//	Vertex{ { 0.0f, 0.0f, 0.25f, 1.0f },{ 0.8f, 0.75f, 0.5f, 1.0f } }, // 0
+	//	Vertex{ { -0.175f, 0.175f, 0.25f, 1.0f },{ 0.8f, 0.75f, 0.5f, 1.0f } }, // 3
+	//	Vertex{ { -0.175f, 0.175f, 0.25f, 1.0f },{ 0.8f, 0.75f, 0.5f, 1.0f } }, // 3	
+	//	Vertex{ { -0.175f, 0.175f, 0.0f, 1.0f },{ 0.8f, 0.75f, 0.5f, 1.0f } }, // 7
+	//	Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.8f, 0.75f, 0.5f, 1.0f } }, // 4
 
-		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.8f, 0.45f, 0.45f, 1.0f } }, // 0 - BOTTOM
-		Vertex{ { 0.425f, 0.0f, 0.0f, 1.0f },{ 0.8f, 0.45f, 0.45f, 1.0f } }, // 4
-		Vertex{ { 0.425f, 0.0f, 0.25f, 1.0f },{ 0.8f, 0.45f, 0.45f, 1.0f } }, // 5
-		Vertex{ { 0.425f, 0.0f, 0.25f, 1.0f },{ 0.8f, 0.45f, 0.45f, 1.0f } }, // 5	
-		Vertex{ { 0.0f, 0.0f, 0.25f, 1.0f },{ 0.8f, 0.45f, 0.45f, 1.0f } }, // 1
-		Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.8f, 0.45f, 0.45f, 1.0f } }  // 0
-	};
+	//	Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.8f, 0.45f, 0.45f, 1.0f } }, // 0 - BOTTOM
+	//	Vertex{ { 0.425f, 0.0f, 0.0f, 1.0f },{ 0.8f, 0.45f, 0.45f, 1.0f } }, // 4
+	//	Vertex{ { 0.425f, 0.0f, 0.25f, 1.0f },{ 0.8f, 0.45f, 0.45f, 1.0f } }, // 5
+	//	Vertex{ { 0.425f, 0.0f, 0.25f, 1.0f },{ 0.8f, 0.45f, 0.45f, 1.0f } }, // 5	
+	//	Vertex{ { 0.0f, 0.0f, 0.25f, 1.0f },{ 0.8f, 0.45f, 0.45f, 1.0f } }, // 1
+	//	Vertex{ { 0.0f, 0.0f, 0.0f, 1.0f },{ 0.8f, 0.45f, 0.45f, 1.0f } }  // 0
+	//};
 
-	Mesh parallelipiped = Mesh(Parallelipiped);
+	//Mesh parallelipiped = Mesh(Parallelipiped);
 
-	parallelipiped.setPosition(Vec3(0.295f, -0.365f, 0.0f));
-	parallelipiped.setRotation(135.0f);
-	parallelipiped.setScale(Vec3(1.0f, 1.0f, 0.5f));
-	parallelipiped.setColor(Vec4());
-	meshes.push_back(parallelipiped);
+	//parallelipiped.setPosition(Vec3(0.295f, -0.365f, 0.0f));
+	//parallelipiped.setRotation(135.0f);
+	//parallelipiped.setScale(Vec3(1.0f, 1.0f, 0.5f));
+	//parallelipiped.setColor(Vec4());
+	//meshes.push_back(parallelipiped);
 
-	float random = 0.05f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (0.95f - 0.05f)));
-	for (int i = 0; i < Pyramid.size(); i++)
-	{
-		Pyramid[i].rgba.x = random;
-	}
-	pyramid = Mesh(Pyramid);
+	//float random = 0.05f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (0.95f - 0.05f)));
+	//for (int i = 0; i < Pyramid.size(); i++)
+	//{
+	//	Pyramid[i].rgba.x = random;
+	//}
+	//pyramid = Mesh(Pyramid);
 
-	pyramid.setPosition(Vec3(0.0f, -0.65f, 0.0f));
-	pyramid.set3DRotation(Vec3(0.0f, 180.0f, 0.0f));
-	pyramid.setScale(Vec3(-1.0f, 1.0f, 0.85f));
-	pyramid.setColor(Vec4());
-	meshes.push_back(pyramid);
+	//pyramid.setPosition(Vec3(0.0f, -0.65f, 0.0f));
+	//pyramid.set3DRotation(Vec3(0.0f, 180.0f, 0.0f));
+	//pyramid.setScale(Vec3(-1.0f, 1.0f, 0.85f));
+	//pyramid.setColor(Vec4());
+	//meshes.push_back(pyramid);
 
-	random = 0.05f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (0.95f - 0.05f)));
-	for (int i = 0; i < Pyramid.size(); i++)
-	{
-		Pyramid[i].rgba.x = random;
-	}
-	pyramid = Mesh(Pyramid);
+	//random = 0.05f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (0.95f - 0.05f)));
+	//for (int i = 0; i < Pyramid.size(); i++)
+	//{
+	//	Pyramid[i].rgba.x = random;
+	//}
+	//pyramid = Mesh(Pyramid);
 
-	pyramid.setPosition(Vec3(-0.25f, -0.385f, 0.0f));
-	pyramid.setRotation(45.0f);
-	pyramid.setScale(Vec3(1.5f, 1.5f, 0.25f));
-	pyramid.setColor(Vec4());
-	meshes.push_back(pyramid);
+	//pyramid.setPosition(Vec3(-0.25f, -0.385f, 0.0f));
+	//pyramid.setRotation(45.0f);
+	//pyramid.setScale(Vec3(1.5f, 1.5f, 0.25f));
+	//pyramid.setColor(Vec4());
+	//meshes.push_back(pyramid);
 
-	random = 0.05f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (0.95f - 0.05f)));
-	for (int i = 0; i < Pyramid.size(); i++)
-	{
-		Pyramid[i].rgba.x = random;
-	}
-	pyramid = Mesh(Pyramid);
+	//random = 0.05f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (0.95f - 0.05f)));
+	//for (int i = 0; i < Pyramid.size(); i++)
+	//{
+	//	Pyramid[i].rgba.x = random;
+	//}
+	//pyramid = Mesh(Pyramid);
 
-	pyramid.setPosition(Vec3(-0.50f, -0.65f, 0.0f));
-	pyramid.setRotation(-90.0f);
-	pyramid.setScale(Vec3(1.0f, 1.0f, 0.15f));
-	pyramid.setColor(Vec4());
-	meshes.push_back(pyramid);
+	//pyramid.setPosition(Vec3(-0.50f, -0.65f, 0.0f));
+	//pyramid.setRotation(-90.0f);
+	//pyramid.setScale(Vec3(1.0f, 1.0f, 0.15f));
+	//pyramid.setColor(Vec4());
+	//meshes.push_back(pyramid);
 
-	random = 0.05f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (0.95f - 0.05f)));
-	for (int i = 0; i < Pyramid.size(); i++)
-	{
-		Pyramid[i].rgba.x = random;
-	}
-	pyramid = Mesh(Pyramid);
+	//random = 0.05f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (0.95f - 0.05f)));
+	//for (int i = 0; i < Pyramid.size(); i++)
+	//{
+	//	Pyramid[i].rgba.x = random;
+	//}
+	//pyramid = Mesh(Pyramid);
 
-	pyramid.setPosition(Vec3(-0.85f, -0.23f, 0.0f));
-	pyramid.setRotation(20.0f);
-	pyramid.setScale(Vec3(2.0f, 2.0f, 0.5f));
-	pyramid.setColor(Vec4());
-	meshes.push_back(pyramid);
+	//pyramid.setPosition(Vec3(-0.85f, -0.23f, 0.0f));
+	//pyramid.setRotation(20.0f);
+	//pyramid.setScale(Vec3(2.0f, 2.0f, 0.5f));
+	//pyramid.setColor(Vec4());
+	//meshes.push_back(pyramid);
 
-	random = 0.05f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (0.95f - 0.05f)));
-	for (int i = 0; i < Pyramid.size(); i++)
-	{
-		Pyramid[i].rgba.x = random;
-	}
-	pyramid = Mesh(Pyramid);
+	//random = 0.05f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (0.95f - 0.05f)));
+	//for (int i = 0; i < Pyramid.size(); i++)
+	//{
+	//	Pyramid[i].rgba.x = random;
+	//}
+	//pyramid = Mesh(Pyramid);
 
-	pyramid.setPosition(Vec3(-0.25f, -0.23f, 0.0f));
-	pyramid.setRotation(20.0f);
-	pyramid.setScale(Vec3(2.0f, 2.0f, 0.7f));
-	pyramid.setColor(Vec4());
-	meshes.push_back(pyramid);
+	//pyramid.setPosition(Vec3(-0.25f, -0.23f, 0.0f));
+	//pyramid.setRotation(20.0f);
+	//pyramid.setScale(Vec3(2.0f, 2.0f, 0.7f));
+	//pyramid.setColor(Vec4());
+	//meshes.push_back(pyramid);
+
+	Model cube2 = Model(std::string("../../projects/engine/src/cube.obj"));
+	cube2.setPosition(Vec3(0.0f));
+	cube2.setRotation(0.0f);
+	cube2.setScale(Vec3(1.0f));
+	cube2.setColor(Vec4());
+	models.push_back(cube2);
 
 	glClearColor(CLEAR_COLOR.x, CLEAR_COLOR.y, CLEAR_COLOR.z, 1.0f);
 	glEnable(GL_DEPTH_TEST);

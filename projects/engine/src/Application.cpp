@@ -1,6 +1,8 @@
-#include "Application.h"
+
 #include "GL\glew.h"
 #include "GL\freeglut.h"
+#include "Application.h"
+#include "Keyboard.h"
 
 #include <iostream>
 #include <sstream>
@@ -55,6 +57,43 @@ void Application::display()
 	++FRAME_COUNT;
 
 	//instance->rendererRef->draw();
+	
+	if (input::Keyboard::GetInstance().Pressed(GLFW_KEY_1))
+	{
+		instance->sceneManagerRef->toggleArcballCam();
+	}
+
+	directions[0] = 0;
+	directions[1] = 0;
+	if (input::Keyboard::GetInstance().isKeyDown(GLFW_KEY_A))
+	{
+		if (directions[0] == 1 || directions[0] == 0)
+		{
+			directions[0] -= 1;
+		}
+	}
+	if (input::Keyboard::GetInstance().isKeyDown(GLFW_KEY_D))
+	{
+		if (directions[0] == -1 || directions[0] == 0)
+		{
+			directions[0] += 1;
+		}
+	}
+	if (input::Keyboard::GetInstance().isKeyDown(GLFW_KEY_W))
+	{
+		if (directions[1] == -1 || directions[1] == 0)
+		{
+			directions[1] += 1;
+		}
+	}
+	if (input::Keyboard::GetInstance().isKeyDown(GLFW_KEY_S))
+	{
+		if (directions[1] == 1 || directions[1] == 0)
+		{
+			directions[1] -= 1;
+		}
+	}
+
 	if (directions[0] == -1)
 	{
 		instance->sceneManagerRef->updateCamera(Camera_Movement::LEFT);
@@ -70,11 +109,12 @@ void Application::display()
 		instance->sceneManagerRef->updateCamera(Camera_Movement::BACKWARD);
 
 	}
-	else if(directions[1] == 1)
+	else if (directions[1] == 1)
 	{
 		instance->sceneManagerRef->updateCamera(Camera_Movement::FORWARD);
 
 	}
+
 	instance->sceneManagerRef->renderScene();
 	instance->windowRef->swapBuffers();
 }
@@ -82,6 +122,10 @@ void Application::display()
 void Application::cleanup()
 {
 
+}
+
+void Application::cleanup(GLFWwindow * window)
+{
 }
 
 void Application::idle()
@@ -95,6 +139,19 @@ void Application::reshape(int _w, int _h)
 	instance->windowHeight = _h;
 	instance->sceneManagerRef->updateAspectRatio((float)_w / (float)_h);
 	instance->windowRef->reshape(_w, _h);
+	instance->rendererRef->reshapeViewport(_w, _h);
+}
+
+void Application::reshapeWindow(GLFWwindow* window, int _w, int _h)
+{
+	instance->windowWidth = _w;
+	instance->windowHeight = _h;
+	instance->sceneManagerRef->updateAspectRatio((float)_w / (float)_h);
+	instance->windowRef->reshape(_w, _h);
+}
+
+void Application::reshapeFramebuffer(GLFWwindow* window, int _w, int _h)
+{
 	instance->rendererRef->reshapeViewport(_w, _h);
 }
 
@@ -187,6 +244,42 @@ void Application::mouse(int x, int y)
 	instance->sceneManagerRef->rotateCamera(deltaX, deltaY);
 }
 
+void Application::mouse(GLFWwindow* window, double x, double y)
+{
+	previousX = x;
+	previousY = y;
+
+	int cx = (instance->windowWidth >> 1);
+	int cy = (instance->windowHeight >> 1);
+
+	float deltaX = float(previousX - cx) * 0.1f;
+	float deltaY = float(previousY - cy) * 0.1f;
+
+	std::cout << "DeltaX: " << abs(deltaX) << std::endl;
+	std::cout << "DeltaY: " << abs(deltaY) << std::endl;
+	if (abs(deltaX) > 0.5f)
+	{
+		glfwSetCursorPos(window, cx, y);
+	}
+	else
+	{
+		deltaX = 0.0f;
+	}
+	if (abs(deltaY) > 0.5f)
+	{
+		glfwSetCursorPos(window, x, cy);
+	}
+	else
+	{
+		deltaY = 0.0f;
+	}
+
+
+	glfwSetWindowPos(instance->windowRef->window, 320, 240);
+
+	instance->sceneManagerRef->rotateCamera(deltaX, deltaY);
+}
+
 void Application::entry(int state)
 {
 	if (state == GLUT_LEFT)
@@ -230,6 +323,21 @@ void Application::keyboard(int key, int x, int y)
 	}
 }
 
+void Application::keyboard(GLFWwindow * window, int key, int scancode, int action, int mode)
+{
+	switch (action)
+	{
+	case GLFW_PRESS:
+		input::Keyboard::GetInstance().KeyPressed(key);
+		break;
+	case GLFW_RELEASE:
+		input::Keyboard::GetInstance().KeyReleased(key);
+		break;
+	default:
+		break;
+	}
+}
+
 void Application::setupApp()
 {
 	windowRef->setupWindow(versionMajor, versionMinor);
@@ -246,11 +354,14 @@ void Application::setupApp()
 	sceneManagerRef->setupSceneManager();
 
 	setupCallbacks();
+
+	glfwSetInputMode(windowRef->window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	instance->sceneManagerRef->updateAspectRatio(640.0f/480.0f);
 }
 
 void Application::setupCallbacks()
 {
-	glutCloseFunc(cleanup);
+	/*glutCloseFunc(cleanup);
 	glutDisplayFunc(display);
 	glutIdleFunc(idle);
 	glutReshapeFunc(reshape);
@@ -260,10 +371,26 @@ void Application::setupCallbacks()
 	glutSpecialUpFunc(keyboard_up);
 	glutMotionFunc(mouse);
 	glutWarpPointer(320,240);
-	glutEntryFunc(entry);
+	glutEntryFunc(entry);*/
+
+	glfwSetWindowCloseCallback(windowRef->window, cleanup);
+	glfwSetWindowSizeCallback(windowRef->window, reshapeWindow);
+	glfwSetFramebufferSizeCallback(windowRef->window, reshapeFramebuffer);
+	glfwSetCursorPosCallback(windowRef->window, mouse);
+	glfwSetKeyCallback(windowRef->window, keyboard);
 }
 
 void Application::mainLoop()
 {
-	glutMainLoop();
+	//glutMainLoop();
+
+	while (!windowRef->shouldWindowClose())
+	{
+		draw();
+
+		glfwPollEvents();
+	}
+
+	glfwDestroyWindow(instance->windowRef->window);
+	glfwTerminate();
 }

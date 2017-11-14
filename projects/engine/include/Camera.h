@@ -3,7 +3,6 @@
 #include "Vec3.h"
 #include "Mat4.h"
 #include "MathUtils.h"
-#include "GL\glew.h"
 
 #include "Quat.h"
 
@@ -17,6 +16,13 @@ enum Camera_Movement
 	BACKWARD,
 	LEFT,
 	RIGHT
+};
+
+enum Camera_Type
+{
+	ARCBALL,
+	FPS,
+	FREE_CAM
 };
 
 enum Projection_Type
@@ -53,10 +59,13 @@ public:
 
 	float aspectRatio;
 
+	Camera_Type currentCameraType;
 	Projection_Type currentProjectionType;
 
-	bool arcballCam = true;
+	bool arcballCam = false;
 	bool gimbalLock = true;
+
+	Mat4 viewMatrix;
 
 	Quat cameraQuaternion;
 

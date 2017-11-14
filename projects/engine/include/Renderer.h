@@ -3,6 +3,7 @@
 #include "Vec3.h"
 #include "Mesh.h"
 #include "Shader.h"
+#include "Model.h"
 
 #include <vector>
 
@@ -22,6 +23,7 @@ public:
 
 private:
 	std::vector<Mesh> meshes;
+	std::vector<Model> models;
 
 public:
 	Renderer();
