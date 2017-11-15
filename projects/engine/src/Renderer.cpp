@@ -51,29 +51,52 @@ void Renderer::draw()
 		}
 	}*/
 
-	for (Model& m : models)
-	{
-		glBindVertexArray(m.getVao());
+	//for (Model& m : models)
+	//{
+	//	glBindVertexArray(m.getVao());
 
-		modelMatrix = Mat4();
-		modelMatrix.matrix[0] = 1.0f;
-		modelMatrix.matrix[5] = 1.0f;
-		modelMatrix.matrix[10] = 1.0f;
-		modelMatrix.matrix[15] = 1.0f;
-		modelMatrix = modelMatrix * modelMatrix.TranslationMatrix(m.getPosition());
-		modelMatrix = modelMatrix * modelMatrix.RotationMatrixAboutAxis(Axis::AxisZ, -m.getRotation());
-		modelMatrix = modelMatrix * modelMatrix.ScaleMatrix(m.getScale());
+	//	modelMatrix = Mat4();
+	//	modelMatrix.matrix[0] = 1.0f;
+	//	modelMatrix.matrix[5] = 1.0f;
+	//	modelMatrix.matrix[10] = 1.0f;
+	//	modelMatrix.matrix[15] = 1.0f;
+	//	modelMatrix = modelMatrix * modelMatrix.TranslationMatrix(m.getPosition());
+	//	modelMatrix = modelMatrix * modelMatrix.RotationMatrixAboutAxis(Axis::AxisZ, -m.getRotation());
+	//	modelMatrix = modelMatrix * modelMatrix.ScaleMatrix(m.getScale());
 
-		currentShader.setMat4("modelMatrix", modelMatrix);
+	//	currentShader.setMat4("modelMatrix", modelMatrix);
 
-		glDrawElements(GL_TRIANGLES, m.getIndicesSize(), GL_UNSIGNED_INT, (GLvoid*)0);
-		//glDrawArrays(GL_TRIANGLES, 0, (GLsizei)m.positions.size());
-	}
+	//	//glDrawElements(GL_TRIANGLES, m.getIndicesSize(), GL_UNSIGNED_INT, (GLvoid*)0);
+	//	glDrawArrays(GL_TRIANGLES, 0, (GLsizei)m.positions.size());
+	//}
+
+	//glUseProgram(0);
+	//glBindVertexArray(0);
+
+	OpenGLError::checkOpenGLError("ERROR: Could not draw scene.");
+}
+
+void Renderer::draw(Model* model, Mat4& transform)
+{
+	currentShader.use();
+
+	glBindVertexArray(model->getVao());
+
+	modelMatrix = Mat4();
+	/*modelMatrix.matrix[0] = 1.0f;
+	modelMatrix.matrix[5] = 1.0f;
+	modelMatrix.matrix[10] = 1.0f;
+	modelMatrix.matrix[15] = 1.0f;
+	modelMatrix = modelMatrix * modelMatrix.TranslationMatrix(model->getPosition());
+	modelMatrix = modelMatrix * modelMatrix.RotationMatrixAboutAxis(Axis::AxisZ, -model->getRotation());
+	modelMatrix = modelMatrix * modelMatrix.ScaleMatrix(model->getScale());*/
+	modelMatrix = transform;
+	currentShader.setMat4("modelMatrix", modelMatrix);
+	//glDrawElements(GL_TRIANGLES, m.getIndicesSize(), GL_UNSIGNED_INT, (GLvoid*)0);
+	glDrawArrays(GL_TRIANGLES, 0, (GLsizei)model->positions.size());
 
 	glUseProgram(0);
 	glBindVertexArray(0);
-
-	OpenGLError::checkOpenGLError("ERROR: Could not draw scene.");
 }
 
 void Renderer::setupRenderer()
@@ -449,7 +472,7 @@ void Renderer::setupRenderer()
 	//pyramid.setColor(Vec4());
 	//meshes.push_back(pyramid);
 
-	Model cube2 = Model(std::string("../../projects/engine/src/cube.obj"));
+	Model cube2 = Model(std::string("../../projects/engine/src/cube_vn.obj"));
 	cube2.setPosition(Vec3(0.0f));
 	cube2.setRotation(0.0f);
 	cube2.setScale(Vec3(1.0f));

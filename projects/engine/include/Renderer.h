@@ -30,6 +30,7 @@ public:
 	~Renderer();
 
 	void draw();
+	void draw(Model* model, Mat4& transform);
 	void update();
 
 	void setupRenderer();

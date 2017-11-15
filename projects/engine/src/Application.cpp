@@ -94,6 +94,12 @@ void Application::display()
 		}
 	}
 
+	if (input::Keyboard::GetInstance().isKeyDown(GLFW_KEY_UP))
+	{
+		instance->sceneManagerRef->nodes["plane"]->setPosition(instance->sceneManagerRef->nodes["plane"]->getPosition() + Vec3(0.0f, 0.0005f, 0.0f));
+		instance->sceneManagerRef->nodes["plane"]->model->setPosition(instance->sceneManagerRef->nodes["plane"]->model->worldPosition + Vec3(0.0f, 0.0005f, 0.0f));
+	}
+
 	if (directions[0] == -1)
 	{
 		instance->sceneManagerRef->updateCamera(Camera_Movement::LEFT);

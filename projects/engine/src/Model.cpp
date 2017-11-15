@@ -13,14 +13,14 @@ Model::Model(std::string& filename)
 	OBJLoader modelLoader = OBJLoader(filename);
 	*this = modelLoader.toModel();
 
-	for (int i = 0; i < positions.size(); i++)
+	/*for (int i = 0; i < positions.size(); i++)
 	{
 		AdvancedVertex aux;
 		aux.position = Vec4(positions[i]);
 		aux.normals = Vec3(normals[i]);
 		aux.texCoords = Vec2(texCoords[i]);
 		vertices.push_back(aux);
-	}
+	}*/
 
 	setupModel();
 }
@@ -32,7 +32,7 @@ Model::~Model()
 
 void Model::setupModel()
 {
-	glGenVertexArrays(1, &vao);
+	/*glGenVertexArrays(1, &vao);
 	glGenBuffers(1, &vbo);
 
 	glBindVertexArray(vao);
@@ -55,9 +55,9 @@ void Model::setupModel()
 
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);*/
 
-	/*glGenVertexArrays(1, &vao);
+	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 	{
 		glGenBuffers(1, &VboVertices);
@@ -73,7 +73,7 @@ void Model::setupModel()
 		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vec3), 0);
 	}
 	glBindVertexArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);*/
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	OpenGLError::checkOpenGLError("ERROR: Could not create VAOs and VBOs.");
 }

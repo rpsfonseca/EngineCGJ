@@ -55,7 +55,7 @@ void loadOBJModel(const std::string& filename, Model model)
 
 OBJLoader::OBJLoader(std::string& filename)
 {
-	std::ifstream file;
+	/*std::ifstream file;
 	file.open(filename);
 
 	std::string line;
@@ -95,9 +95,9 @@ OBJLoader::OBJLoader(std::string& filename)
 				break;
 			}
 		}
-	}
+	}*/
 
-	//createMesh(filename);
+	createMesh(filename);
 }
 
 
@@ -108,7 +108,7 @@ OBJLoader::~OBJLoader()
 Model OBJLoader::toModel()
 {
 	Model result;
-	Model normalModel;
+	/*Model normalModel;
 
 	unsigned int numIndices = objIndices.size();
 
@@ -186,11 +186,11 @@ Model OBJLoader::toModel()
 		normalModel.indices.push_back(normalModelIndex);
 		result.indices.push_back(resultModelIndex);
 		indexMap.insert(std::pair<unsigned int, unsigned int>(resultModelIndex, normalModelIndex));
-	}
+	}*/
 
-	/*result.positions = vertices;
+	result.positions = vertices;
 	result.normals = normals;
-	result.texCoords = uvs;*/
+	result.texCoords = uvs;
 
 	/*if (!hasNormals)
 	{

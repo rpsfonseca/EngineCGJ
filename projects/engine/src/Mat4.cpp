@@ -3,7 +3,7 @@
 #include <iostream>
 namespace math
 {
-	const Mat4 Identity = {
+	const Mat4 Mat4::Identity = {
 		1.0f, 0.0f, 0.0f, 0.0f,
 		0.0f, 1.0f, 0.0f, 0.0f,
 		0.0f, 0.0f, 1.0f, 0.0f,

@@ -2,8 +2,10 @@
 
 #include "Camera.h"
 #include "Renderer.h"
+#include "SceneNode.h"
 
 #include <memory>
+#include <map>
 
 class SceneManager
 {
@@ -13,12 +15,18 @@ public:
 
 	unsigned int uniformBlockId;
 
+	static SceneNode* rootSceneNode;
+	static int nodeCounterId;
+
 	std::vector<Mesh> meshes;
 
+	std::map<std::string, SceneNode*> nodes;
 public:
 	SceneManager();
 	SceneManager(std::shared_ptr<Renderer> rendererRef);
 	~SceneManager();
+
+	static SceneNode* createSceneNode(Model* model);
 
 	void setupSceneManager();
 
