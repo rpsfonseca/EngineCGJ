@@ -25,6 +25,9 @@ class Application
 	static float previousX;
 	static float previousY;
 
+	float currentFrame;
+	float lastFrame = 0.0f;
+
 public:
 	Application();
 	Application(int _versionMajor, int _versionMinor);

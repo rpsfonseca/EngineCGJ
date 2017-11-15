@@ -42,6 +42,7 @@ namespace math
 		Vec3& operator/=(const Vec3& other);
 		Vec3& operator/=(const float& other);
 
+		static Vec3 Lerp(const Vec3& start, const Vec3& end, const float percent);
 		static Vec3 CrossProduct(const Vec3& left, const Vec3& right);
 		static float DotProduct(const Vec3& left, const Vec3& right);
 

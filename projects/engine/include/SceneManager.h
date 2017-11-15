@@ -27,9 +27,11 @@ public:
 	~SceneManager();
 
 	static SceneNode* createSceneNode(Model* model);
+	static SceneNode* createSceneNode(Model* model, Vec3& startPos, Vec3& targetPos);
 
 	void setupSceneManager();
 
+	void updateScene();
 	void renderScene();
 
 	void toggleArcballCam();

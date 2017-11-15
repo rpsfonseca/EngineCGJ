@@ -126,8 +126,6 @@ void Camera::updateCameraVectors()
 		// Also re-calculate the Right and Up vector
 		Right = Vec3::CrossProduct(Front, WorldUp).Normalize(); // Normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
 		Up = Vec3::CrossProduct(Right, Front).Normalize();
-
-		std::cout << "HERE!!!!" << std::endl;
 	}
 }
 

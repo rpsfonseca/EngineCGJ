@@ -16,6 +16,24 @@ Renderer::~Renderer()
 {
 }
 
+void Renderer::preDraw()
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glBindBuffer(GL_UNIFORM_BUFFER, uboId);
+	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(Mat4), &viewMatrix);
+	glBufferSubData(GL_UNIFORM_BUFFER, sizeof(Mat4), sizeof(Mat4), &projectionMatrix);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+	currentShader.use();
+}
+
+void Renderer::postDraw()
+{
+	glUseProgram(0);
+	glBindVertexArray(0);
+}
+
 void Renderer::draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -78,25 +96,15 @@ void Renderer::draw()
 
 void Renderer::draw(Model* model, Mat4& transform)
 {
-	currentShader.use();
-
 	glBindVertexArray(model->getVao());
 
 	modelMatrix = Mat4();
-	/*modelMatrix.matrix[0] = 1.0f;
-	modelMatrix.matrix[5] = 1.0f;
-	modelMatrix.matrix[10] = 1.0f;
-	modelMatrix.matrix[15] = 1.0f;
-	modelMatrix = modelMatrix * modelMatrix.TranslationMatrix(model->getPosition());
-	modelMatrix = modelMatrix * modelMatrix.RotationMatrixAboutAxis(Axis::AxisZ, -model->getRotation());
-	modelMatrix = modelMatrix * modelMatrix.ScaleMatrix(model->getScale());*/
 	modelMatrix = transform;
 	currentShader.setMat4("modelMatrix", modelMatrix);
 	//glDrawElements(GL_TRIANGLES, m.getIndicesSize(), GL_UNSIGNED_INT, (GLvoid*)0);
 	glDrawArrays(GL_TRIANGLES, 0, (GLsizei)model->positions.size());
 
-	glUseProgram(0);
-	glBindVertexArray(0);
+	OpenGLError::checkOpenGLError("ERROR: Could not draw scene.");
 }
 
 void Renderer::setupRenderer()

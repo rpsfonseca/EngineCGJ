@@ -129,6 +129,11 @@ namespace math
 		return Multiply(invScalar);
 	}
 
+	Vec3 Vec3::Lerp(const Vec3& start, const Vec3& end, const float percent)
+	{
+		return (start + percent*(end - start));
+	}
+
 	Vec3 Vec3::CrossProduct(const Vec3& left, const Vec3& right)
 	{
 		Vec3 aux;

@@ -47,7 +47,8 @@ void SceneNode::updateTransform()
 	if (transformDirty)
 	{
 		transform = transform.TranslationMatrix(position);
-		transform = transform * transform.RotationMatrixAboutAxis(Axis::AxisZ, 0.0f);
+		//transform = transform * transform.RotationMatrixAboutAxis(Axis::AxisZ, 0.0f);
+		transform = transform * rotation.getMatrix();
 		transform = transform * transform.ScaleMatrix(scale);
 
 		if (parentNode != NULL)

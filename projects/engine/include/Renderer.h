@@ -29,6 +29,8 @@ public:
 	Renderer();
 	~Renderer();
 
+	void preDraw();
+	void postDraw();
 	void draw();
 	void draw(Model* model, Mat4& transform);
 	void update();
