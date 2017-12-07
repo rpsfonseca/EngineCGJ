@@ -1,3 +1,12 @@
+/**
+	CS-11 Asn 6
+	Application.cpp
+	Purpose: Holds the class definitions for the engine app
+
+	@author Ricardo Fonseca
+	@version 0.1
+*/
+
 
 #include "GL\glew.h"
 #include "GL\freeglut.h"
@@ -16,11 +25,16 @@ bool Application::firstTimeMoving = true;
 
 static Application* instance;
 
+// Constructs Application with no args.
+// Inits the singleton.
 Application::Application()
 {
 	instance = this;
 }
 
+// Inits Application with params indicating the version of OpenGL we want to target.
+// Also creates the smart pointers for windowRef, rendererRef and sceneManagerRef,
+// sets windowWidth and windowHeight and inits the singleton.
 Application::Application(int _versionMajor, int _versionMinor)
 	: versionMajor(_versionMajor), versionMinor(_versionMinor)
 {
@@ -34,6 +48,9 @@ Application::Application(int _versionMajor, int _versionMinor)
 	instance = this;
 }
 
+// Inits Application with params indicating the version of OpenGL we want to target.
+// Also creates the smart pointers for windowRef, rendererRef and sceneManagerRef,
+// sets windowWidth and windowHeight and inits the singleton.
 Application::Application(int _versionMajor, int _versionMinor, int _width, int _height)
 	: versionMajor(_versionMajor), versionMinor(_versionMinor), windowWidth(_width), windowHeight(_height)
 {
@@ -141,29 +158,11 @@ void Application::display()
 	instance->windowRef->swapBuffers();
 }
 
-void Application::cleanup()
-{
-
-}
-
 void Application::cleanup(GLFWwindow * window)
 {
 }
 
-void Application::idle()
-{
-	glutPostRedisplay();
-}
-
-void Application::reshape(int _w, int _h)
-{
-	instance->windowWidth = _w;
-	instance->windowHeight = _h;
-	instance->sceneManagerRef->updateAspectRatio((float)_w / (float)_h);
-	instance->windowRef->reshape(_w, _h);
-	instance->rendererRef->reshapeViewport(_w, _h);
-}
-
+// Window reshape callback used by GLFW when the specified window is resized.
 void Application::reshapeWindow(GLFWwindow* window, int _w, int _h)
 {
 	instance->windowWidth = _w;
@@ -172,6 +171,7 @@ void Application::reshapeWindow(GLFWwindow* window, int _w, int _h)
 	instance->windowRef->reshape(_w, _h);
 }
 
+// Framebuffer reshape callback used by GLFW when when the framebuffer of the specified window is resized.
 void Application::reshapeFramebuffer(GLFWwindow* window, int _w, int _h)
 {
 	instance->rendererRef->reshapeViewport(_w, _h);
@@ -188,84 +188,7 @@ void Application::timer(int _val)
 	glutTimerFunc(1000, timer, 0);
 }
 
-void Application::char_keyboard(unsigned char key, int x, int y)
-{
-	std::cout << key << std::endl;
-
-	switch (key)
-	{
-	case 'a':
-		instance->sceneManagerRef->toggleArcballCam();
-		break;
-	case 'g':
-		instance->sceneManagerRef->toggleGimbalLock();
-		break;
-	case 'p':
-		instance->sceneManagerRef->changeCameraProjection();
-		break;
-	default:
-		break;
-	}
-}
-
-void Application::keyboard_up(int key, int x, int y)
-{
-	switch (key)
-	{
-	case GLUT_KEY_LEFT:
-		directions[0] = 0.0f;
-		break;
-	case GLUT_KEY_RIGHT:
-		directions[0] = 0.0f;
-		break;
-	case GLUT_KEY_UP:
-		directions[1] = 0.0f;
-		break;
-	case GLUT_KEY_DOWN:
-		directions[1] = 0.0f;
-		break;
-	default:
-		break;
-	}
-}
-
-void Application::mouse(int x, int y)
-{
-	/*if (instance->firstTimeMoving)
-	{
-		previousX = x;
-		previousY = y;
-		firstTimeMoving = false;
-	}
-
-	float mouseX = x - previousX;
-	float mouseY = previousY - y;
-
-	previousX = x;
-	previousY = y;
-
-	instance->sceneManagerRef->rotateCamera(mouseX, mouseY);*/
-
-	previousX = x;
-	previousY = y;
-
-	int cx = (instance->windowWidth >> 1);
-	int cy = (instance->windowHeight >> 1);
-
-	float deltaX = float(previousX - cx) / 10;
-	float deltaY = float(previousY - cy);
-
-	if (abs(deltaX) > 0.5f)
-	{
-		glutWarpPointer(cx, y);
-	}
-	if (abs(deltaY) > 0.5f) {
-		glutWarpPointer(x, cy);
-	}
-
-	instance->sceneManagerRef->rotateCamera(deltaX, deltaY);
-}
-
+// Mouse callback used by GLFW to send mouse position.
 void Application::mouse(GLFWwindow* window, double x, double y)
 {
 	previousX = x;
@@ -310,41 +233,6 @@ void Application::entry(int state)
 	}
 }
 
-void Application::keyboard(int key, int x, int y)
-{
-	directions[0] = 0.0f;
-	directions[1] = 0.0f;
-	switch (key)
-	{
-		case GLUT_KEY_LEFT:
-			if (directions[0] == 1 || directions[0] == 0)
-			{
-				directions[0] -= 1;
-			}
-			break;
-		case GLUT_KEY_RIGHT:
-			if (directions[0] == -1 || directions[0] == 0)
-			{
-				directions[0] += 1;
-			}
-			break;
-		case GLUT_KEY_UP:
-			if (directions[1] == -1 || directions[1] == 0)
-			{
-				directions[1] += 1;
-			}
-			break;
-		case GLUT_KEY_DOWN:
-			if (directions[1] == 1 || directions[1] == 0)
-			{
-				directions[1] -= 1;
-			}
-			break;
-		default:
-			break;
-	}
-}
-
 void Application::keyboard(GLFWwindow * window, int key, int scancode, int action, int mode)
 {
 	switch (action)
@@ -377,24 +265,15 @@ void Application::setupApp()
 
 	setupCallbacks();
 
+	// TODO: MAKE A WRAPPER FOR THIS, PROBABLY ON WINDOW CLASS
 	glfwSetInputMode(windowRef->window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
 	instance->sceneManagerRef->updateAspectRatio(640.0f/480.0f);
 }
 
+// Sets the appropriate callbacks to glfw.
 void Application::setupCallbacks()
 {
-	/*glutCloseFunc(cleanup);
-	glutDisplayFunc(display);
-	glutIdleFunc(idle);
-	glutReshapeFunc(reshape);
-	glutTimerFunc(0, timer, 0);
-	glutKeyboardFunc(char_keyboard);
-	glutSpecialFunc(keyboard);
-	glutSpecialUpFunc(keyboard_up);
-	glutMotionFunc(mouse);
-	glutWarpPointer(320,240);
-	glutEntryFunc(entry);*/
-
 	glfwSetWindowCloseCallback(windowRef->window, cleanup);
 	glfwSetWindowSizeCallback(windowRef->window, reshapeWindow);
 	glfwSetFramebufferSizeCallback(windowRef->window, reshapeFramebuffer);
@@ -404,8 +283,6 @@ void Application::setupCallbacks()
 
 void Application::mainLoop()
 {
-	//glutMainLoop();
-
 	while (!windowRef->shouldWindowClose())
 	{
 		currentFrame = glfwGetTime();

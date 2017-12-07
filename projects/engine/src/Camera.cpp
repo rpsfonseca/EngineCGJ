@@ -186,7 +186,7 @@ void Camera::changeProjection()
 
 void Camera::toggleArcballCam()
 {
-	currentCameraType == Camera_Type::ARCBALL ? currentCameraType = Camera_Type::FPS : currentCameraType = Camera_Type::ARCBALL;
+	currentCameraType == Camera_Type::ARCBALL ? currentCameraType = Camera_Type::FPS, Yaw = -90.0f : currentCameraType = Camera_Type::ARCBALL;
 }
 
 void Camera::toggleGimbalLock()

@@ -4,7 +4,11 @@
 #include <string>
 #include <iostream>
 
-Model::Model(){}
+Model::Model()
+{
+	hasNormals = false;
+	hasTextures = false;
+}
 
 Model::Model(std::string& filename)
 {
@@ -66,11 +70,23 @@ void Model::setupModel()
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vec3), 0);
 
-		glGenBuffers(1, &VboNormals);
-		glBindBuffer(GL_ARRAY_BUFFER, VboNormals);
-		glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(Vec3), &normals[0], GL_STATIC_DRAW);
-		glEnableVertexAttribArray(2);
-		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vec3), 0);
+		if (hasTextures)
+		{
+			glGenBuffers(1, &VboTexcoords);
+			glBindBuffer(GL_ARRAY_BUFFER, VboTexcoords);
+			glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(Vec3), &texCoords[0], GL_STATIC_DRAW);
+			glEnableVertexAttribArray(1);
+			glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vec3), 0);
+		}
+
+		if (hasNormals)
+		{
+			glGenBuffers(1, &VboNormals);
+			glBindBuffer(GL_ARRAY_BUFFER, VboNormals);
+			glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(Vec3), &normals[0], GL_STATIC_DRAW);
+			glEnableVertexAttribArray(2);
+			glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vec3), 0);
+		}
 	}
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);

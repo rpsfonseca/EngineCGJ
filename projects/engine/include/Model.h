@@ -3,7 +3,8 @@
 #include "Mesh.h"
 #include "Vec2.h"
 #include "Vec3.h"
-#include "Animation.h"
+
+#include <map>
 
 struct AdvancedVertex
 {
@@ -16,7 +17,6 @@ class Model
 {
 public:
 	//Mesh modelMesh;
-	Animation* animation;
 	std::vector<AdvancedVertex> vertices;
 	std::vector<Vec3> positions;
 	std::vector<Vec3> normals;
@@ -24,6 +24,9 @@ public:
 	std::vector<unsigned int> indices;
 	unsigned int vao, vbo, ebo, ubo;
 	GLuint VboVertices, VboTexcoords, VboNormals;
+
+	bool hasTextures;
+	bool hasNormals;
 
 public:
 	Model();

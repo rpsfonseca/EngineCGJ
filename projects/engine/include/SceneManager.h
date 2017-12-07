@@ -15,24 +15,53 @@ public:
 
 	unsigned int uniformBlockId;
 
-	static SceneNode* rootSceneNode;
-	static int nodeCounterId;
+	static SceneNode* rootSceneNode; /** The root node of our node hierarchy */
+	static int nodeCounterId; /** Counter to keep track of the current node id to give to a new node */
 
-	std::vector<Mesh> meshes;
-
-	std::map<std::string, SceneNode*> nodes;
+	std::map<std::string, SceneNode*> nodes; /** Hashtable to store all scene nodes */
 public:
+	/**
+		SceneManager constructor. Only here because we need it to be able to declare a variable of this type.
+	*/
 	SceneManager();
+
+	/**
+		SceneManager constructor.
+		Sets the renderer member with the shared pointer passed as param.
+		Creates the scene camera as a shared pointer.
+		This is the one that needs to be used;
+
+		@param rendererRef Shared pointer to the renderer being used.
+	*/
 	SceneManager(std::shared_ptr<Renderer> rendererRef);
+
+	/**
+		SceneManager destructor.
+	*/
 	~SceneManager();
 
-	static SceneNode* createSceneNode(Model* model);
-	static SceneNode* createSceneNode(Model* model, Vec3& startPos, Vec3& targetPos);
+	/**
+		Creates a new scene node and inits it with a model.
 
+		@param model Model to assign to node.
+	*/
+	static SceneNode* createSceneNode(Model* model);
+
+	/**
+		Sets up the scene manager.
+		Takes care of creating the uniform block for the shader and creating the scene nodes.
+	*/
 	void setupSceneManager();
 
-	void updateScene();
+	/**
+		Pushes scene nodes to renderer to be rendered.
+	*/
 	void renderScene();
+
+	/**
+		Updates each scene node.
+	*/
+	void updateScene();
 
 	void toggleArcballCam();
 	void toggleGimbalLock();

@@ -192,6 +192,15 @@ Model OBJLoader::toModel()
 	result.normals = normals;
 	result.texCoords = uvs;
 
+	if (result.normals.size())
+	{
+		result.hasNormals = true;
+	}
+	if (result.texCoords.size())
+	{
+		result.hasTextures = true;
+	}
+
 	/*if (!hasNormals)
 	{
 		normalModel.calcNormals();

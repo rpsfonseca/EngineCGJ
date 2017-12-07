@@ -3,43 +3,38 @@
 
 #include <stack>
 
-SceneNode* SceneManager::rootSceneNode = new SceneNode(0);
-int SceneManager::nodeCounterId = 0;
+SceneNode* SceneManager::rootSceneNode = new SceneNode(0); // The root node of our node hierarchy
+int SceneManager::nodeCounterId = 0; // Counter to keep track of the current node id to give to a new node
 
 SceneManager::SceneManager()
 {
 }
 
+// SceneManager constructor.
+// Sets the renderer member with the shared pointer passed as param.
+// Creates the scene camera as a shared pointer.
+// This is the one that needs to be used;
 SceneManager::SceneManager(std::shared_ptr<Renderer> rendererRef)
 	: renderer(rendererRef)
 {
 	currentCamera = std::make_shared<Camera>(Vec3(0.0f, 0.0f, 12.0f));
-
 	//setupSceneManager();
 }
 
-SceneManager::~SceneManager()
-{
-}
+// SceneManager destructor.
+SceneManager::~SceneManager() {}
 
+// Creates a new scene node and inits it with a model.
 SceneNode* SceneManager::createSceneNode(Model* model)
 {
 	SceneNode* node = new SceneNode(SceneManager::nodeCounterId++);
 	node->model = model;
-	node->model->animation = new Animation();
 
 	return node;
 }
 
-SceneNode* SceneManager::createSceneNode(Model* model, Vec3& startPos, Vec3& targetPos)
-{
-	SceneNode* node = new SceneNode(SceneManager::nodeCounterId++);
-	node->model = model;
-	node->model->animation = new Animation(startPos, targetPos);
-
-	return node;
-}
-
+// Sets up the scene manager.
+// Takes care of creating the uniform block for the shader and creating the scene nodes.
 void SceneManager::setupSceneManager()
 {
 	//renderer->setupRenderer();
@@ -62,102 +57,15 @@ void SceneManager::setupSceneManager()
 	planeNode->model->setScale(Vec3(1.0f));
 	rootSceneNode->addChild(planeNode);
 
-	SceneNode* cubeNode = SceneManager::createSceneNode(new Model(std::string("../../projects/engine/src/cube.obj")), Vec3(-0.50174f, 0.50f, 0.0f), Vec3(5.0f));
-	cubeNode->setPosition(Vec3(-0.50174f, 0.50f, 0.0f));
-	cubeNode->setRotation(Quat(0.0f, Vec3::UnitY));
-	cubeNode->setScale(Vec3(1.0f, 0.5f, 1.0f));
-	cubeNode->model->setPosition(Vec3(0.0f, 0.50f, 0.0f));
-	cubeNode->model->setRotation(0.0f);
-	cubeNode->model->setScale(Vec3(1.0f));
-	planeNode->addChild(cubeNode);
-
-	SceneNode* parallelogramNode = SceneManager::createSceneNode(new Model(std::string("../../projects/engine/src/parallelogram.obj")));
-	parallelogramNode->setPosition(Vec3(0.25137f, 0.50f, -0.75111f));
-	parallelogramNode->setRotation(Quat(90.0f, Vec3::UnitY));
-	parallelogramNode->setScale(Vec3(1.0f, 0.5f, 1.0f));
-	parallelogramNode->model->setPosition(Vec3(0.0f, 0.50f, 0.0f));
-	parallelogramNode->model->setRotation(0.0f);
-	parallelogramNode->model->setScale(Vec3(1.0f));
-	planeNode->addChild(parallelogramNode);
-
-	SceneNode* bigTriNode = SceneManager::createSceneNode(new Model(std::string("../../projects/engine/src/big_tri.obj")));
-	bigTriNode->setPosition(Vec3(0.0f, 0.25f, 0.66666f));
-	bigTriNode->setRotation(Quat(0.0f, Vec3::UnitY));
-	bigTriNode->setScale(Vec3(1.0f, 0.25f, 1.0f));
-	bigTriNode->model->setPosition(Vec3(0.0f, 0.50f, 0.0f));
-	bigTriNode->model->setRotation(0.0f);
-	bigTriNode->model->setScale(Vec3(1.0f));
-	planeNode->addChild(bigTriNode);
-
-	bigTriNode = SceneManager::createSceneNode(new Model(std::string("../../projects/engine/src/big_tri.obj")));
-	bigTriNode->setPosition(Vec3(0.66465f, 0.50f, 0.0f));
-	bigTriNode->setRotation(Quat(90.0f, Vec3::UnitY));
-	bigTriNode->setScale(Vec3(1.0f, 0.70f, 1.0f));
-	bigTriNode->model->setPosition(Vec3(0.0f, 0.50f, 0.0f));
-	bigTriNode->model->setRotation(0.0f);
-	bigTriNode->model->setScale(Vec3(1.0f));
-	planeNode->addChild(bigTriNode);
-
-	SceneNode* mediumTriNode = SceneManager::createSceneNode(new Model(std::string("../../projects/engine/src/medium_tri.obj")));
-	mediumTriNode->setPosition(Vec3(-0.66666f, 0.50f, -0.66732f));
-	mediumTriNode->setRotation(Quat(90.0f, Vec3::UnitY));
-	mediumTriNode->setScale(Vec3(1.0f, 0.75f, 1.0f));
-	mediumTriNode->model->setPosition(Vec3(0.0f, 0.50f, 0.0f));
-	mediumTriNode->model->setRotation(0.0f);
-	mediumTriNode->model->setScale(Vec3(1.0f));
-	planeNode->addChild(mediumTriNode);
-
-	SceneNode* smallTriNode = SceneManager::createSceneNode(new Model(std::string("../../projects/engine/src/small_tri.obj")));
-	smallTriNode->setPosition(Vec3(0.0f, 0.50f, -0.33383f));
-	smallTriNode->setRotation(Quat(90.0f, Vec3::UnitY));
-	smallTriNode->setScale(Vec3(1.0f, 1.0f, 1.0f));
-	smallTriNode->model->setPosition(Vec3(0.0f, 0.50f, 0.0f));
-	smallTriNode->model->setRotation(0.0f);
-	smallTriNode->model->setScale(Vec3(1.0f));
-	planeNode->addChild(smallTriNode);
-
-	smallTriNode = SceneManager::createSceneNode(new Model(std::string("../../projects/engine/src/small_tri.obj")));
-	smallTriNode->setPosition(Vec3(-0.83290f, 0.50f, 0.50174f));
-	smallTriNode->setRotation(Quat(180.0f, Vec3::UnitY));
-	smallTriNode->setScale(Vec3(1.0f, 0.85f, 1.0f));
-	smallTriNode->model->setPosition(Vec3(0.0f, 0.50f, 0.0f));
-	smallTriNode->model->setRotation(0.0f);
-	smallTriNode->model->setScale(Vec3(1.0f));
-	planeNode->addChild(smallTriNode);
-
 	nodes.insert(std::pair<std::string, SceneNode*>("plane", planeNode));
 }
 
-void SceneManager::updateScene()
-{
-	std::stack<SceneNode*> nodeStack;
-	nodeStack.push(rootSceneNode);
-	for (unsigned int i = 0; i < rootSceneNode->childNodes.size(); ++i)
-	{
-		nodeStack.push(rootSceneNode->childNodes[i]);
-	}
-	while (!nodeStack.empty())
-	{
-		SceneNode* node = nodeStack.top();
-		nodeStack.pop();
-
-		if (node->model && node->model->animation->hasAnimationRunning)
-		{
-			node->model->animation->updateAnimation();
-			node->setPosition(node->model->animation->currentPos);
-		}
-		for (unsigned int i = 0; i < node->childNodes.size(); ++i)
-		{
-			nodeStack.push(node->childNodes[i]);
-		}
-	}
-}
-
+// Pushes scene nodes to renderer to be rendered.
 void SceneManager::renderScene()
 {
 	renderer->setProjectionMatrix(currentCamera->getProjectionMatrix());
 	renderer->setViewMatrix(currentCamera->getViewMatrix());
-	//renderer->draw();
+
 	renderer->preDraw();
 
 	std::stack<SceneNode*> nodeStack;
@@ -183,6 +91,27 @@ void SceneManager::renderScene()
 	}
 
 	renderer->postDraw();
+}
+
+// Updates each scene node.
+void SceneManager::updateScene()
+{
+	std::stack<SceneNode*> nodeStack;
+	nodeStack.push(rootSceneNode);
+	for (unsigned int i = 0; i < rootSceneNode->childNodes.size(); ++i)
+	{
+		nodeStack.push(rootSceneNode->childNodes[i]);
+	}
+	while (!nodeStack.empty())
+	{
+		SceneNode* node = nodeStack.top();
+		nodeStack.pop();
+
+		for (unsigned int i = 0; i < node->childNodes.size(); ++i)
+		{
+			nodeStack.push(node->childNodes[i]);
+		}
+	}
 }
 
 void SceneManager::changeCameraProjection()
