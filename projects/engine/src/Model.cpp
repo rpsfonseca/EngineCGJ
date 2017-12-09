@@ -4,12 +4,19 @@
 #include <string>
 #include <iostream>
 
+// Model constructor.
+// Just creates the variable of this type.
+// Sets hasTextures and hasNormals.
 Model::Model()
 {
 	hasNormals = false;
 	hasTextures = false;
 }
 
+// Model constructor.
+// This is the one normally used.
+// You load a 3d model by passing the filename.
+// Also setups up the VBO's.
 Model::Model(std::string& filename)
 {
 	//loadOBJModel(filename, *this);
@@ -34,6 +41,7 @@ Model::~Model()
 {
 }
 
+// Setups up the VBO's.
 void Model::setupModel()
 {
 	/*glGenVertexArrays(1, &vao);

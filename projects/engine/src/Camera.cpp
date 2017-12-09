@@ -4,6 +4,8 @@
 #include <cmath>
 #include <iostream>
 
+// Camera constructor.
+// Sets up pretty much all variables.
 Camera::Camera(Vec3 position, Vec3 up, float yaw, float pitch)
 	: Front(Vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
 {
@@ -16,6 +18,8 @@ Camera::Camera(Vec3 position, Vec3 up, float yaw, float pitch)
 	updateCameraVectors();
 }
 
+// Camera constructor.
+// Sets up pretty much all variables.
 Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch)
 	: Front(Vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
 {

@@ -38,6 +38,10 @@ const float SPEED = 2.5f;
 const float SENSITIVITY = 0.1f;
 const float ZOOM = 45.0f;
 
+/**
+	This class represents a Camera.
+	A Camera may be of 3 types: ARCBALL, FPS, FREE_CAM.
+*/
 class Camera
 {
 public:
@@ -69,8 +73,16 @@ public:
 
 	Quat cameraQuaternion;
 
+	/**
+		Camera constructor.
+		Sets up pretty much all variables.
+	*/
 	Camera(Vec3 position = Vec3(0.0f, 0.0f, 0.0f), Vec3 up = Vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
 
+	/**
+		Camera constructor.
+		Sets up pretty much all variables.
+	*/
 	Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch);
 
 	//Camera();

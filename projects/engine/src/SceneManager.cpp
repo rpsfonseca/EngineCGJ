@@ -46,6 +46,12 @@ void SceneManager::setupSceneManager()
 	glBindBufferBase(GL_UNIFORM_BUFFER, renderer->uboBp, uniformBlockId);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
+	// TODO: we could probably do
+	// glGenBuffers(1, &renderer->uboId);
+	// glBindBuffer(GL_UNIFORM_BUFFER, renderer->uboId);
+	// glBufferData(GL_UNIFORM_BUFFER, sizeof(Mat4) * 2, 0, GL_STREAM_DRAW);
+	// glBindBufferBase(GL_UNIFORM_BUFFER, renderer->uboBp, renderer->uboId);
+
 	renderer->uboId = uniformBlockId;
 
 	SceneNode* planeNode = SceneManager::createSceneNode(new Model(std::string("../../projects/engine/src/floor.obj")));

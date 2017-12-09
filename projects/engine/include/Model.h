@@ -13,6 +13,10 @@ struct AdvancedVertex
 	Vec3 normals;
 };
 
+/**
+	This class represents a 3d model.
+	A model may be composed by mesh(es), animation(s), armature and texture(s) info.
+*/
 class Model
 {
 public:
@@ -29,10 +33,25 @@ public:
 	bool hasNormals;
 
 public:
+	/**
+		Model constructor.
+		Just creates the variable of this type.
+		Sets hasTextures and hasNormals.
+	*/
 	Model();
+
+	/**
+		Model constructor.
+		This is the one normally used.
+		You load a 3d model by passing the filename.
+		Also setups up the VBO's.
+	*/
 	Model(std::string& filename);
 	~Model();
 
+	/**
+		Setups up the VBO's.
+	*/
 	void setupModel();
 
 	unsigned int getVao();

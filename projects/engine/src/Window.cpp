@@ -8,10 +8,14 @@ int Window::HEIGHT = 480;
 int Window::WIDTH = 640;
 std::string Window::TITLE = "EngineCGJ - Development";
 
+// Default Window constructor.
+// Does nothing other than enabling to create a variables of this type.
 Window::Window()
 {
 }
 
+// Currently used constructor.
+// Sets WIDTH and HEIGHT static variables.
 Window::Window(int _width, int _height)
 {
 	WIDTH = _width;
@@ -22,12 +26,9 @@ Window::~Window()
 {
 }
 
+// Creates the window with the appropriate context and OpenGL version.
 void Window::setupWindow(const int& _versionMajor, const int& _versionMinor)
 {
-	/*int argc = 1;
-	char *argv[1] = { (char*)"Something" };
-	glutInit(&argc, argv);*/
-
 	if (!glfwInit())
 	{
 		exit(EXIT_FAILURE);
@@ -45,34 +46,21 @@ void Window::setupWindow(const int& _versionMajor, const int& _versionMinor)
 	}
 
 	glfwMakeContextCurrent(window);
-
-	/*glutInitContextVersion(_versionMajor, _versionMinor);
-	glutInitContextFlags(GLUT_FORWARD_COMPATIBLE);
-	glutInitContextProfile(GLUT_CORE_PROFILE);
-
-	glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
-
-	glutInitWindowSize(WIDTH, HEIGHT);
-	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
-	windowHandle = glutCreateWindow(TITLE.c_str());
-	if (windowHandle < 1)
-	{
-		std::cerr << "ERROR: Could not create a new rendering window." << std::endl;
-		exit(EXIT_FAILURE);
-	}*/
 }
 
+// Simple wrapper for glfwWindowShouldClose method.
 bool Window::shouldWindowClose()
 {
 	return glfwWindowShouldClose(window);
 }
 
+// Simple wrapper for glfwSwapBuffers method.
 void Window::swapBuffers()
 {
-	//glutSwapBuffers();
 	glfwSwapBuffers(window);
 }
 
+// When window reshaping happens, it sets the new width and height values to the respective static variables.
 void Window::reshape(int _newWidth, int _newHeight)
 {
 	WIDTH = _newWidth;

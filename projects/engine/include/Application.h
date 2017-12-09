@@ -1,7 +1,6 @@
 #pragma once
 
 /**
-	CS-11 Asn 6
 	Application.h
 	Purpose: Holds the class declarations for the engine app
 
