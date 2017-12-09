@@ -9,8 +9,7 @@ using namespace math;
 
 struct Vertex
 {
-	Vec4 position;
-	Vec4 rgba;
+	Vec3 position;
 };
 
 class Mesh
@@ -45,7 +44,7 @@ public:
 
 	Vec4 getColor();
 	void setColor(Vec4& sc);
-private:
+protected:
 	unsigned int vao, vbo, ebo, ubo;
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
