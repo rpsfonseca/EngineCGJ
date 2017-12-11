@@ -56,7 +56,7 @@ void SceneManager::setupSceneManager()
 
 	SceneNode* planeNode = SceneManager::createSceneNode(new Model(std::string("../../projects/engine/src/floor.obj")));
 	planeNode->setPosition(Vec3(0.0f));
-	planeNode->setRotation(Quat());
+	planeNode->setRotation(Quat(90.0f, Vec3::UnitX));
 	planeNode->setScale(Vec3(1.0f));
 	planeNode->model->setPosition(Vec3(0.0f));
 	planeNode->model->setRotation(0.0f);

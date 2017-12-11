@@ -182,7 +182,7 @@ void Application::timer(int _val)
 	std::ostringstream oss;
 	oss << instance->windowRef->TITLE << ": " << FRAME_COUNT << " FPS @ (" << instance->windowWidth << "x" << instance->windowHeight << ")";
 	std::string s = oss.str();
-	glutSetWindow(instance->windowRef->windowHandle);
+	//glutSetWindow(instance->windowRef->windowHandle);
 	glutSetWindowTitle(s.c_str());
 	FRAME_COUNT = 0;
 	glutTimerFunc(1000, timer, 0);
