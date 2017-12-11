@@ -2,7 +2,7 @@
 
 #include "Mesh.h"
 
-class Quad : Mesh
+class Quad : public Mesh
 {
 public:
 	Quad();
