@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Mesh.h"
+#include "Material.h"
 #include "Vec2.h"
 #include "Vec3.h"
 
@@ -20,7 +21,8 @@ struct AdvancedVertex
 class Model
 {
 public:
-	//Mesh modelMesh;
+	std::vector<Mesh> meshes;
+	std::map<std::string, Material> materials;
 	std::vector<AdvancedVertex> vertices;
 	std::vector<Vec3> positions;
 	std::vector<Vec3> normals;

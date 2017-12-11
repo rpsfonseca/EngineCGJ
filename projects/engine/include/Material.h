@@ -8,5 +8,6 @@ public:
 	Shader shader;
 
 	Material();
+	Material(std::string shaderName);
 	~Material();
 };

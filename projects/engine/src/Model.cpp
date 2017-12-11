@@ -1,6 +1,7 @@
 #include "Model.h"
 #include "OBJLoader.h"
 #include "OpenGLError.h"
+#include "Quad.h"
 #include <string>
 #include <iostream>
 
@@ -11,6 +12,9 @@ Model::Model()
 {
 	hasNormals = false;
 	hasTextures = false;
+
+	meshes.push_back(Quad());
+	materials["default"] = Material();
 }
 
 // Model constructor.
