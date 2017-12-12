@@ -121,9 +121,9 @@ void main()
 		p += dir*step;
 	}    
 
-	if(color.x + color.y + color.z <= 0.2){
+	if(color.w < 0.15)
 		discard;
-	}
+	
 
     FragColor = color;
 }
