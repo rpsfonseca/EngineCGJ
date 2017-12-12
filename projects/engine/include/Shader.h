@@ -10,6 +10,8 @@
 #include <sstream>
 #include <iostream>
 
+#define SHADERPATH "../../projects/engine/resources/shaders/"
+
 class Shader
 {
 private:

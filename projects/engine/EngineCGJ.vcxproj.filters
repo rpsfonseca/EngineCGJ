@@ -31,6 +31,24 @@
     <Filter Include="Source Files\Objects">
       <UniqueIdentifier>{dc35028e-e8f8-4e75-8ccc-b04c1029d1fc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Auxiliar">
+      <UniqueIdentifier>{91bf92ff-f79c-477c-ab15-13d08a9ccac4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core">
+      <UniqueIdentifier>{60a8b38c-3328-4840-9879-ade737435f56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Math">
+      <UniqueIdentifier>{d30436a1-1841-46cc-835a-b43c979718cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\NotBeingUsed">
+      <UniqueIdentifier>{9e188369-064e-4b29-b056-545510be791c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Objects">
+      <UniqueIdentifier>{eeadce4a-ceee-4089-8e4a-bf81f9a1e90a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\SceneRelated">
+      <UniqueIdentifier>{cf1fa361-1e17-4f9a-b51e-d36d249071f7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -110,80 +128,80 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Mat3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Mat4.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Vec2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Vec3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Mat2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Vec4.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Shader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Renderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Window.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Mesh.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="include\Application.h">
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="include\Camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\MathUtils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\SceneManager.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SceneRelated</Filter>
     </ClInclude>
     <ClInclude Include="include\Entity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Quat.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\NotBeingUsed</Filter>
     </ClInclude>
     <ClInclude Include="include\Keyboard.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Auxiliar</Filter>
     </ClInclude>
-    <ClInclude Include="include\StringUtils.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Mat2.h">
+      <Filter>Header Files\Math</Filter>
     </ClInclude>
-    <ClInclude Include="include\Model.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="include\Mat4.h">
+      <Filter>Header Files\Math</Filter>
     </ClInclude>
-    <ClInclude Include="include\OBJLoader.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="include\Mat3.h">
+      <Filter>Header Files\Math</Filter>
     </ClInclude>
-    <ClInclude Include="include\OpenGLError.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\SceneNode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Timer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Application.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="include\Quat.h">
+      <Filter>Header Files\Math</Filter>
     </ClInclude>
     <ClInclude Include="include\Quad.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Renderer.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Shader.h">
+      <Filter>Header Files\Auxiliar</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vec4.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vec2.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vec3.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Window.h">
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="include\Material.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Mesh.h">
+      <Filter>Header Files\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Model.h">
+      <Filter>Header Files\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OBJLoader.h">
+      <Filter>Header Files\Auxiliar</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MathUtils.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SceneManager.h">
+      <Filter>Header Files\SceneRelated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SceneNode.h">
+      <Filter>Header Files\SceneRelated</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OpenGLError.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\StringUtils.h">
+      <Filter>Header Files\NotBeingUsed</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Timer.h">
+      <Filter>Header Files\NotBeingUsed</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
