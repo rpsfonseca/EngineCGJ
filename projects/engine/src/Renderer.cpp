@@ -54,8 +54,6 @@ void Renderer::preDraw()
 	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(Mat4), &viewMatrix);
 	glBufferSubData(GL_UNIFORM_BUFFER, sizeof(Mat4), sizeof(Mat4), &projectionMatrix);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
-
-	currentShader.use();
 }
 
 
@@ -126,13 +124,22 @@ void Renderer::draw()
 // The pattern here is that we send the model of a SceneNode to be drawn from the SceneManager, along with its transform.
 void Renderer::draw(Model* model, Mat4& transform)
 {
-	glBindVertexArray(model->getVao());
+	model->materials["default"].shader.use();
+
+	glBindVertexArray(model->meshes[0].getVao());
 
 	modelMatrix = Mat4();
 	modelMatrix = transform;
-	currentShader.setMat4("modelMatrix", modelMatrix);
-	//glDrawElements(GL_TRIANGLES, m.getIndicesSize(), GL_UNSIGNED_INT, (GLvoid*)0);
-	glDrawArrays(GL_TRIANGLES, 0, (GLsizei)model->positions.size());
+	model->materials["default"].shader.setMat4("modelMatrix", modelMatrix);
+
+	if (model->meshes[0].usingIndices)
+	{
+		glDrawElements(GL_TRIANGLES, model->meshes[0].getIndicesSize(), GL_UNSIGNED_INT, (GLvoid*)0);
+	}
+	else
+	{
+		glDrawArrays(GL_TRIANGLES, 0, (GLsizei)model->positions.size());
+	}
 
 	OpenGLError::checkOpenGLError("ERROR: Could not draw scene.");
 }

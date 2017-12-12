@@ -2,7 +2,7 @@
 
 Material::Material()
 {
-	//shader = Shader("quad.vs", "quad.fs");
+	shader = Shader("../../projects/engine/src/quad.vs", "../../projects/engine/src/quad.fs");
 }
 
 Material::Material(std::string shaderName)

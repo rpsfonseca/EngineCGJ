@@ -23,19 +23,8 @@ Model::Model()
 // Also setups up the VBO's.
 Model::Model(std::string& filename)
 {
-	//loadOBJModel(filename, *this);
-
 	OBJLoader modelLoader = OBJLoader(filename);
 	*this = modelLoader.toModel();
-
-	/*for (int i = 0; i < positions.size(); i++)
-	{
-		AdvancedVertex aux;
-		aux.position = Vec4(positions[i]);
-		aux.normals = Vec3(normals[i]);
-		aux.texCoords = Vec2(texCoords[i]);
-		vertices.push_back(aux);
-	}*/
 
 	setupModel();
 }
@@ -48,31 +37,6 @@ Model::~Model()
 // Setups up the VBO's.
 void Model::setupModel()
 {
-	/*glGenVertexArrays(1, &vao);
-	glGenBuffers(1, &vbo);
-
-	glBindVertexArray(vao);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(AdvancedVertex), &vertices[0], GL_STATIC_DRAW);
-
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(AdvancedVertex), (GLvoid*)0);
-
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(AdvancedVertex), (GLvoid*)offsetof(AdvancedVertex, texCoords));
-
-	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(AdvancedVertex), (GLvoid*)offsetof(AdvancedVertex, normals));
-
-	glGenBuffers(1, &ebo);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
-
-	glBindVertexArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);*/
-
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 	{

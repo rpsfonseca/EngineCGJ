@@ -17,8 +17,8 @@ SceneManager::SceneManager()
 SceneManager::SceneManager(std::shared_ptr<Renderer> rendererRef)
 	: renderer(rendererRef)
 {
-	currentCamera = std::make_shared<Camera>(Vec3(0.0f, 0.0f, 12.0f));
-	//setupSceneManager();
+	currentCamera = std::make_shared<Camera>(Vec3(0.0f, 0.0f, 5.0f));
+	//TODO: setupSceneManager();
 }
 
 // SceneManager destructor.
@@ -54,9 +54,15 @@ void SceneManager::setupSceneManager()
 
 	renderer->uboId = uniformBlockId;
 
-	SceneNode* planeNode = SceneManager::createSceneNode(new Model(std::string("../../projects/engine/src/floor.obj")));
+	/*SceneNode* planeNode = SceneManager::createSceneNode(new Model(std::string("../../projects/engine/src/floor.obj")));
 	planeNode->setPosition(Vec3(0.0f));
 	planeNode->setRotation(Quat(90.0f, Vec3::UnitX));
+	planeNode->setScale(Vec3(1.0f));
+	planeNode->model->setPosition(Vec3(0.0f));
+	planeNode->model->setRotation(0.0f);
+	planeNode->model->setScale(Vec3(1.0f));*/
+	SceneNode* planeNode = SceneManager::createSceneNode(new Model());
+	planeNode->setPosition(Vec3(0.0f));
 	planeNode->setScale(Vec3(1.0f));
 	planeNode->model->setPosition(Vec3(0.0f));
 	planeNode->model->setRotation(0.0f);

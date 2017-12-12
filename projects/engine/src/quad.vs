@@ -15,5 +15,5 @@ void main()
 {
 	exPosition = position;
 
-	gl_Position = projectionMatrix * viewMatrix * modelMatrix * position;
+	gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);
 }
