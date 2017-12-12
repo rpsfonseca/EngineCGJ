@@ -191,7 +191,11 @@ void Application::timer(int _val)
 // Mouse callback used by GLFW to send mouse position.
 void Application::mouse(GLFWwindow * window, double x, double y)
 {
-		
+	int invertControls_x = 1;//1 or -1
+	int invertControls_y = 1;//1 or -1
+
+
+
 	static double prev_centered_x, prev_centered_y;
 
 	double normalized_x = x / (instance->windowRef->WIDTH * 1.0);
@@ -202,8 +206,8 @@ void Application::mouse(GLFWwindow * window, double x, double y)
 
 	double sensitivity = 100.0;
 
-	double delta_x = (centered_x - prev_centered_x)*sensitivity;
-	double delta_y = (centered_y - prev_centered_y)*sensitivity;
+	double delta_x = (centered_x - prev_centered_x)*sensitivity*(invertControls_x);
+	double delta_y = (centered_y - prev_centered_y)*sensitivity*(invertControls_y);
 
 	if (left_button_down) {
 		std::cout << delta_x << "x" << delta_y << std::endl;
@@ -217,10 +221,16 @@ void Application::mouse(GLFWwindow * window, double x, double y)
 void Application::mousepress(GLFWwindow* window, int button, int action, int mods)
 {
 	if (button == GLFW_MOUSE_BUTTON_LEFT) {
-		if (GLFW_PRESS == action)
+		if (GLFW_PRESS == action) {
+
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 			left_button_down = true;
-		else if (GLFW_RELEASE == action)
+		}
+		else if (GLFW_RELEASE == action) {
 			left_button_down = false;
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
+		}
 	}
 }
 
