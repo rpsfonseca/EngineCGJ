@@ -19,9 +19,9 @@
 
 unsigned int Application::FRAME_COUNT = 0;
 int Application::directions[2] = { 0.0f, 0.0f };
-float Application::previousX;
-float Application::previousY;
 bool Application::firstTimeMoving = true;
+
+bool Application::left_button_down = false;
 
 static Application* instance;
 
@@ -189,40 +189,39 @@ void Application::timer(int _val)
 }
 
 // Mouse callback used by GLFW to send mouse position.
-void Application::mouse(GLFWwindow* window, double x, double y)
+void Application::mouse(GLFWwindow * window, double x, double y)
 {
-	previousX = x;
-	previousY = y;
+		
+	static double prev_centered_x, prev_centered_y;
 
-	int cx = (instance->windowWidth >> 1);
-	int cy = (instance->windowHeight >> 1);
+	double normalized_x = x / (instance->windowRef->WIDTH * 1.0);
+	double normalized_y = y / (instance->windowRef->HEIGHT * 1.0);
 
-	float deltaX = float(previousX - cx) * 0.1f;
-	float deltaY = float(previousY - cy) * 0.1f;
+	double centered_x = normalized_x * 2.0 - 1.0;
+	double centered_y = normalized_y * 2.0 - 1.0;
 
-	std::cout << "DeltaX: " << abs(deltaX) << std::endl;
-	std::cout << "DeltaY: " << abs(deltaY) << std::endl;
-	if (abs(deltaX) > 0.5f)
-	{
-		glfwSetCursorPos(window, cx, y);
+	double sensitivity = 100.0;
+
+	double delta_x = (centered_x - prev_centered_x)*sensitivity;
+	double delta_y = (centered_y - prev_centered_y)*sensitivity;
+
+	if (left_button_down) {
+		std::cout << delta_x << "x" << delta_y << std::endl;
+		instance->sceneManagerRef->rotateCamera(delta_x, delta_y);
 	}
-	else
-	{
-		deltaX = 0.0f;
-	}
-	if (abs(deltaY) > 0.5f)
-	{
-		glfwSetCursorPos(window, x, cy);
-	}
-	else
-	{
-		deltaY = 0.0f;
-	}
+	
+		prev_centered_x = centered_x;
+		prev_centered_y = centered_y;
+}
 
-
-	glfwSetWindowPos(instance->windowRef->window, 320, 240);
-
-	instance->sceneManagerRef->rotateCamera(deltaX, deltaY);
+void Application::mousepress(GLFWwindow* window, int button, int action, int mods)
+{
+	if (button == GLFW_MOUSE_BUTTON_LEFT) {
+		if (GLFW_PRESS == action)
+			left_button_down = true;
+		else if (GLFW_RELEASE == action)
+			left_button_down = false;
+	}
 }
 
 void Application::entry(int state)
@@ -266,7 +265,7 @@ void Application::setupApp()
 	setupCallbacks();
 
 	// TODO: MAKE A WRAPPER FOR THIS, PROBABLY ON WINDOW CLASS
-	glfwSetInputMode(windowRef->window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	//glfwSetInputMode(windowRef->window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	instance->sceneManagerRef->updateAspectRatio(640.0f/480.0f);
 }
@@ -278,6 +277,7 @@ void Application::setupCallbacks()
 	glfwSetWindowSizeCallback(windowRef->window, reshapeWindow);
 	glfwSetFramebufferSizeCallback(windowRef->window, reshapeFramebuffer);
 	glfwSetCursorPosCallback(windowRef->window, mouse);
+	glfwSetMouseButtonCallback(windowRef->window, mousepress);
 	glfwSetKeyCallback(windowRef->window, keyboard);
 }
 

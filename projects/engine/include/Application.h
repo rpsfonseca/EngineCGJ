@@ -34,13 +34,13 @@ class Application
 
 	static bool firstTimeMoving;
 
-	static float previousX;
-	static float previousY;
+	static bool left_button_down;
 
 	float currentFrame;
 	float lastFrame = 0.0f;
 
 	bool firstTimeT = false;
+
 public:
 	/**
 		Constructs Application with no args.
@@ -118,6 +118,7 @@ private:
 		@param y Mouse y position.
 	*/
 	static void mouse(GLFWwindow* window, double x, double y);
+	static void mousepress(GLFWwindow* window, int button, int action, int mods);
 	static void entry(int state);
 private:
 	/**
