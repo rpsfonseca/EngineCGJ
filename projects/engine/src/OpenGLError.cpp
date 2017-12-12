@@ -27,6 +27,8 @@ void OpenGLError::checkOpenGLError(std::string error)
 {
 	if (isOpenGLError()) {
 		std::cerr << error << std::endl;
+		int wait;
+		std::cin >> wait;
 		exit(EXIT_FAILURE);
 	}
 }
