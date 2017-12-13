@@ -295,10 +295,6 @@ void Application::mainLoop()
 {
 	while (!windowRef->shouldWindowClose())
 	{
-		currentFrame = Timer::getTotalElapsedTime();
-		Timer::deltaTime = currentFrame - lastFrame;
-		lastFrame = currentFrame;
-
 		Timer::update();
 		windowRef->setWindowTitle(Timer::fps);
 

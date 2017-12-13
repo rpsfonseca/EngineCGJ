@@ -9,7 +9,8 @@ public:
 	~Timer();
 
 	static float deltaTime;
-	static float lastTime;
+	static float lastFPSUpdate;
+	static float lastFrameTime;
 	static int fps;
 
 	static void update();
