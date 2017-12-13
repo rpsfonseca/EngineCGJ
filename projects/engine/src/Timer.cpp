@@ -9,3 +9,9 @@ Timer::Timer()
 Timer::~Timer()
 {
 }
+
+double Timer::getTotalElapsedTime()
+{
+	return glfwGetTime();
+}
+
