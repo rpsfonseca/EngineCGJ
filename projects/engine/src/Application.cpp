@@ -295,15 +295,12 @@ void Application::mainLoop()
 {
 	while (!windowRef->shouldWindowClose())
 	{
-		currentFrame = glfwGetTime();
+		currentFrame = Timer::getTotalElapsedTime();
 		Timer::deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-		std::ostringstream oss;
-		oss << instance->windowRef->TITLE << ": " << FRAME_COUNT << " FPS @ (" << instance->windowWidth << "x" << instance->windowHeight << ")";
-		std::string s = oss.str();
-		glfwSetWindowTitle(instance->windowRef->window, s.c_str());
-		FRAME_COUNT = 0;
+		Timer::update();
+		windowRef->setWindowTitle(Timer::fps);
 
 		instance->sceneManagerRef->updateScene();
 		draw();

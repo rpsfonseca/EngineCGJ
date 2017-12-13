@@ -43,6 +43,11 @@ public:
 	void setupWindow(const int& _versionMajor, const int& _versionMinor);
 
 	/**
+		
+	*/
+	void setWindowTitle(int fps);
+
+	/**
 		Simple wrapper for glfwWindowShouldClose method.
 	*/
 	bool shouldWindowClose();

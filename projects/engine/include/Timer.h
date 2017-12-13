@@ -9,12 +9,18 @@ public:
 	~Timer();
 
 	static float deltaTime;
+	static float lastTime;
+	static int fps;
+
+	static void update();
 	
 	/**
 		Simple wrapper for glfwGetTime.
 		Measures time elapsed since GLFW was initialized.
 	*/
 	static double getTotalElapsedTime();
+
 private:
+	static int frameCount;
 
 };

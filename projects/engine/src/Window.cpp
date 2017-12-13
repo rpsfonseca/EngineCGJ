@@ -3,6 +3,8 @@
 #include "Window.h"
 
 #include <iostream>
+#include <sstream>
+#include <string>
 
 int Window::HEIGHT = 480;
 int Window::WIDTH = 640;
@@ -46,6 +48,14 @@ void Window::setupWindow(const int& _versionMajor, const int& _versionMinor)
 	}
 
 	glfwMakeContextCurrent(window);
+}
+
+void Window::setWindowTitle(int fps)
+{
+	std::ostringstream oss;
+	oss << TITLE << ": " << fps << " FPS @ (" << WIDTH << "x" << HEIGHT << ")";
+	std::string s = oss.str();
+	glfwSetWindowTitle(window, s.c_str());
 }
 
 // Simple wrapper for glfwWindowShouldClose method.
