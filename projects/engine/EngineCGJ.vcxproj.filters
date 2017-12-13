@@ -49,6 +49,9 @@
     <Filter Include="Header Files\SceneRelated">
       <UniqueIdentifier>{cf1fa361-1e17-4f9a-b51e-d36d249071f7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\NotOurs">
+      <UniqueIdentifier>{4cf1a532-a242-40b8-8b5e-58862d73a895}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -126,6 +129,9 @@
     <ClCompile Include="src\Timer.cpp">
       <Filter>Source Files\NotBeingUsed</Filter>
     </ClCompile>
+    <ClCompile Include="src\Texture.cpp">
+      <Filter>Source Files\Auxiliar</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Application.h">
@@ -202,6 +208,15 @@
     </ClInclude>
     <ClInclude Include="include\Timer.h">
       <Filter>Header Files\NotBeingUsed</Filter>
+    </ClInclude>
+    <ClInclude Include="include\stb_image.h">
+      <Filter>Header Files\NotOurs</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SkyBox.h">
+      <Filter>Header Files\Auxiliar</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Texture.h">
+      <Filter>Header Files\Auxiliar</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
