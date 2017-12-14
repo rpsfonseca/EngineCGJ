@@ -1,15 +1,14 @@
 #pragma once
 #include <string>
+#include <iostream>
 #include "GL\glew.h"
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
 
+#define TEXTURE_PATH "../../projects/engine/resources/textures/"
 
 class Texture {
 private:
-	int width, height, bpp;
+	int width, height;
 	unsigned int tex_id;
-	unsigned int sampler_id;
 	bool mipMapsGenerated;
 
 	int tex_filter_Magnification;
@@ -17,21 +16,9 @@ private:
 
 	std::string path;
 public:
-	void createTextureFromData();
-	bool loadTexture2D(std::string& filepath, bool generateMipMaps);
-	void bindTexture(int texureUnit = 0);
+	bool loadTexture2D(std::string& filepath, bool generateMipMaps = true);
 
-	void setFiltering(int tex_filter_Magnification, int tex_filter_Minification);
-
-	void setSamplerParameter(GLenum parameter, GLenum value);
-
-	int getMinificationFilter();
-	int getMagnificationFilter();
-
-	int getWidth();
-	int getHeight();
-	int getBytesPerPixel();
-
+	void bind(unsigned int unit);
 	void releaseTexture();
 
 	Texture();
