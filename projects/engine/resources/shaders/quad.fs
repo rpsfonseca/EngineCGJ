@@ -3,12 +3,15 @@
 in vec3 exPosition;
 out vec4 FragColor;
 
+uniform float runTime;
+
+
 //-----------------------------------------------------------------------------
 // Maths utils
 //-----------------------------------------------------------------------------
 
 const vec2 size = vec2(512,512);
-const int samples = 32;
+const int samples = 64;
 
 //const vec2 res = vec2(size.x,512);
 
@@ -53,7 +56,7 @@ float fbm(vec3 p)
 //-----------------------------------------------------------------------------
 float scene(vec3 p)
 {	
-	return .001-length(p)*.07+fbm(p*.3);
+	return .0001-length(p)*.07+fbm(p*.3);
 	//vec3 r = vec3(1,1,1); 
 	//eturn (length( p/r ) - 1.0) * min(min(r.x,r.y),r.z);
 }
@@ -67,12 +70,13 @@ void main()
 	//#if 0
     //vec2 mo = -1.0 + 2.0*iMouse.xy / iResolution.xy;
     //#else
-	vec2 mo = vec2(.1,cos(.25*10)*3.);
+	vec2 mo = vec2(.1*runTime,cos(.25*runTime)*3.);
 	//#endif
 
     // camera by iq
-    vec3 org = 25.0*normalize(vec3(cos(2.75-3.0*mo.x), 0.7-1.0*(mo.y-1.0), sin(2.75-3.0*mo.x)));
-	vec3 ta = vec3(0.0, 1.0, 0.0);
+    vec3 org = 25.0*normalize(vec3(cos(2.75-3.0*mo.x), 0.7-1.0*(mo.y-1.0), sin(2.75-3.0)));
+    org = vec3(org.x, org.y, org.z - 20);
+    vec3 ta = vec3(0.0, 1.0, 0.0);
     vec3 ww = normalize( ta - org);
     vec3 uu = normalize(cross( vec3(0.0,1.0,0.0), ww ));
     vec3 vv = normalize(cross(ww,uu));

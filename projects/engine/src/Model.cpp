@@ -4,6 +4,8 @@
 #include "Quad.h"
 #include <string>
 #include <iostream>
+#include "Timer.h"
+
 
 // Model constructor.
 // Just creates the variable of this type.
@@ -95,7 +97,7 @@ void Model::draw(Mat4& transform)
 	Mat4 modelMatrix = Mat4();
 	modelMatrix = transform;
 	materials["default"].shader.setMat4("modelMatrix", modelMatrix);
-
+	materials["default"].shader.setFloat("runTime", glfwGetTime());
 	if (meshes[0].usingIndices)
 	{
 		glDrawElements(GL_TRIANGLES, meshes[0].getIndicesSize(), GL_UNSIGNED_INT, (GLvoid*)0);

@@ -3,12 +3,15 @@
 in vec3 exPosition;
 out vec4 FragColor;
 
+uniform float runTime;
+
+
 //-----------------------------------------------------------------------------
 // Maths utils
 //-----------------------------------------------------------------------------
 
 const vec2 size = vec2(512,512);
-const int samples = 32;
+const int samples = 64;
 
 //const vec2 res = vec2(size.x,512);
 
@@ -67,7 +70,7 @@ void main()
 	//#if 0
     //vec2 mo = -1.0 + 2.0*iMouse.xy / iResolution.xy;
     //#else
-	vec2 mo = vec2(.1,cos(.25*10)*3.);
+	vec2 mo = vec2(.1,cos(.25*runTime)*3.);
 	//#endif
 
     // camera by iq

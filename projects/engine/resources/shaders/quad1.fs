@@ -3,7 +3,10 @@
 in vec3 exPosition;
 out vec4 FragColor;
 
+uniform float runTime;
+
+
 void main(void)
 {
-	FragColor = vec4(.5-exPosition,1);
+	FragColor = vec4(1+cos(runTime)-exPosition,1);
 }
