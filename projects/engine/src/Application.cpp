@@ -210,7 +210,7 @@ void Application::mouse(GLFWwindow * window, double x, double y)
 	double delta_y = (centered_y - prev_centered_y)*sensitivity*(invertControls_y);
 
 	if (left_button_down) {
-		std::cout << delta_x << "x" << delta_y << std::endl;
+		//std::cout << delta_x << "x" << delta_y << std::endl;
 		instance->sceneManagerRef->rotateCamera(delta_x, delta_y);
 	}
 	
