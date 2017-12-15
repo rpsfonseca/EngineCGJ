@@ -11,7 +11,7 @@ uniform float runTime;
 //-----------------------------------------------------------------------------
 
 const vec2 size = vec2(512,512);
-const int samples = 64;
+const int samples = 32;
 
 //const vec2 res = vec2(size.x,512);
 
@@ -74,8 +74,8 @@ void main()
 	//#endif
 
     // camera by iq
-    vec3 org = 25.0*normalize(vec3(cos(2.75-3.0*mo.x), 0.7-1.0*(mo.y-1.0), sin(2.75-3.0)));
-    org = vec3(org.x, org.y, org.z - 20);
+    vec3 org = 25.0*normalize(vec3(cos(2.75-3.0*mo.x), 0.7-1.0*(mo.y-1.0), sin(2.75-3.0*mo.x)));
+    org = vec3(org.x, org.y, org.z);
     vec3 ta = vec3(0.0, 1.0, 0.0);
     vec3 ww = normalize( ta - org);
     vec3 uu = normalize(cross( vec3(0.0,1.0,0.0), ww ));
