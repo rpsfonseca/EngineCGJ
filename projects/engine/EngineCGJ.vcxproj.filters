@@ -52,6 +52,12 @@
     <Filter Include="Header Files\NotOurs">
       <UniqueIdentifier>{4cf1a532-a242-40b8-8b5e-58862d73a895}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Objects\SpecificObjects">
+      <UniqueIdentifier>{37639aa8-7e0a-4ca0-ab85-8ab80dd36cb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Objects\SpecificObject">
+      <UniqueIdentifier>{e30206cd-d84e-4dc9-8fba-44d2df3dec16}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -123,14 +129,17 @@
     <ClCompile Include="src\Model.cpp">
       <Filter>Source Files\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="src\Quad.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
     <ClCompile Include="src\Timer.cpp">
       <Filter>Source Files\NotBeingUsed</Filter>
     </ClCompile>
     <ClCompile Include="src\Texture.cpp">
       <Filter>Source Files\Auxiliar</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Quad.cpp">
+      <Filter>Source Files\Objects\SpecificObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyBox.cpp">
+      <Filter>Source Files\Objects\SpecificObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -157,9 +166,6 @@
     </ClInclude>
     <ClInclude Include="include\Quat.h">
       <Filter>Header Files\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Quad.h">
-      <Filter>Header Files\Objects</Filter>
     </ClInclude>
     <ClInclude Include="include\Renderer.h">
       <Filter>Header Files\Core</Filter>
@@ -212,11 +218,14 @@
     <ClInclude Include="include\stb_image.h">
       <Filter>Header Files\NotOurs</Filter>
     </ClInclude>
-    <ClInclude Include="include\SkyBox.h">
-      <Filter>Header Files\Auxiliar</Filter>
-    </ClInclude>
     <ClInclude Include="include\Texture.h">
       <Filter>Header Files\Auxiliar</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Quad.h">
+      <Filter>Header Files\Objects\SpecificObject</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SkyBox.h">
+      <Filter>Header Files\Objects\SpecificObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
