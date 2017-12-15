@@ -62,14 +62,23 @@ void SceneManager::setupSceneManager()
 	planeNode->model->setRotation(0.0f);
 	planeNode->model->setScale(Vec3(1.0f));*/
 	SceneNode* planeNode = SceneManager::createSceneNode(new Model());
-	planeNode->setPosition(Vec3(0.0f));
+	planeNode->setPosition(Vec3(-0.5f, 0.0f, 0.0f));
 	planeNode->setScale(Vec3(1.0f));
 	planeNode->model->setPosition(Vec3(0.0f));
 	planeNode->model->setRotation(0.0f);
 	planeNode->model->setScale(Vec3(1.0f));
 	rootSceneNode->addChild(planeNode);
 
+	SceneNode* planeNode2 = SceneManager::createSceneNode(new Model("quad1"));
+	planeNode2->setPosition(Vec3(0.5f, 0.0f, 0.0f));
+	planeNode2->setScale(Vec3(1.0f));
+	planeNode2->model->setPosition(Vec3(0.0f));
+	planeNode2->model->setRotation(0.0f);
+	planeNode2->model->setScale(Vec3(1.0f));
+	rootSceneNode->addChild(planeNode2);
+
 	nodes.insert(std::pair<std::string, SceneNode*>("plane", planeNode));
+	nodes.insert(std::pair<std::string, SceneNode*>("plane2", planeNode2));
 }
 
 // Pushes scene nodes to renderer to be rendered.

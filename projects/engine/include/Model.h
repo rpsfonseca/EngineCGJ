@@ -49,6 +49,9 @@ public:
 		Also setups up the VBO's.
 	*/
 	Model(std::string& filename);
+
+	Model(std::string shaderName, int a = 0);
+
 	~Model();
 
 	/**

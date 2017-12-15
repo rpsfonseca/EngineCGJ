@@ -17,6 +17,15 @@ Model::Model()
 	materials["default"] = Material();
 }
 
+Model::Model(std::string shaderName, int a)
+{
+	hasNormals = false;
+	hasTextures = false;
+
+	meshes.push_back(Quad());
+	materials["default"] = Material(shaderName);
+}
+
 // Model constructor.
 // This is the one normally used.
 // You load a 3d model by passing the filename.
@@ -82,6 +91,10 @@ void Model::draw(Mat4& transform)
 	}
 
 	glBindVertexArray(meshes[0].getVao());
+
+	Mat4 modelMatrix = Mat4();
+	modelMatrix = transform;
+	materials["default"].shader.setMat4("modelMatrix", modelMatrix);
 
 	if (meshes[0].usingIndices)
 	{
