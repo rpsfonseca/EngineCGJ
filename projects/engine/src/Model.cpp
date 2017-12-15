@@ -29,7 +29,6 @@ Model::Model(std::string& filename)
 	setupModel();
 }
 
-
 Model::~Model()
 {
 }

@@ -13,12 +13,21 @@ Material::Material()
 
 Material::Material(std::string shaderName)
 {
-	const char* vertexShaderPath = (shaderName + ".vs").c_str();
-	const char* fragmentShaderPath = (shaderName + ".fs").c_str();
+	const char* vertexShaderPath = (SHADERPATH + shaderName + ".vs").c_str();
+	const char* fragmentShaderPath = (SHADERPATH + shaderName + ".fs").c_str();
 	shader = Shader(vertexShaderPath, fragmentShaderPath);
 }
 
 Material::~Material()
 {
 
+}
+
+void Material::setTexture(std::string name, Texture* value, unsigned int unit)
+{
+	textures[name].unit = unit;
+	textures[name].texture = value;
+
+	shader.use();
+	shader.setInteger(name.c_str(), unit);
 }
