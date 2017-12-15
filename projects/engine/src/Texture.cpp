@@ -37,7 +37,7 @@ bool Texture::loadTexture2D(std::string & filename, bool generateMipMaps)
 	}
 	else
 	{
-		std::cout << "Failed to load texture" << std::endl;
+		std::cout << "Failed to load texture ->" << filepath << std::endl;
 		stbi_image_free(data);
 		return false;
 	}

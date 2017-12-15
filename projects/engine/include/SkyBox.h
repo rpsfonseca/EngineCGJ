@@ -7,10 +7,6 @@
 #include <vector>
 #include <bitset>
 
-using namespace math;
-
-typedef std::bitset<8> BYTE;
-
 
 class Skybox
 {
@@ -27,5 +23,5 @@ private:
 	GLuint uiBuffer;
 	int iSize;
 	int iBufferType;
-	std::vector<BYTE> data;
+	std::vector<std::bitset<8>> data;
 };

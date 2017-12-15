@@ -1,13 +1,15 @@
 #include "SkyBox.h"
 
+using namespace math;
+
 void Skybox::loadSkybox(std::string t_Front, std::string t_Back, std::string t_Left, std::string t_Right, std::string t_Top, std::string t_Bottom)
 {
-	textures[0].loadTexture2D(std::string(TEXTURE_PATH) + t_Front);
-	textures[1].loadTexture2D(std::string(TEXTURE_PATH) + t_Back);
-	textures[2].loadTexture2D(std::string(TEXTURE_PATH) + t_Left);
-	textures[3].loadTexture2D(std::string(TEXTURE_PATH) + t_Right);
-	textures[4].loadTexture2D(std::string(TEXTURE_PATH) + t_Top);
-	textures[5].loadTexture2D(std::string(TEXTURE_PATH) + t_Bottom);
+	textures[0].loadTexture2D(t_Front);
+	textures[1].loadTexture2D(t_Back);
+	textures[2].loadTexture2D(t_Left);
+	textures[3].loadTexture2D(t_Right);
+	textures[4].loadTexture2D(t_Top);
+	textures[5].loadTexture2D(t_Bottom);
 
 
 	glGenVertexArrays(1, &uiVAO);
@@ -91,5 +93,5 @@ void Skybox::releaseSkybox()
 
 void Skybox::addData(void* ptrData, GLuint uiDataSize)
 {
-	data.insert(data.end(), (BYTE*)ptrData, (BYTE*)ptrData + uiDataSize);
+	data.insert(data.end(), (std::bitset<8>*)ptrData, (std::bitset<8>*)ptrData + uiDataSize);
 }
