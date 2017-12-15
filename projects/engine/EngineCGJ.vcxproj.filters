@@ -138,7 +138,7 @@
     <ClCompile Include="src\Quad.cpp">
       <Filter>Source Files\Objects\SpecificObjects</Filter>
     </ClCompile>
-    <ClCompile Include="SkyBox.cpp">
+    <ClCompile Include="src\SkyBox.cpp">
       <Filter>Source Files\Objects\SpecificObjects</Filter>
     </ClCompile>
   </ItemGroup>
