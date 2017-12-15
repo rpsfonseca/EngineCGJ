@@ -69,6 +69,32 @@ void Model::setupModel()
 	OpenGLError::checkOpenGLError("ERROR: Could not create VAOs and VBOs.");
 }
 
+void Model::draw(Mat4& transform)
+{
+	for (auto it = materials.begin(); it != materials.end(); ++it)
+	{
+		it->second.shader.use();
+		auto aux = it->second.textures;
+		for (auto it2 = aux.begin(); it2 != aux.end(); ++it2)
+		{
+			it2->second.texture->bind(it2->second.unit);
+		}
+	}
+
+	glBindVertexArray(meshes[0].getVao());
+
+	if (meshes[0].usingIndices)
+	{
+		glDrawElements(GL_TRIANGLES, meshes[0].getIndicesSize(), GL_UNSIGNED_INT, (GLvoid*)0);
+	}
+	else
+	{
+		glDrawArrays(GL_TRIANGLES, 0, (GLsizei)positions.size());
+	}
+
+	OpenGLError::checkOpenGLError("ERROR: Could not draw model.");
+}
+
 unsigned int Model::getVao()
 {
 	return vao;

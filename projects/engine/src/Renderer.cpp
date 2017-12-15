@@ -60,7 +60,8 @@ void Renderer::preDraw()
 // The pattern here is that we send the model of a SceneNode to be drawn from the SceneManager, along with its transform.
 void Renderer::draw(Model* model, Mat4& transform)
 {
-	model->materials["default"].shader.use();
+	model->draw(transform);
+	/*model->materials["default"].shader.use();
 
 	glBindVertexArray(model->meshes[0].getVao());
 
@@ -75,7 +76,7 @@ void Renderer::draw(Model* model, Mat4& transform)
 	else
 	{
 		glDrawArrays(GL_TRIANGLES, 0, (GLsizei)model->positions.size());
-	}
+	}*/
 
 	OpenGLError::checkOpenGLError("ERROR: Could not draw scene.");
 }

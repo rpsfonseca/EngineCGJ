@@ -56,6 +56,11 @@ public:
 	*/
 	void setupModel();
 
+	/**
+		
+	*/
+	void draw(Mat4& transform);
+
 	unsigned int getVao();
 	inline unsigned int getVbo();
 	unsigned int getEbo();
