@@ -17,6 +17,15 @@ Model::Model()
 	materials["default"] = Material();
 }
 
+Model::Model(std::string shaderName, int a)
+{
+	hasNormals = false;
+	hasTextures = false;
+
+	meshes.push_back(Quad());
+	materials["default"] = Material(shaderName);
+}
+
 // Model constructor.
 // This is the one normally used.
 // You load a 3d model by passing the filename.
@@ -67,6 +76,36 @@ void Model::setupModel()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	OpenGLError::checkOpenGLError("ERROR: Could not create VAOs and VBOs.");
+}
+
+void Model::draw(Mat4& transform)
+{
+	for (auto it = materials.begin(); it != materials.end(); ++it)
+	{
+		it->second.shader.use();
+		auto aux = it->second.textures;
+		for (auto it2 = aux.begin(); it2 != aux.end(); ++it2)
+		{
+			it2->second.texture->bind(it2->second.unit);
+		}
+	}
+
+	glBindVertexArray(meshes[0].getVao());
+
+	Mat4 modelMatrix = Mat4();
+	modelMatrix = transform;
+	materials["default"].shader.setMat4("modelMatrix", modelMatrix);
+
+	if (meshes[0].usingIndices)
+	{
+		glDrawElements(GL_TRIANGLES, meshes[0].getIndicesSize(), GL_UNSIGNED_INT, (GLvoid*)0);
+	}
+	else
+	{
+		glDrawArrays(GL_TRIANGLES, 0, (GLsizei)positions.size());
+	}
+
+	OpenGLError::checkOpenGLError("ERROR: Could not draw model.");
 }
 
 unsigned int Model::getVao()

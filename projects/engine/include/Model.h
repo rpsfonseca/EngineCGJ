@@ -49,12 +49,20 @@ public:
 		Also setups up the VBO's.
 	*/
 	Model(std::string& filename);
+
+	Model(std::string shaderName, int a = 0);
+
 	~Model();
 
 	/**
 		Setups up the VBO's.
 	*/
 	void setupModel();
+
+	/**
+		
+	*/
+	void draw(Mat4& transform);
 
 	unsigned int getVao();
 	inline unsigned int getVbo();

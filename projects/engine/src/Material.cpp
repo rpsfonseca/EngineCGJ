@@ -13,9 +13,18 @@ Material::Material()
 
 Material::Material(std::string shaderName)
 {
-	const char* vertexShaderPath = (SHADERPATH + shaderName + ".vs").c_str();
-	const char* fragmentShaderPath = (SHADERPATH + shaderName + ".fs").c_str();
-	shader = Shader(vertexShaderPath, fragmentShaderPath);
+	/*const char* vertexShaderPath = (SHADERPATH + shaderName + ".vs").c_str();
+	const char* fragmentShaderPath = (SHADERPATH + shaderName + ".fs").c_str();*/
+	std::string path_vs = SHADERPATH;
+	path_vs.append(shaderName);
+	path_vs.append(".vs");
+	std::string path_fs = SHADERPATH;
+	path_fs.append(shaderName);
+	path_fs.append(".fs");
+
+	std::cout << path_fs << std::endl << path_vs << std::endl;
+
+	shader = Shader(path_vs.c_str(), path_fs.c_str());
 }
 
 Material::~Material()
