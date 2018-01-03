@@ -1,7 +1,5 @@
 /**
-	CS-11 Asn 6
-	Application.cpp
-	Purpose: Holds the class definitions for the engine app
+	Holds the class definitions for the engine app
 
 	@author Ricardo Fonseca
 	@version 0.1
@@ -13,6 +11,7 @@
 #include "Application.h"
 #include "Keyboard.h"
 #include "Timer.h"
+#include "EditorGUI.h"
 
 #include <iostream>
 #include <sstream>
@@ -155,7 +154,7 @@ void Application::display()
 	}
 
 	instance->sceneManagerRef->renderScene();
-	instance->windowRef->swapBuffers();
+	//instance->windowRef->swapBuffers();
 }
 
 void Application::cleanup(GLFWwindow * window)
@@ -278,6 +277,8 @@ void Application::setupApp()
 	//glfwSetInputMode(windowRef->window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	instance->sceneManagerRef->updateAspectRatio(640.0f/480.0f);
+
+	EditorGUI::init(windowRef->window);
 }
 
 // Sets the appropriate callbacks to glfw.
@@ -298,11 +299,18 @@ void Application::mainLoop()
 		Timer::update();
 		windowRef->setWindowTitle(Timer::fps);
 
+		EditorGUI::newFrame();
+
 		instance->sceneManagerRef->updateScene();
 		draw();
 
+		EditorGUI::renderGUI();
+
+		instance->windowRef->swapBuffers();
 		glfwPollEvents();
 	}
+
+	EditorGUI::shutdown();
 
 	glfwDestroyWindow(instance->windowRef->window);
 	glfwTerminate();
