@@ -8,7 +8,6 @@
 class Texture {
 private:
 	int width, height;
-	unsigned int tex_id;
 	bool mipMapsGenerated;
 
 	int tex_filter_Magnification;
@@ -16,6 +15,9 @@ private:
 
 	std::string path;
 public:
+	unsigned int tex_id;
+
+	bool generateRTTexture();
 	bool loadTexture2D(std::string& filepath, bool generateMipMaps = true);
 
 	void bind(unsigned int unit);

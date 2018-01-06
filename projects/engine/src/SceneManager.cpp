@@ -1,7 +1,11 @@
 #include "SceneManager.h"
 #include "Timer.h"
 
+#include "imgui_GLFW.h"
 #include <stack>
+#include <vector>
+#include <string>
+#include <cstring>
 
 SceneNode* SceneManager::rootSceneNode = new SceneNode(0); // The root node of our node hierarchy
 int SceneManager::nodeCounterId = 0; // Counter to keep track of the current node id to give to a new node
@@ -81,6 +85,16 @@ void SceneManager::setupSceneManager()
 	nodes.insert(std::pair<std::string, SceneNode*>("plane2", planeNode2));
 }
 
+
+bool VectorOfStringGetter(void* data, int n, const char** out_text)
+{
+	const std::vector<std::string>* v = (std::vector<std::string>*)data;
+	//v[n].data[0];
+	const std::string* a = v[n].data();
+	*out_text = v->at(n).c_str();
+	return true;
+}
+
 // Pushes scene nodes to renderer to be rendered.
 void SceneManager::renderScene()
 {
@@ -112,7 +126,27 @@ void SceneManager::renderScene()
 	}
 
 	renderer->postDraw();
+
+	ImGui::Begin("ObjectsWidget", (bool*)1);
+	static int listbox_item_current = -1, listbox_item_current2 = -1;
+	std::vector<std::string> v;
+	for (auto it = nodes.begin(); it != nodes.end(); ++it)
+	{
+		v.push_back(it->first.c_str());
+	}
+	ImGui::ListBox("Objects", &listbox_item_current, VectorOfStringGetter, (void*)&v, (int)v.size());
+	if (listbox_item_current != -1)
+	{
+		std::vector<std::string> a;
+		for (auto it = nodes[v[listbox_item_current]]->model->materials.begin(); it != nodes[v[listbox_item_current]]->model->materials.end(); ++it)
+		{
+			a.push_back(it->first.c_str());
+		}
+		ImGui::ListBox("Objects2", &listbox_item_current2, VectorOfStringGetter, (void*)&a, (int)a.size());
+	}
+	ImGui::End();
 }
+
 
 // Updates each scene node.
 void SceneManager::updateScene()

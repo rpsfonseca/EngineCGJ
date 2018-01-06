@@ -62,7 +62,6 @@ public:
 		Updates each scene node.
 	*/
 	void updateScene();
-
 	void toggleArcballCam();
 	void toggleGimbalLock();
 	void changeCameraProjection();

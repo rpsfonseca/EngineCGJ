@@ -82,9 +82,9 @@ void Skybox::renderSkybox()
 
 void Skybox::releaseSkybox()
 {
-	for (int i; i < 6; i++) {
+	/*for (int i; i < 6; i++) {
 		textures[i].releaseTexture();
-	}
+	}*/
 	glDeleteVertexArrays(1, &uiVAO);
 	glDeleteBuffers(1, &uiBuffer);
 	data.clear();

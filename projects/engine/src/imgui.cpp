@@ -548,7 +548,7 @@ You can also perfectly create a standalone ImDrawList instance _but_ you need Im
 #define IMGUI_DEFINE_MATH_OPERATORS
 #define IMGUI_DEFINE_PLACEMENT_NEW
 #include "imgui_internal.h"
-
+#include <iostream>
 #include <ctype.h>      // toupper, isprint
 #include <stdlib.h>     // NULL, malloc, free, qsort, atoi
 #include <stdio.h>      // vsnprintf, sscanf, printf
@@ -8894,6 +8894,7 @@ void ImGui::ListBoxFooter()
 
 bool ImGui::ListBox(const char* label, int* current_item, const char* const* items, int items_count, int height_items)
 {
+	std::cout << items[0] << std::endl;
 	const bool value_changed = ListBox(label, current_item, Items_ArrayGetter, (void*)items, items_count, height_items);
 	return value_changed;
 }
