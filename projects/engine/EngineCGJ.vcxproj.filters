@@ -58,6 +58,12 @@
     <Filter Include="Header Files\Objects\SpecificObject">
       <UniqueIdentifier>{e30206cd-d84e-4dc9-8fba-44d2df3dec16}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\SimulationManager">
+      <UniqueIdentifier>{0b48b655-0997-4e99-97fc-51c92d74d691}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\SimulationManager">
+      <UniqueIdentifier>{0f8bec09-efbb-4841-8850-40673d3da2d9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -158,6 +164,15 @@
     </ClCompile>
     <ClCompile Include="src\imgui_GLFW.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulation\Cloud.cpp">
+      <Filter>Source Files\SimulationManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulation\SimManager.cpp">
+      <Filter>Source Files\SimulationManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulation\SimData.cpp">
+      <Filter>Source Files\SimulationManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -271,6 +286,15 @@
     </ClInclude>
     <ClInclude Include="include\imgui_GLFW.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulation\SimManager.h">
+      <Filter>Header Files\SimulationManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulation\Cloud.h">
+      <Filter>Header Files\SimulationManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulation\SimData.h">
+      <Filter>Header Files\SimulationManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

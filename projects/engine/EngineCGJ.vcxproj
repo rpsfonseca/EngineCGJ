@@ -44,6 +44,9 @@
     <ClCompile Include="src\SceneManager.cpp" />
     <ClCompile Include="src\SceneNode.cpp" />
     <ClCompile Include="src\Shader.cpp" />
+    <ClCompile Include="src\Simulation\Cloud.cpp" />
+    <ClCompile Include="src\Simulation\SimData.cpp" />
+    <ClCompile Include="src\Simulation\SimManager.cpp" />
     <ClCompile Include="src\SkyBox.cpp" />
     <ClCompile Include="src\StringUtils.cpp" />
     <ClCompile Include="src\Texture.cpp" />
@@ -91,6 +94,9 @@
     <ClInclude Include="include\Window.h" />
     <ClInclude Include="Mat2.h" />
     <ClInclude Include="RenderTarget.h" />
+    <ClInclude Include="src\Simulation\Cloud.h" />
+    <ClInclude Include="src\Simulation\SimData.h" />
+    <ClInclude Include="src\Simulation\SimManager.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
