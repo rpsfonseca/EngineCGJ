@@ -48,6 +48,10 @@ private:
 	void defineRaycasterLayout(const GLuint shaderProgram);
 	void defineGUILayout(const GLuint shaderProgram);
 
+	void rightButtonUpdates();
+	void arrowUpdates();
+
+
 	bool showVRC;
 
 	float*** interpolatedData;

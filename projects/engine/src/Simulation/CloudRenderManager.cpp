@@ -11,8 +11,8 @@
 */
 CloudRenderManager::CloudRenderManager() :
 	windowTitle("Real-timeish Cloud Renderer"),
-	nearPlane(0.1f),
-	farPlane(15.0f),
+	nearPlane(0.001f),
+	farPlane(15000.0f),
 	fieldOfView(75.0f),
 	tanFOV(tan(fieldOfView / 2.0f / 360.0f * 2.0f * 3.14f)),
 	showVRC(false) {};
@@ -107,7 +107,7 @@ bool CloudRenderManager::initialize(const int gridX, const int gridY, const int 
 
 	// Initialize the camera and the projetion matrices
 	camera.initialize(gridX, gridY, gridZ);
-	perspectiveProjection = math::Mat4::perspective(fieldOfView,(float)1400.0 / (float)700,nearPlane, farPlane);
+	perspectiveProjection = math::Mat4::perspective(fieldOfView,(float)1400.0 / (float)700.0 ,nearPlane, farPlane);
 
 	interpolatedData = new float **[gridX];
 	for (int i = 0; i != gridX; ++i) {
@@ -158,10 +158,13 @@ void CloudRenderManager::defineGUILayout(const GLuint guiShaderProgram) {
 
 }
 
-void CloudRenderManager::draw(const SimData& data, std::mutex& simMutex,
-	const double time) {
+void CloudRenderManager::draw(const SimData& data, std::mutex& simMutex, const double time) {
+	static int counter = 0, frames = 0;
+	static double fps = 0;
 	// Update the camera
-	camera.updateCamera();
+	//camera.updateCamera();
+	rightButtonUpdates();
+	arrowUpdates();
 
 	// Clear the screen with background (sky) color
 	glClearColor(67 / 256.0f, 128 / 256.0f, 183 / 256.0f, 1.0f);
@@ -180,12 +183,14 @@ void CloudRenderManager::draw(const SimData& data, std::mutex& simMutex,
 	//controls.update();
 
 	//if (showVRC) renderGUI();
-	static int counter = 0, frames = 0;
-	static double fps = 0;
 	counter++;
 	frames++;
 	fps = (double)frames / time;
-	if (counter > 100) { std::cout << fps << " - fps" << std::endl;  counter = 0; }
+	if (counter > 100) { 
+		std::cout << fps << " - fps" << std::endl;
+		counter = 0;
+
+	}
 
 	// Check for errors
 	GLint glErr = glGetError();
@@ -193,6 +198,8 @@ void CloudRenderManager::draw(const SimData& data, std::mutex& simMutex,
 
 	// Swap the buffer
 	glfwSwapBuffers(window);
+
+	glfwPollEvents();
 
 }
 
@@ -228,7 +235,7 @@ void CloudRenderManager::renderRayCastingClouds(const SimData & data,
 	setUniform("viewInverse", camera.getLookAtMatrix()); //inverting it in shader
 	setUniform("proj", perspectiveProjection);
 	setUniform("tanFOV", tanFOV);
-	setUniform("screenSize", math::Vec2(1400.0,70));
+	setUniform("screenSize", math::Vec2(1400.0,700.0));
 	setUniform("eyePosition", camera.getEyeLocation());
 	setUniform("near", nearPlane);
 	setUniform("far", farPlane);
@@ -289,3 +296,78 @@ void CloudRenderManager::terminate() {
 	glfwTerminate();
 
 }
+
+void CloudRenderManager::rightButtonUpdates() {
+	
+	static double prevMouseX, prevMouseY;
+	static bool prevMousePressed;
+
+
+	float rotationFactor = 0.2f;
+	if (glfwGetMouseButton(window, 1)) {
+		if (prevMousePressed) {
+			// Right mouse button has been pressed for more than 1 frame
+			double newMouseX, newMouseY;
+			glfwGetCursorPos(window, &newMouseX, &newMouseY);
+
+			double diffX = newMouseX - prevMouseX + 1;
+			double diffY = newMouseY - prevMouseY;
+
+			math::Vec3 transVec = v4tov3(camera.lookAtPoint);
+			math::Mat4 translateMatrix = math::Mat4::TranslationMatrix(-transVec);
+			math::Mat4 minusTranslateMatrix = math::Mat4::TranslationMatrix(transVec);
+
+			// Difference in X - rotate around up vector in lookAt point
+			if (diffX) {
+				math::Vec3 rotAxis = v4tov3(camera.upAxis);
+				math::Mat4 rotMatrix = math::Mat4::RotationMatrixFromAxisAngle(rotAxis, diffX*rotationFactor);
+				camera.cameraPoint = minusTranslateMatrix * rotMatrix * translateMatrix * camera.cameraPoint;
+			}
+
+			// Difference in Y - rotate around DxY vector in lookAt point
+			// (D is a vector between camera and look-at point)
+			if (diffY) {
+				math::Vec3 rotAxis = math::Vec3::CrossProduct(v4tov3(camera.upAxis), v4tov3(camera.cameraPoint) - v4tov3(camera.lookAtPoint));
+				math::Mat4 rotMatrix = math::Mat4::RotationMatrixFromAxisAngle(rotAxis, diffY*rotationFactor);
+				camera.cameraPoint = minusTranslateMatrix * rotMatrix * translateMatrix * camera.cameraPoint;
+			}
+
+		}
+
+		prevMousePressed = true;
+		glfwGetCursorPos(window,&prevMouseX, &prevMouseY);
+
+	}
+	else
+		prevMousePressed = false;
+
+}
+
+void CloudRenderManager::arrowUpdates()
+{
+	float arrowFactor = 0.2f;
+	math::Vec4 normD = (v4tov3(camera.cameraPoint) - v4tov3(camera.lookAtPoint)).Normalize();
+	math::Vec4 normDY = v3tov4(math::Vec3::CrossProduct(v4tov3(normD), v4tov3(camera.upAxis)));
+	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS || glfwGetKey(window, 'W') == GLFW_PRESS) {
+		camera.cameraPoint = math::Vec4((camera.cameraPoint.x - normD.x)*arrowFactor, (camera.cameraPoint.y - normD.y)*arrowFactor, (camera.cameraPoint.z - normD.z)*arrowFactor, (camera.cameraPoint.w - normD.w)*arrowFactor);
+		camera.lookAtPoint = math::Vec4((camera.lookAtPoint.x - normD.x)*arrowFactor, (camera.lookAtPoint.y - normD.y)*arrowFactor, (camera.lookAtPoint.z - normD.z)*arrowFactor, (camera.lookAtPoint.w - normD.w)*arrowFactor);
+	}
+	if (glfwGetKey(window,GLFW_KEY_DOWN) == GLFW_PRESS || glfwGetKey(window, 'S') == GLFW_PRESS) {
+		camera.cameraPoint = math::Vec4((camera.cameraPoint.x + normD.x)*arrowFactor, (camera.cameraPoint.y + normD.y)*arrowFactor, (camera.cameraPoint.z + normD.z)*arrowFactor, (camera.cameraPoint.w + normD.w)*arrowFactor);
+		camera.lookAtPoint = math::Vec4((camera.lookAtPoint.x + normD.x)*arrowFactor, (camera.lookAtPoint.y + normD.y)*arrowFactor, (camera.lookAtPoint.z + normD.z)*arrowFactor, (camera.lookAtPoint.w + normD.w)*arrowFactor);
+	}
+	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS || glfwGetKey(window, 'A') == GLFW_PRESS) {
+		camera.cameraPoint = math::Vec4((camera.cameraPoint.x + normDY.x)*arrowFactor, (camera.cameraPoint.y + normDY.y)*arrowFactor, (camera.cameraPoint.z + normDY.z)*arrowFactor, (camera.cameraPoint.w + normDY.w)*arrowFactor);
+		camera.lookAtPoint = math::Vec4((camera.lookAtPoint.x + normDY.x)*arrowFactor, (camera.lookAtPoint.y + normDY.y)*arrowFactor, (camera.lookAtPoint.z + normDY.z)*arrowFactor, (camera.lookAtPoint.w + normDY.w)*arrowFactor);
+	}
+	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS || glfwGetKey(window, 'D') == GLFW_PRESS) {
+		camera.cameraPoint = math::Vec4((camera.cameraPoint.x - normDY.x)*arrowFactor, (camera.cameraPoint.y - normDY.y)*arrowFactor, (camera.cameraPoint.z - normDY.z)*arrowFactor, (camera.cameraPoint.w - normDY.w)*arrowFactor);
+		camera.lookAtPoint = math::Vec4((camera.lookAtPoint.x - normDY.x)*arrowFactor, (camera.lookAtPoint.y - normDY.y)*arrowFactor, (camera.lookAtPoint.z - normDY.z)*arrowFactor, (camera.lookAtPoint.w - normDY.w)*arrowFactor);
+	}
+
+	// We might have changed w components with vector additions and 
+	// subtractions. Reset w to 1
+	camera.cameraPoint.w = 1.0f;
+	camera.lookAtPoint.w = 1.0f;
+}
+

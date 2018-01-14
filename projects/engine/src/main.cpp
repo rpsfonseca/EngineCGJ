@@ -1,7 +1,6 @@
 #include "Mat4.h"
 #include "Vec4.h"
 #include "Quat.h"
-//#include "Application.h"
 
 #include "Simulation\SimData.h"
 #include "Simulation\SimManager.h"
@@ -25,7 +24,6 @@ int gridZ = 128;
 int frameCap = 60;
 double simulationCap = 2;
 
-GLFWwindow* window;
 
 std::unique_ptr<SimData> simulationData;
 std::unique_ptr<SimManager> simulationManager;
@@ -56,7 +54,7 @@ void Simulate(void *arg) {
 
 			// Lock mutex and do the rest of the simulation
 			simMutex.lock();
-				simulationManager->stepMutex(simulationData.get(), glfwGetTime());
+			simulationManager->stepMutex(simulationData.get(), glfwGetTime());
 			simMutex.unlock();
 
 			//glfwSleep(1.0 / simulationCap - glfwGetTime() + startTime);
