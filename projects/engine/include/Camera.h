@@ -85,6 +85,10 @@ public:
 	*/
 	Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch);
 
+
+
+	//Camera(float boxX, float boxY, float boxZ, float fov, float aspectRatio, float nearPlane, float farPlane);
+
 	//Camera();
 	~Camera();
 

@@ -64,6 +64,9 @@
     <Filter Include="Header Files\SimulationManager">
       <UniqueIdentifier>{0f8bec09-efbb-4841-8850-40673d3da2d9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Render">
+      <UniqueIdentifier>{02d643b5-ff17-469a-9eed-826c9701c913}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -172,6 +175,21 @@
       <Filter>Source Files\SimulationManager</Filter>
     </ClCompile>
     <ClCompile Include="src\Simulation\SimData.cpp">
+      <Filter>Source Files\SimulationManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulation\RenderTools.cpp">
+      <Filter>Source Files\SimulationManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulation\Cube.cpp">
+      <Filter>Source Files\SimulationManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulation\CloudRenderManager.cpp">
+      <Filter>Source Files\SimulationManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulation\Shader2.cpp">
+      <Filter>Source Files\SimulationManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulation\Camera2.cpp">
       <Filter>Source Files\SimulationManager</Filter>
     </ClCompile>
   </ItemGroup>
@@ -295,6 +313,24 @@
     </ClInclude>
     <ClInclude Include="src\Simulation\SimData.h">
       <Filter>Header Files\SimulationManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulation\RenderTools.h">
+      <Filter>Header Files\SimulationManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulation\SOIL.h">
+      <Filter>Source Files\SimulationManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulation\CloudRenderManager.h">
+      <Filter>Header Files\SimulationManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulation\Cube.h">
+      <Filter>Header Files\SimulationManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulation\Shader2.h">
+      <Filter>Header Files\SimulationManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulation\Camera2.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

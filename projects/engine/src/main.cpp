@@ -1,10 +1,11 @@
 #include "Mat4.h"
 #include "Vec4.h"
 #include "Quat.h"
-#include "Application.h"
+//#include "Application.h"
 
 #include "Simulation\SimData.h"
 #include "Simulation\SimManager.h"
+#include "Simulation\CloudRenderManager.h"
 
 #include <iostream>
 #include <vector>
@@ -28,7 +29,7 @@ GLFWwindow* window;
 
 std::unique_ptr<SimData> simulationData;
 std::unique_ptr<SimManager> simulationManager;
-//std::unique_ptr<RenderManager> rendererModule;
+std::unique_ptr<CloudRenderManager> rendererModule;
 
 // Simulation thread
 std::thread simThread;
@@ -75,60 +76,48 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
 
 void run()
 {
-	if (!glfwInit())
-	{
-		exit(EXIT_FAILURE);
-	}
-
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-	window = glfwCreateWindow(600, 600, "TEST", NULL, NULL);
+	
 
 	// Allocate simulation data on the heap
-	simulationData = std::unique_ptr<SimData>(
-		new SimData(gridX, gridY, gridZ));
+	simulationData = std::unique_ptr<SimData>(new SimData(gridX, gridY, gridZ));
 
 	//// Initialize cloud renderer module
-	//rendererModule = std::unique_ptr<RenderManager>(
-	//	new RenderManager());
-	//if (!rendererModule->initialize(gridX, gridY, gridZ))
-	//	return;
+	rendererModule = std::unique_ptr<CloudRenderManager>(new CloudRenderManager());
+	if (!rendererModule->initialize(gridX, gridY, gridZ)) return;
 
 	// Initialize cloud simulation module
-	simulationManager = std::unique_ptr<SimManager>(
-		new SimManager(gridX, gridY, gridZ));
+	simulationManager = std::unique_ptr<SimManager>(new SimManager(gridX, gridY, gridZ));
 
 	void* arguments[] = { &simulationData, &simulationManager };
 
 	// Create the simulation thread and data mutex
 	simThread = std::thread(Simulate, arguments);
 
-	glfwSetKeyCallback(window, keyCallback);
+	//glfwSetKeyCallback(window, keyCallback);
 
 	// The main loop
-	while (glfwWindowShouldClose(window))
+	//std::this_thread::sleep_for(std::chrono::milliseconds(20000));
+	while (true)
 	{
 
 		double startTime = glfwGetTime();
-		//clock_t start_clock = clock();
-		////rendererModule->draw(*simulationData.get(), simMutex, startTime);
+		clock_t start_clock = clock();
+		rendererModule->draw(*simulationData.get(), simMutex, startTime);
 
-		////glfwSleep(1.0 / frameCap - glfwGetTime() + startTime);
+		//glfwSleep(1.0 / frameCap - glfwGetTime() + startTime);
 
-		//clock_t end_clock = clock();
-		//clock_t sleep_time = MAX_FRAMERATE_MILISECONDS
-		//	+ ((start_clock - end_clock) * 1000) / CLOCKS_PER_SEC;
+		/*
+		clock_t end_clock = clock();
+		clock_t sleep_time = MAX_FRAMERATE_MILISECONDS	+ ((start_clock - end_clock) * 1000) / CLOCKS_PER_SEC;
 
-		//if (sleep_time > 0)
-		//{
-		//	std::this_thread::sleep_for
-		//	(std::chrono::milliseconds(sleep_time));
-		//}
-		clock_t sleep_time = 1.0 / simulationCap - glfwGetTime() + startTime;
-		std::this_thread::sleep_for(std::chrono::milliseconds(sleep_time));
-
+		if (sleep_time > 0)
+		{
+			std::this_thread::sleep_for
+			(std::chrono::milliseconds(sleep_time));
+		}
+		//clock_t sleep_time = 1.0 / simulationCap - glfwGetTime() + startTime;
+		//std::this_thread::sleep_for(std::chrono::milliseconds(sleep_time));
+		*/
 	}
 
 	exitLoop = true;
@@ -138,7 +127,7 @@ void run()
 	simThread.join();
 
 	// Terminate
-	//rendererModule->terminate();
+	rendererModule->terminate();
 
 }
 
@@ -149,5 +138,7 @@ int main()
 	app.setupApp();
 	app.mainLoop();*/
 	run();
+	int wait = 0;
+	std::cin >> wait;
 	exit(EXIT_SUCCESS);
 }
