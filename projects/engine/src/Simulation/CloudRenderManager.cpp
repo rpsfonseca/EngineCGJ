@@ -15,7 +15,10 @@ CloudRenderManager::CloudRenderManager() :
 	farPlane(15000.0f),
 	fieldOfView(75.0f),
 	tanFOV(tan(fieldOfView / 2.0f / 360.0f * 2.0f * 3.14f)),
-	showVRC(false) {};
+	showVRC(false)
+{
+	camera = Camera(math::Vec3(-0.5f, 0.5f, -0.5f), math::Vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
+};
 
 bool CloudRenderManager::initialize(const int gridX, const int gridY, const int gridZ) {
 
@@ -106,7 +109,7 @@ bool CloudRenderManager::initialize(const int gridX, const int gridY, const int 
 	//defineGUILayout(guiShaderProgram);
 
 	// Initialize the camera and the projetion matrices
-	camera.initialize(gridX, gridY, gridZ);
+	//camera.initialize(gridX, gridY, gridZ);
 	perspectiveProjection = math::Mat4::perspective(fieldOfView,(float)1400.0 / (float)700.0 ,nearPlane, farPlane);
 
 	interpolatedData = new float **[gridX];
@@ -162,9 +165,9 @@ void CloudRenderManager::draw(const SimData& data, std::mutex& simMutex, const d
 	static int counter = 0, frames = 0;
 	static double fps = 0;
 	// Update the camera
-	//camera.updateCamera();
-	rightButtonUpdates();
-	arrowUpdates();
+	//camera.updateCameraVectors();
+	/*rightButtonUpdates();
+	arrowUpdates();*/
 
 	// Clear the screen with background (sky) color
 	glClearColor(67 / 256.0f, 128 / 256.0f, 183 / 256.0f, 1.0f);
@@ -231,12 +234,12 @@ void CloudRenderManager::renderRayCastingClouds(const SimData & data,
 
 	glBindVertexArray(VAOs[0]);
 	glUseProgram(raycasterShaderProgram);
-	setUniform("view", camera.getLookAtMatrix());
-	setUniform("viewInverse", camera.getLookAtMatrix()); //inverting it in shader
+	setUniform("view", camera.getViewMatrix());
+	setUniform("viewInverse", camera.getViewMatrix()); //inverting it in shader
 	setUniform("proj", perspectiveProjection);
 	setUniform("tanFOV", tanFOV);
 	setUniform("screenSize", math::Vec2(1400.0,700.0));
-	setUniform("eyePosition", camera.getEyeLocation());
+	setUniform("eyePosition", camera.Position);
 	setUniform("near", nearPlane);
 	setUniform("far", farPlane);
 
@@ -299,75 +302,75 @@ void CloudRenderManager::terminate() {
 
 void CloudRenderManager::rightButtonUpdates() {
 	
-	static double prevMouseX, prevMouseY;
-	static bool prevMousePressed;
+	//static double prevMouseX, prevMouseY;
+	//static bool prevMousePressed;
 
 
-	float rotationFactor = 0.2f;
-	if (glfwGetMouseButton(window, 1)) {
-		if (prevMousePressed) {
-			// Right mouse button has been pressed for more than 1 frame
-			double newMouseX, newMouseY;
-			glfwGetCursorPos(window, &newMouseX, &newMouseY);
+	//float rotationFactor = 0.2f;
+	//if (glfwGetMouseButton(window, 1)) {
+	//	if (prevMousePressed) {
+	//		// Right mouse button has been pressed for more than 1 frame
+	//		double newMouseX, newMouseY;
+	//		glfwGetCursorPos(window, &newMouseX, &newMouseY);
 
-			double diffX = newMouseX - prevMouseX + 1;
-			double diffY = newMouseY - prevMouseY;
+	//		double diffX = newMouseX - prevMouseX + 1;
+	//		double diffY = newMouseY - prevMouseY;
 
-			math::Vec3 transVec = v4tov3(camera.lookAtPoint);
-			math::Mat4 translateMatrix = math::Mat4::TranslationMatrix(-transVec);
-			math::Mat4 minusTranslateMatrix = math::Mat4::TranslationMatrix(transVec);
+	//		math::Vec3 transVec = v4tov3(camera.lookAtPoint);
+	//		math::Mat4 translateMatrix = math::Mat4::TranslationMatrix(-transVec);
+	//		math::Mat4 minusTranslateMatrix = math::Mat4::TranslationMatrix(transVec);
 
-			// Difference in X - rotate around up vector in lookAt point
-			if (diffX) {
-				math::Vec3 rotAxis = v4tov3(camera.upAxis);
-				math::Mat4 rotMatrix = math::Mat4::RotationMatrixFromAxisAngle(rotAxis, diffX*rotationFactor);
-				camera.cameraPoint = minusTranslateMatrix * rotMatrix * translateMatrix * camera.cameraPoint;
-			}
+	//		// Difference in X - rotate around up vector in lookAt point
+	//		if (diffX) {
+	//			math::Vec3 rotAxis = v4tov3(camera.upAxis);
+	//			math::Mat4 rotMatrix = math::Mat4::RotationMatrixFromAxisAngle(rotAxis, diffX*rotationFactor);
+	//			camera.cameraPoint = minusTranslateMatrix * rotMatrix * translateMatrix * camera.cameraPoint;
+	//		}
 
-			// Difference in Y - rotate around DxY vector in lookAt point
-			// (D is a vector between camera and look-at point)
-			if (diffY) {
-				math::Vec3 rotAxis = math::Vec3::CrossProduct(v4tov3(camera.upAxis), v4tov3(camera.cameraPoint) - v4tov3(camera.lookAtPoint));
-				math::Mat4 rotMatrix = math::Mat4::RotationMatrixFromAxisAngle(rotAxis, diffY*rotationFactor);
-				camera.cameraPoint = minusTranslateMatrix * rotMatrix * translateMatrix * camera.cameraPoint;
-			}
+	//		// Difference in Y - rotate around DxY vector in lookAt point
+	//		// (D is a vector between camera and look-at point)
+	//		if (diffY) {
+	//			math::Vec3 rotAxis = math::Vec3::CrossProduct(v4tov3(camera.upAxis), v4tov3(camera.cameraPoint) - v4tov3(camera.lookAtPoint));
+	//			math::Mat4 rotMatrix = math::Mat4::RotationMatrixFromAxisAngle(rotAxis, diffY*rotationFactor);
+	//			camera.cameraPoint = minusTranslateMatrix * rotMatrix * translateMatrix * camera.cameraPoint;
+	//		}
 
-		}
+	//	}
 
-		prevMousePressed = true;
-		glfwGetCursorPos(window,&prevMouseX, &prevMouseY);
+	//	prevMousePressed = true;
+	//	glfwGetCursorPos(window,&prevMouseX, &prevMouseY);
 
-	}
-	else
-		prevMousePressed = false;
+	//}
+	//else
+	//	prevMousePressed = false;
 
 }
 
 void CloudRenderManager::arrowUpdates()
 {
-	float arrowFactor = 0.2f;
-	math::Vec4 normD = (v4tov3(camera.cameraPoint) - v4tov3(camera.lookAtPoint)).Normalize();
-	math::Vec4 normDY = v3tov4(math::Vec3::CrossProduct(v4tov3(normD), v4tov3(camera.upAxis)));
-	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS || glfwGetKey(window, 'W') == GLFW_PRESS) {
-		camera.cameraPoint = math::Vec4((camera.cameraPoint.x - normD.x)*arrowFactor, (camera.cameraPoint.y - normD.y)*arrowFactor, (camera.cameraPoint.z - normD.z)*arrowFactor, (camera.cameraPoint.w - normD.w)*arrowFactor);
-		camera.lookAtPoint = math::Vec4((camera.lookAtPoint.x - normD.x)*arrowFactor, (camera.lookAtPoint.y - normD.y)*arrowFactor, (camera.lookAtPoint.z - normD.z)*arrowFactor, (camera.lookAtPoint.w - normD.w)*arrowFactor);
-	}
-	if (glfwGetKey(window,GLFW_KEY_DOWN) == GLFW_PRESS || glfwGetKey(window, 'S') == GLFW_PRESS) {
-		camera.cameraPoint = math::Vec4((camera.cameraPoint.x + normD.x)*arrowFactor, (camera.cameraPoint.y + normD.y)*arrowFactor, (camera.cameraPoint.z + normD.z)*arrowFactor, (camera.cameraPoint.w + normD.w)*arrowFactor);
-		camera.lookAtPoint = math::Vec4((camera.lookAtPoint.x + normD.x)*arrowFactor, (camera.lookAtPoint.y + normD.y)*arrowFactor, (camera.lookAtPoint.z + normD.z)*arrowFactor, (camera.lookAtPoint.w + normD.w)*arrowFactor);
-	}
-	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS || glfwGetKey(window, 'A') == GLFW_PRESS) {
-		camera.cameraPoint = math::Vec4((camera.cameraPoint.x + normDY.x)*arrowFactor, (camera.cameraPoint.y + normDY.y)*arrowFactor, (camera.cameraPoint.z + normDY.z)*arrowFactor, (camera.cameraPoint.w + normDY.w)*arrowFactor);
-		camera.lookAtPoint = math::Vec4((camera.lookAtPoint.x + normDY.x)*arrowFactor, (camera.lookAtPoint.y + normDY.y)*arrowFactor, (camera.lookAtPoint.z + normDY.z)*arrowFactor, (camera.lookAtPoint.w + normDY.w)*arrowFactor);
-	}
-	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS || glfwGetKey(window, 'D') == GLFW_PRESS) {
-		camera.cameraPoint = math::Vec4((camera.cameraPoint.x - normDY.x)*arrowFactor, (camera.cameraPoint.y - normDY.y)*arrowFactor, (camera.cameraPoint.z - normDY.z)*arrowFactor, (camera.cameraPoint.w - normDY.w)*arrowFactor);
-		camera.lookAtPoint = math::Vec4((camera.lookAtPoint.x - normDY.x)*arrowFactor, (camera.lookAtPoint.y - normDY.y)*arrowFactor, (camera.lookAtPoint.z - normDY.z)*arrowFactor, (camera.lookAtPoint.w - normDY.w)*arrowFactor);
-	}
+	//float arrowFactor = 0.2f;
+	//math::Vec4 normD = (v4tov3(camera.cameraPoint) - v4tov3(camera.lookAtPoint)).Normalize();
+	//math::Vec4 normDY = v3tov4(math::Vec3::CrossProduct(v4tov3(normD), v4tov3(camera.upAxis)));
+	//if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS || glfwGetKey(window, 'W') == GLFW_PRESS) {
+	//	camera.cameraPoint = math::Vec4((camera.cameraPoint.x - normD.x)*arrowFactor, (camera.cameraPoint.y - normD.y)*arrowFactor, (camera.cameraPoint.z - normD.z)*arrowFactor, (camera.cameraPoint.w - normD.w)*arrowFactor);
+	//	camera.lookAtPoint = math::Vec4((camera.lookAtPoint.x - normD.x)*arrowFactor, (camera.lookAtPoint.y - normD.y)*arrowFactor, (camera.lookAtPoint.z - normD.z)*arrowFactor, (camera.lookAtPoint.w - normD.w)*arrowFactor);
+	//}
+	//if (glfwGetKey(window,GLFW_KEY_DOWN) == GLFW_PRESS || glfwGetKey(window, 'S') == GLFW_PRESS) {
+	//	camera.cameraPoint = math::Vec4((camera.cameraPoint.x + normD.x)*arrowFactor, (camera.cameraPoint.y + normD.y)*arrowFactor, (camera.cameraPoint.z + normD.z)*arrowFactor, (camera.cameraPoint.w + normD.w)*arrowFactor);
+	//	camera.lookAtPoint = math::Vec4((camera.lookAtPoint.x + normD.x)*arrowFactor, (camera.lookAtPoint.y + normD.y)*arrowFactor, (camera.lookAtPoint.z + normD.z)*arrowFactor, (camera.lookAtPoint.w + normD.w)*arrowFactor);
+	//}
+	//if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS || glfwGetKey(window, 'A') == GLFW_PRESS) {
+	//	camera.cameraPoint = math::Vec4((camera.cameraPoint.x + normDY.x)*arrowFactor, (camera.cameraPoint.y + normDY.y)*arrowFactor, (camera.cameraPoint.z + normDY.z)*arrowFactor, (camera.cameraPoint.w + normDY.w)*arrowFactor);
+	//	camera.lookAtPoint = math::Vec4((camera.lookAtPoint.x + normDY.x)*arrowFactor, (camera.lookAtPoint.y + normDY.y)*arrowFactor, (camera.lookAtPoint.z + normDY.z)*arrowFactor, (camera.lookAtPoint.w + normDY.w)*arrowFactor);
+	//}
+	//if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS || glfwGetKey(window, 'D') == GLFW_PRESS) {
+	//	camera.cameraPoint = math::Vec4((camera.cameraPoint.x - normDY.x)*arrowFactor, (camera.cameraPoint.y - normDY.y)*arrowFactor, (camera.cameraPoint.z - normDY.z)*arrowFactor, (camera.cameraPoint.w - normDY.w)*arrowFactor);
+	//	camera.lookAtPoint = math::Vec4((camera.lookAtPoint.x - normDY.x)*arrowFactor, (camera.lookAtPoint.y - normDY.y)*arrowFactor, (camera.lookAtPoint.z - normDY.z)*arrowFactor, (camera.lookAtPoint.w - normDY.w)*arrowFactor);
+	//}
 
-	// We might have changed w components with vector additions and 
-	// subtractions. Reset w to 1
-	camera.cameraPoint.w = 1.0f;
-	camera.lookAtPoint.w = 1.0f;
+	//// We might have changed w components with vector additions and 
+	//// subtractions. Reset w to 1
+	//camera.cameraPoint.w = 1.0f;
+	//camera.lookAtPoint.w = 1.0f;
 }
 

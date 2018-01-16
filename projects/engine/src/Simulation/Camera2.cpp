@@ -64,7 +64,7 @@ math::Mat4 lookAt(math::Vec3 cameraPos, math::Vec3 lookAtPos, math::Vec3 upVec)
 								0, 0, 0, 1);
 
 
-	return m1*m2;
+	return m2*m1;
 }
 
 math::Vec3 v4tov3(const math::Vec4& v1) {

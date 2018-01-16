@@ -14,7 +14,7 @@ Camera::Camera(Vec3 position, Vec3 up, float yaw, float pitch)
 	Yaw = yaw;
 	Pitch = pitch;
 	currentProjectionType = Projection_Type::PERSPECTIVE;
-	currentCameraType = Camera_Type::ARCBALL;
+	currentCameraType = Camera_Type::FPS;
 	updateCameraVectors();
 }
 
@@ -28,7 +28,7 @@ Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float u
 	Yaw = yaw;
 	Pitch = pitch;
 	currentProjectionType = Projection_Type::PERSPECTIVE;
-	currentCameraType = Camera_Type::ARCBALL;
+	currentCameraType = Camera_Type::FPS;
 	updateCameraVectors();
 }
 

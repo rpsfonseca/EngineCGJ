@@ -4,7 +4,7 @@
 #define RENDERMANAGER_H
 
 #include "SimData.h"
-#include "Camera2.h"
+#include "Camera.h"
 #include <mutex>
 //#include "GUIControls.h"
 #include "Shader2.h"
@@ -56,7 +56,7 @@ private:
 
 	float*** interpolatedData;
 	GLFWwindow* window;
-	Camera2 camera;
+	Camera camera;
 	//GUIControls controls;
 	math::Mat4 perspectiveProjection;
 	math::Vec3 sunPosition;
