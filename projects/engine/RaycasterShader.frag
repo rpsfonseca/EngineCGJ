@@ -60,7 +60,7 @@ bool IntersectRayBox(Ray r, out float t0, out float t1) {
 
 void main() {
 
-	/*mat4 viewInverse2 = inverse(viewInverse);
+	mat4 viewInverse2 = inverse(viewInverse);
 	
 	// Direction in view splace
 	vec3 viewDirection;
@@ -121,6 +121,6 @@ void main() {
 	outColor = vec4( color, 255 );
 	vec4 debug = vec4( viewRay.direction, 1.0 );
 	outColor = mix( outColor, debug, 0.0 );
-	*/
-	outColor = vec4(1.0,0.0,0.0,1.0);
+	
+	/*outColor = vec4(1.0,0.0,0.0,1.0);*/
 }

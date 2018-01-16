@@ -17,7 +17,7 @@ CloudRenderManager::CloudRenderManager() :
 	tanFOV(tan(fieldOfView / 2.0f / 360.0f * 2.0f * 3.14f)),
 	showVRC(false)
 {
-	camera = Camera(math::Vec3(-0.5f, 0.5f, -0.5f), math::Vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
+	camera = Camera(math::Vec3(0.0f, 0.5f, 0.5f), math::Vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
 };
 
 bool CloudRenderManager::initialize(const int gridX, const int gridY, const int gridZ) {
@@ -170,7 +170,7 @@ void CloudRenderManager::draw(const SimData& data, std::mutex& simMutex, const d
 	arrowUpdates();*/
 
 	// Clear the screen with background (sky) color
-	glClearColor(67 / 256.0f, 128 / 256.0f, 183 / 256.0f, 1.0f);
+	//glClearColor(67 / 256.0f, 128 / 256.0f, 183 / 256.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Lock mutex because we will use data, which is shared with simulation
@@ -194,6 +194,9 @@ void CloudRenderManager::draw(const SimData& data, std::mutex& simMutex, const d
 		counter = 0;
 
 	}
+
+	rightButtonUpdates();
+	arrowUpdates(1.0f/fps);
 
 	// Check for errors
 	GLint glErr = glGetError();
@@ -302,20 +305,20 @@ void CloudRenderManager::terminate() {
 
 void CloudRenderManager::rightButtonUpdates() {
 	
-	//static double prevMouseX, prevMouseY;
-	//static bool prevMousePressed;
+	static double prevMouseX, prevMouseY;
+	static bool prevMousePressed;
 
 
-	//float rotationFactor = 0.2f;
-	//if (glfwGetMouseButton(window, 1)) {
-	//	if (prevMousePressed) {
-	//		// Right mouse button has been pressed for more than 1 frame
-	//		double newMouseX, newMouseY;
-	//		glfwGetCursorPos(window, &newMouseX, &newMouseY);
+	float rotationFactor = 0.2f;
+	if (glfwGetMouseButton(window, 1)) {
+		if (prevMousePressed) {
+			// Right mouse button has been pressed for more than 1 frame
+			double newMouseX, newMouseY;
+			glfwGetCursorPos(window, &newMouseX, &newMouseY);
 
-	//		double diffX = newMouseX - prevMouseX + 1;
-	//		double diffY = newMouseY - prevMouseY;
-
+			double diffX = newMouseX - prevMouseX + 1;
+			double diffY = newMouseY - prevMouseY;
+			camera.processMouseMovement(diffX, 0.0f);
 	//		math::Vec3 transVec = v4tov3(camera.lookAtPoint);
 	//		math::Mat4 translateMatrix = math::Mat4::TranslationMatrix(-transVec);
 	//		math::Mat4 minusTranslateMatrix = math::Mat4::TranslationMatrix(transVec);
@@ -335,38 +338,46 @@ void CloudRenderManager::rightButtonUpdates() {
 	//			camera.cameraPoint = minusTranslateMatrix * rotMatrix * translateMatrix * camera.cameraPoint;
 	//		}
 
-	//	}
+		}
 
-	//	prevMousePressed = true;
-	//	glfwGetCursorPos(window,&prevMouseX, &prevMouseY);
+		prevMousePressed = true;
+		glfwGetCursorPos(window,&prevMouseX, &prevMouseY);
 
-	//}
-	//else
-	//	prevMousePressed = false;
+	}
+	else
+		prevMousePressed = false;
 
 }
 
-void CloudRenderManager::arrowUpdates()
+void CloudRenderManager::arrowUpdates(float deltaTime)
 {
 	//float arrowFactor = 0.2f;
 	//math::Vec4 normD = (v4tov3(camera.cameraPoint) - v4tov3(camera.lookAtPoint)).Normalize();
 	//math::Vec4 normDY = v3tov4(math::Vec3::CrossProduct(v4tov3(normD), v4tov3(camera.upAxis)));
-	//if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS || glfwGetKey(window, 'W') == GLFW_PRESS) {
-	//	camera.cameraPoint = math::Vec4((camera.cameraPoint.x - normD.x)*arrowFactor, (camera.cameraPoint.y - normD.y)*arrowFactor, (camera.cameraPoint.z - normD.z)*arrowFactor, (camera.cameraPoint.w - normD.w)*arrowFactor);
+	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS || glfwGetKey(window, 'W') == GLFW_PRESS)
+	{
+		//camera.cameraPoint = math::Vec4((camera.cameraPoint.x - normD.x)*arrowFactor, (camera.cameraPoint.y - normD.y)*arrowFactor, (camera.cameraPoint.z - normD.z)*arrowFactor, (camera.cameraPoint.w - normD.w)*arrowFactor);
 	//	camera.lookAtPoint = math::Vec4((camera.lookAtPoint.x - normD.x)*arrowFactor, (camera.lookAtPoint.y - normD.y)*arrowFactor, (camera.lookAtPoint.z - normD.z)*arrowFactor, (camera.lookAtPoint.w - normD.w)*arrowFactor);
-	//}
-	//if (glfwGetKey(window,GLFW_KEY_DOWN) == GLFW_PRESS || glfwGetKey(window, 'S') == GLFW_PRESS) {
+		camera.processKeyboard(Camera_Movement::FORWARD, deltaTime);
+	}
+	if (glfwGetKey(window,GLFW_KEY_DOWN) == GLFW_PRESS || glfwGetKey(window, 'S') == GLFW_PRESS)
+	{
 	//	camera.cameraPoint = math::Vec4((camera.cameraPoint.x + normD.x)*arrowFactor, (camera.cameraPoint.y + normD.y)*arrowFactor, (camera.cameraPoint.z + normD.z)*arrowFactor, (camera.cameraPoint.w + normD.w)*arrowFactor);
 	//	camera.lookAtPoint = math::Vec4((camera.lookAtPoint.x + normD.x)*arrowFactor, (camera.lookAtPoint.y + normD.y)*arrowFactor, (camera.lookAtPoint.z + normD.z)*arrowFactor, (camera.lookAtPoint.w + normD.w)*arrowFactor);
-	//}
-	//if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS || glfwGetKey(window, 'A') == GLFW_PRESS) {
+		camera.processKeyboard(Camera_Movement::BACKWARD, deltaTime);
+	}
+	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS || glfwGetKey(window, 'A') == GLFW_PRESS)
+	{
 	//	camera.cameraPoint = math::Vec4((camera.cameraPoint.x + normDY.x)*arrowFactor, (camera.cameraPoint.y + normDY.y)*arrowFactor, (camera.cameraPoint.z + normDY.z)*arrowFactor, (camera.cameraPoint.w + normDY.w)*arrowFactor);
 	//	camera.lookAtPoint = math::Vec4((camera.lookAtPoint.x + normDY.x)*arrowFactor, (camera.lookAtPoint.y + normDY.y)*arrowFactor, (camera.lookAtPoint.z + normDY.z)*arrowFactor, (camera.lookAtPoint.w + normDY.w)*arrowFactor);
-	//}
-	//if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS || glfwGetKey(window, 'D') == GLFW_PRESS) {
+		camera.processKeyboard(Camera_Movement::LEFT, deltaTime);
+	}
+	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS || glfwGetKey(window, 'D') == GLFW_PRESS)
+	{
 	//	camera.cameraPoint = math::Vec4((camera.cameraPoint.x - normDY.x)*arrowFactor, (camera.cameraPoint.y - normDY.y)*arrowFactor, (camera.cameraPoint.z - normDY.z)*arrowFactor, (camera.cameraPoint.w - normDY.w)*arrowFactor);
 	//	camera.lookAtPoint = math::Vec4((camera.lookAtPoint.x - normDY.x)*arrowFactor, (camera.lookAtPoint.y - normDY.y)*arrowFactor, (camera.lookAtPoint.z - normDY.z)*arrowFactor, (camera.lookAtPoint.w - normDY.w)*arrowFactor);
-	//}
+		camera.processKeyboard(Camera_Movement::RIGHT, deltaTime);
+	}
 
 	//// We might have changed w components with vector additions and 
 	//// subtractions. Reset w to 1

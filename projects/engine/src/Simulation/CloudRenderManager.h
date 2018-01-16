@@ -49,7 +49,7 @@ private:
 	void defineGUILayout(const GLuint shaderProgram);
 
 	void rightButtonUpdates();
-	void arrowUpdates();
+	void arrowUpdates(float deltaTime);
 
 
 	bool showVRC;
