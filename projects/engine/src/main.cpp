@@ -57,20 +57,12 @@ void Simulate(void *arg) {
 			simulationManager->stepMutex(simulationData.get(), glfwGetTime());
 			simMutex.unlock();
 
-			//glfwSleep(1.0 / simulationCap - glfwGetTime() + startTime);
 			clock_t sleep_time = 1.0 / simulationCap - glfwGetTime() + startTime;
 			std::this_thread::sleep_for(std::chrono::milliseconds(sleep_time));
 		}
 	}
 }
 
-void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode)
-{
-	if (key == 'P' && action == GLFW_PRESS)
-		simPaused = !simPaused;
-	//if (key == '1' && state == GLFW_PRESS)
-		//rendererModule->changeShowVRC();
-}
 
 void run()
 {
@@ -91,37 +83,18 @@ void run()
 	// Create the simulation thread and data mutex
 	simThread = std::thread(Simulate, arguments);
 
-	//glfwSetKeyCallback(window, keyCallback);
-
 	// The main loop
-	//std::this_thread::sleep_for(std::chrono::milliseconds(20000));
 	while (true)
 	{
 
 		double startTime = glfwGetTime();
 		clock_t start_clock = clock();
 		rendererModule->draw(*simulationData.get(), simMutex, startTime);
-
-		//glfwSleep(1.0 / frameCap - glfwGetTime() + startTime);
-
-		/*
-		clock_t end_clock = clock();
-		clock_t sleep_time = MAX_FRAMERATE_MILISECONDS	+ ((start_clock - end_clock) * 1000) / CLOCKS_PER_SEC;
-
-		if (sleep_time > 0)
-		{
-			std::this_thread::sleep_for
-			(std::chrono::milliseconds(sleep_time));
-		}
-		//clock_t sleep_time = 1.0 / simulationCap - glfwGetTime() + startTime;
-		//std::this_thread::sleep_for(std::chrono::milliseconds(sleep_time));
-		*/
 	}
 
 	exitLoop = true;
 
 	// Wait for the other thread to finish
-	//glfwWaitThread(simThread, GLFW_WAIT);
 	simThread.join();
 
 	// Terminate
@@ -132,9 +105,6 @@ void run()
 
 int main()
 {
-	/*Application app = Application(3, 3);
-	app.setupApp();
-	app.mainLoop();*/
 	run();
 	int wait = 0;
 	std::cin >> wait;

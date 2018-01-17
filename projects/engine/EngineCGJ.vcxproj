@@ -44,11 +44,9 @@
     <ClCompile Include="src\SceneManager.cpp" />
     <ClCompile Include="src\SceneNode.cpp" />
     <ClCompile Include="src\Shader.cpp" />
-    <ClCompile Include="src\Simulation\Camera2.cpp" />
     <ClCompile Include="src\Simulation\Cloud.cpp" />
     <ClCompile Include="src\Simulation\CloudRenderManager.cpp" />
     <ClCompile Include="src\Simulation\Cube.cpp" />
-    <ClCompile Include="src\Simulation\RenderTools.cpp" />
     <ClCompile Include="src\Simulation\Shader2.cpp" />
     <ClCompile Include="src\Simulation\SimData.cpp" />
     <ClCompile Include="src\Simulation\SimManager.cpp" />
@@ -99,11 +97,9 @@
     <ClInclude Include="include\Window.h" />
     <ClInclude Include="Mat2.h" />
     <ClInclude Include="RenderTarget.h" />
-    <ClInclude Include="src\Simulation\Camera2.h" />
     <ClInclude Include="src\Simulation\Cloud.h" />
     <ClInclude Include="src\Simulation\CloudRenderManager.h" />
     <ClInclude Include="src\Simulation\Cube.h" />
-    <ClInclude Include="src\Simulation\RenderTools.h" />
     <ClInclude Include="src\Simulation\Shader2.h" />
     <ClInclude Include="src\Simulation\SimData.h" />
     <ClInclude Include="src\Simulation\SimManager.h" />
