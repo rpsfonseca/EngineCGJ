@@ -3,18 +3,15 @@
 #include <iostream>
 
 #include "Cube.h"
-/*
-#include "Slider.h"
 
-*/
-
-
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 CloudRenderManager::CloudRenderManager() :	windowTitle("CGJ - Final Delivery"), 
 											nearPlane(0.001f), farPlane(100.0f), 
 											fieldOfView(75.0f), 
 											tanFOV(tan(fieldOfView / 2.0f / 360.0f * 2.0f * 3.14f)),
-											showVRC(false)
+											showVRC(true)
 {
 	camera = Camera(math::Vec3(0.0f, 0.5f, 0.5f), math::Vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
 	perspectiveProjection = math::Mat4::perspective(fieldOfView, (float)1400.0 / (float)700.0, nearPlane, farPlane);
@@ -55,7 +52,7 @@ bool CloudRenderManager::initialize(const int gridX, const int gridY, const int 
 
 	// Load and compile shaders
 	raycasterShaderProgram = shaderManager.createFromFile("RaycasterShader.vert", "RaycasterShader.frag");
-	//guiShaderProgram = shaderManager.createFromFile("GUIshader.vert", "GUIShader.frag");
+	guiShaderProgram = shaderManager.createFromFile("GUIshader.vert", "GUIShader.frag");
 
 	initializeTextures(volumeTexture, planarTextures);
 
@@ -111,7 +108,7 @@ bool CloudRenderManager::initialize(const int gridX, const int gridY, const int 
 	}
 
 	// Initialize the sliders
-	/*
+	
 	controls.addSlider("Density Cutoff", "densityCutoff", 0.0f, 0.2f, 0.06f);
 	controls.addSlider("Density Factor", "densityFactor", 0.0f, 1.0f, 0.35f);
 	controls.addSlider("Color Multiplier", "colorMultiplier", 1.0f, 10.0f, 5.0f);
@@ -127,7 +124,7 @@ bool CloudRenderManager::initialize(const int gridX, const int gridY, const int 
 	controls.addSlider("Sun PositionZ", "sunPositionZ", -1.0f, 1.0f, 0.5f);
 	controls.addSlider("View Samples", "viewSamplesF", 1.0f, 1024.0f, 128.0f);
 	controls.addSlider("Light Samples", "lightSamplesF", 1.0f, 64.0f, 64.0f);
-	*/
+	
 
 	return true;
 
@@ -166,9 +163,10 @@ void CloudRenderManager::draw(const SimData& data, std::mutex& simMutex, const d
 	simMutex.unlock();
 
 	glUseProgram(raycasterShaderProgram);
-	//controls.update();
+	controls.update();
 
-	//if (showVRC) renderGUI();
+	if (showVRC) renderGUI();
+
 	counter++;
 	frames++;
 	fps = (double)frames / time;
@@ -214,7 +212,6 @@ void CloudRenderManager::interpolateCloudData(const SimData & data, const double
 				}
 }
 
-// Shade clouds by performing volume ray casting
 void CloudRenderManager::renderRayCastingClouds(const SimData & data, const double time) {
 
 	glBindVertexArray(VAOs[0]);
@@ -265,7 +262,7 @@ void CloudRenderManager::renderGUI() {
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// Render the controls in orthographic mode
-	//controls.render(planarTextures);
+	controls.render(planarTextures);
 
 	glDisable(GL_BLEND);
 	glDepthMask(GL_TRUE);
@@ -334,14 +331,12 @@ void CloudRenderManager::arrowUpdates(float deltaTime)
 
 //----------------------------------------------
 
-//#include "SOIL.h"
 
 GLuint VBOs[5];
 GLuint numVBOs;
 GLuint EBOs[5];
 GLuint numEBOs;
 
-// Need to pass sizeof(vertices) as well because of dynamic arrays
 GLuint createVBO(float vertices[], int size) {
 
 	glGenBuffers(1, &VBOs[numVBOs]);
@@ -369,31 +364,32 @@ void deleteVBOs() {
 void deleteEBOs() {
 	glDeleteBuffers(numEBOs, EBOs);
 }
+
 void initializeTextures(GLuint volumeTexture, GLuint * planarTextures) {
 	// We need one 3D texture and several 2D textures
 
-	/*
 	// Generate the 2D textures using pngs
+
 	glGenTextures(3, planarTextures);
 
-	int width, height;
+	int width, height, channels;
 	unsigned char* image;
 
 	const char* files[] = { "SliderHandle.png", "SliderIndicator.png", "SliderNormal.png" };
-	for (int i = 0; i < 2; ++i) {
-	image = SOIL_load_image(files[i], &width, &height, 0, SOIL_LOAD_RGBA);
-	glBindTexture(GL_TEXTURE_2D, planarTextures[i]);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
-	GL_UNSIGNED_BYTE, image);
-	SOIL_free_image_data(image);
+	for (int i = 0; i < 3; ++i) {
+		image = stbi_load(files[i], &width, &height, &channels, STBI_rgb);
+		if (image) std::cout << files[i] << std::endl;
+		glBindTexture(GL_TEXTURE_2D, planarTextures[i]);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,GL_UNSIGNED_BYTE, image);
+		stbi_image_free(image);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	}
 
-	*/
+
 	// Generate the 3D textures
 	glGenTextures(1, &volumeTexture);
 	glBindTexture(GL_TEXTURE_3D, volumeTexture);
@@ -420,8 +416,6 @@ void setUniform(const std::string name, const float value) {
 	glUniform1f(location, value);
 
 }
-
-
 
 void setUniform(const std::string name, const math::Vec2 vector) {
 
@@ -455,4 +449,110 @@ float convertXToRelative(const int x) {
 
 float convertYToRelative(const int y) {
 	return -((static_cast<float>(y) / 700.0) * 2.0f - 1.0f);
+}
+
+
+//----------------------------------------------------------
+
+
+Slider::Slider(	const std::string text, const std::string shaderProperty,
+				const float min, const float max, const float initial,
+				const float sliderPositionY) :
+					text(text),
+					shaderProperty(shaderProperty),
+					min(min),
+					max(max),
+					currentPercentage((initial - min) / (max - min)),
+					sliderPosition(slider_consts::sliderPositionX, slider_consts::sliderPositionY + sliderPositionY),
+					buttonPosition(Position(sliderPosition.X + slider_consts::sliderLength * (-0.5f + currentPercentage), sliderPosition.Y)),
+					buttonPressed(false)
+{
+	setUniform(shaderProperty, min + currentPercentage * (max - min));
+}
+
+void Slider::update() {
+	/*
+	int newMouseX, newMouseY;
+	//glfwGetMousePos(&newMouseX, &newMouseY);
+
+	float relativeMouseX = convertXToRelative(newMouseX);
+	float relativeMouseY = convertYToRelative(newMouseY);
+
+	// Check if mouse press is on button
+	if (!glfwGetMouseButton(0)) {
+		buttonPressed = false;
+	}
+	else if ((relativeMouseX - buttonPosition.X) * (relativeMouseX - buttonPosition.X)
+		+ (relativeMouseY - buttonPosition.Y) * (relativeMouseY - buttonPosition.Y)
+		< slider_consts::buttonSize * slider_consts::buttonSize || buttonPressed) {
+		buttonPressed = true;
+		buttonPosition.X = relativeMouseX;
+		float minPos = sliderPosition.X - slider_consts::sliderLength / 2;
+		float maxPos = sliderPosition.X + slider_consts::sliderLength / 2;
+		if (buttonPosition.X <  minPos)
+			buttonPosition.X = minPos;
+		if (buttonPosition.X > maxPos)
+			buttonPosition.X = maxPos;
+
+		currentPercentage = (buttonPosition.X - minPos) / (maxPos - minPos);
+		setUniform(shaderProperty, min + currentPercentage * (max - min));
+	}
+
+	*/
+}
+
+void Slider::render(const GLuint * textures) {
+
+	// Render the left part of the slider
+	glBindTexture(GL_TEXTURE_2D, textures[1]);
+	float minPos = sliderPosition.X - slider_consts::sliderLength / 2;
+	setUniform("positionX", (minPos + buttonPosition.X) / 2);
+	setUniform("positionY", buttonPosition.Y);
+	setUniform("sizeX", (buttonPosition.X - minPos) / 2);
+	setUniform("sizeY", slider_consts::sliderHeight);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+	// Render the right part of the slider
+	glBindTexture(GL_TEXTURE_2D, textures[2]);
+	float maxPos = sliderPosition.X + slider_consts::sliderLength / 2;
+	setUniform("positionX", (maxPos + buttonPosition.X) / 2);
+	setUniform("positionY", buttonPosition.Y);
+	setUniform("sizeX", (maxPos - buttonPosition.X) / 2);
+	setUniform("sizeY", slider_consts::sliderHeight);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+	// Render the handle
+	glBindTexture(GL_TEXTURE_2D, textures[0]);
+	setUniform("positionX", buttonPosition.X);
+	setUniform("positionY", buttonPosition.Y);
+	setUniform("sizeX", slider_consts::buttonSize);
+	setUniform("sizeY", slider_consts::buttonSize);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+}
+
+float Slider::getPercentage() {
+	return (currentPercentage - min) / (max - min);
+}
+
+//-------------------------------------------------------------
+
+
+void GUIControls::addSlider(const std::string text, const std::string shaderProperty, const float min, const float max, const float initial) 
+{
+	Slider slider = Slider(text, shaderProperty, min, max, initial, sliders.size() * slider_consts::sliderOffsetY * -1);
+	sliders.push_back(slider);
+}
+
+void GUIControls::update() {
+	for (Slider &s : sliders) {
+		s.update();
+	}
+}
+
+void GUIControls::render(const GLuint * textures) {
+	float offset = 0;
+	for (Slider &s : sliders) {
+		s.render(textures);
+	}
 }

@@ -49,6 +49,9 @@
     <Filter Include="Source Files\Other">
       <UniqueIdentifier>{2a4ef4ed-4ca2-4f46-be09-8232cd8cf811}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Clouds\GUI">
+      <UniqueIdentifier>{4322a1d9-c6d1-4409-a912-dae1057069e6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Vec2.cpp">
@@ -250,9 +253,6 @@
     </ClInclude>
     <ClInclude Include="RenderTarget.h">
       <Filter>Header Files\Other</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Simulation\SOIL.h">
-      <Filter>Source Files\Other</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
