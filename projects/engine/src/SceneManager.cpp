@@ -1,7 +1,6 @@
 #include "SceneManager.h"
 #include "Timer.h"
 
-#include "imgui_GLFW.h"
 #include <stack>
 #include <vector>
 #include <string>
@@ -127,14 +126,12 @@ void SceneManager::renderScene()
 
 	renderer->postDraw();
 
-	ImGui::Begin("ObjectsWidget", (bool*)1);
 	static int listbox_item_current = -1, listbox_item_current2 = -1;
 	std::vector<std::string> v;
 	for (auto it = nodes.begin(); it != nodes.end(); ++it)
 	{
 		v.push_back(it->first.c_str());
 	}
-	ImGui::ListBox("Objects", &listbox_item_current, VectorOfStringGetter, (void*)&v, (int)v.size());
 	if (listbox_item_current != -1)
 	{
 		std::vector<std::string> a;
@@ -142,9 +139,7 @@ void SceneManager::renderScene()
 		{
 			a.push_back(it->first.c_str());
 		}
-		ImGui::ListBox("Objects2", &listbox_item_current2, VectorOfStringGetter, (void*)&a, (int)a.size());
 	}
-	ImGui::End();
 }
 
 

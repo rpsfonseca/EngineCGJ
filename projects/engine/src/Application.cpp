@@ -11,7 +11,6 @@
 #include "Application.h"
 #include "Keyboard.h"
 #include "Timer.h"
-#include "EditorGUI.h"
 
 #include <iostream>
 #include <sstream>
@@ -278,7 +277,6 @@ void Application::setupApp()
 
 	instance->sceneManagerRef->updateAspectRatio(640.0f/480.0f);
 
-	EditorGUI::init(windowRef->window);
 }
 
 // Sets the appropriate callbacks to glfw.
@@ -299,18 +297,15 @@ void Application::mainLoop()
 		Timer::update();
 		windowRef->setWindowTitle(Timer::fps);
 
-		EditorGUI::newFrame();
 
 		instance->sceneManagerRef->updateScene();
 		draw();
 
-		EditorGUI::renderGUI();
 
 		instance->windowRef->swapBuffers();
 		glfwPollEvents();
 	}
 
-	EditorGUI::shutdown();
 
 	glfwDestroyWindow(instance->windowRef->window);
 	glfwTerminate();
