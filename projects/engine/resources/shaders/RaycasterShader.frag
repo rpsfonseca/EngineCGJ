@@ -75,7 +75,7 @@ void main() {
 		
 		Ray viewRay = Ray( eyePosition, normalize( viewDirection ) );	
 
-		color = vec3( 67/256.0, 128/256.0, 183/256.0 );
+		color = 1 -vec3( 67/256.0, 128/256.0, 183/256.0 );
 		vec3 pos = viewRay.origin;
 		float tmin, tmax;
 		IntersectRayBox( viewRay, tmin, tmax );
@@ -127,7 +127,7 @@ void main() {
 		}
 		outColor = vec4( color, 255 );
 		vec4 debug = vec4( viewRay.direction, 1.0 );
-		outColor = mix( outColor, debug, 0.0 );
+		outColor = 1 - mix( outColor, debug, 0.0 );
 	
 	/*outColor = vec4( color, 255 );*/
 
