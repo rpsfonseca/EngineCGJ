@@ -101,7 +101,7 @@ bool CloudRenderManager::initialize(const int gridX, const int gridY, const int 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements, GL_STATIC_DRAW);
 
-	//defineGUILayout(guiShaderProgram);
+	defineGUILayout(guiShaderProgram);
 
 	interpolatedData = new float **[gridX];
 	for (int i = 0; i != gridX; ++i) {
@@ -175,7 +175,7 @@ void CloudRenderManager::draw(const SimData& data, std::mutex& simMutex, const d
 
 	simMutex.unlock();
 
-	glUseProgram(raycasterShaderProgram);
+	//glUseProgram(raycasterShaderProgram);
 	controls.update();
 
 	if (showVRC) renderGUI();
