@@ -75,9 +75,6 @@
     <ClInclude Include="include\Shader.h" />
     <ClInclude Include="include\SkyBox.h" />
     <ClInclude Include="include\stb_image.h" />
-    <ClInclude Include="include\stb_rect_pack.h" />
-    <ClInclude Include="include\stb_textedit.h" />
-    <ClInclude Include="include\stb_truetype.h" />
     <ClInclude Include="include\StringUtils.h" />
     <ClInclude Include="include\Texture.h" />
     <ClInclude Include="include\Timer.h" />
