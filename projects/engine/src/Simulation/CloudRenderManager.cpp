@@ -4,7 +4,6 @@
 
 #include "Cube.h"
 /*
-#include "Globals.h"
 #include "Slider.h"
 
 */

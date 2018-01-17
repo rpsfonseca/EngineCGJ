@@ -1,10 +1,11 @@
 #include "Cube.h"
 
 // Float array must be of size 2x3x8 floats
-void getCubeVertices(const float startX, const float stopX,
-	const float startY, const float stopY,
-	const float startZ, const float stopZ,
-	float vertices[]) {
+void getCubeVertices(	const float startX, const float stopX,
+						const float startY, const float stopY,
+						const float startZ, const float stopZ,
+						float vertices[]) 
+{
 
 	float tempVertices[] = {
 		startX, startY, startZ,
