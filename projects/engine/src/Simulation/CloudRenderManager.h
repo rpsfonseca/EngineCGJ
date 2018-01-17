@@ -11,6 +11,7 @@
 #include "Mat4.h"
 #include "Vec3.h"
 #include "Vec2.h"
+#include "LightShafts.h"
 
 #include "GLFW\glfw3.h"
 
@@ -23,6 +24,8 @@ public:
 	void draw(const SimData& data, std::mutex& dataMutex,
 		const double frameTime);
 	inline void changeShowVRC() { showVRC = !showVRC; };
+
+	LightShafts* lightShafts;
 private:
 	const char * windowTitle;
 
@@ -45,7 +48,7 @@ private:
 	void interpolateCloudData(const SimData& data,
 		const double frameTime);
 	void renderRayCastingClouds(const SimData& data,
-		const double frameTime);
+		const double frameTime, bool occlusion);
 	void renderGUI();
 	void defineRaycasterLayout(const GLuint shaderProgram);
 	void defineGUILayout(const GLuint shaderProgram);
@@ -71,6 +74,7 @@ void deleteVBOs();
 void deleteEBOs();
 void initializeTextures(GLuint volumeTexture, GLuint* planarTextures);
 void deleteTextures(GLuint volumeTexture, GLuint* planarTextures);
+void setUniform(const std::string name, const bool value);
 void setUniform(const std::string name, const float value);
 void setUniform(const std::string name, const math::Vec2 vector);
 void setUniform(const std::string name, const math::Vec3 vector);
