@@ -13,327 +13,249 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\Math">
-      <UniqueIdentifier>{04a38a65-fc18-4f22-9d6d-b618e9ba0107}</UniqueIdentifier>
+    <Filter Include="Header Files\LegacyCode">
+      <UniqueIdentifier>{b75795e4-eb02-485a-88fc-f7a9b3f25ec8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Core">
-      <UniqueIdentifier>{2f86bb70-9454-4d27-9c9d-9be0a20c0a28}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\SceneRelated">
-      <UniqueIdentifier>{2167cf1d-c366-4863-8db1-a1266fa27ce2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Auxiliar">
-      <UniqueIdentifier>{601c4d9f-ad43-480e-aa46-821bcfaf11b3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\NotBeingUsed">
-      <UniqueIdentifier>{bcd39594-6bce-4ee7-b572-59ca89b13649}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Objects">
-      <UniqueIdentifier>{dc35028e-e8f8-4e75-8ccc-b04c1029d1fc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Auxiliar">
-      <UniqueIdentifier>{91bf92ff-f79c-477c-ab15-13d08a9ccac4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Core">
-      <UniqueIdentifier>{60a8b38c-3328-4840-9879-ade737435f56}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Math">
-      <UniqueIdentifier>{d30436a1-1841-46cc-835a-b43c979718cd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\NotBeingUsed">
-      <UniqueIdentifier>{9e188369-064e-4b29-b056-545510be791c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Objects">
-      <UniqueIdentifier>{eeadce4a-ceee-4089-8e4a-bf81f9a1e90a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\SceneRelated">
-      <UniqueIdentifier>{cf1fa361-1e17-4f9a-b51e-d36d249071f7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\NotOurs">
-      <UniqueIdentifier>{4cf1a532-a242-40b8-8b5e-58862d73a895}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Objects\SpecificObjects">
-      <UniqueIdentifier>{37639aa8-7e0a-4ca0-ab85-8ab80dd36cb9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Objects\SpecificObject">
-      <UniqueIdentifier>{e30206cd-d84e-4dc9-8fba-44d2df3dec16}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\SimulationManager">
-      <UniqueIdentifier>{0b48b655-0997-4e99-97fc-51c92d74d691}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\SimulationManager">
+    <Filter Include="Header Files\Clouds">
       <UniqueIdentifier>{0f8bec09-efbb-4841-8850-40673d3da2d9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Render">
-      <UniqueIdentifier>{02d643b5-ff17-469a-9eed-826c9701c913}</UniqueIdentifier>
+    <Filter Include="Header Files\Clouds\Math">
+      <UniqueIdentifier>{d30436a1-1841-46cc-835a-b43c979718cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Clouds\Automata&amp;Data">
+      <UniqueIdentifier>{b55d978d-8c59-452b-8449-7490913fff09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Clouds\RenderStuff">
+      <UniqueIdentifier>{4b35c06a-5b65-46aa-b76c-ce591a3af35f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\LegacyCode">
+      <UniqueIdentifier>{3f0f5011-7a6a-492a-8f4f-feb89188ab93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Clouds">
+      <UniqueIdentifier>{aa903bd5-6e64-400f-91c8-a70bc7f89e33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Clouds\Math">
+      <UniqueIdentifier>{04a38a65-fc18-4f22-9d6d-b618e9ba0107}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Other">
+      <UniqueIdentifier>{9283d479-5905-4ee6-a032-50b3cf85452e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Clouds\Automata&amp;Data">
+      <UniqueIdentifier>{ddfd1293-f37b-40cc-89dc-cc1a5d97bff7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Clouds\RenderStuff">
+      <UniqueIdentifier>{e148379f-7e6b-4eab-8966-5682001a1ddf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Other">
+      <UniqueIdentifier>{2a4ef4ed-4ca2-4f46-be09-8232cd8cf811}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Vec2.cpp">
-      <Filter>Source Files\Math</Filter>
+      <Filter>Source Files\Clouds\Math</Filter>
     </ClCompile>
     <ClCompile Include="src\Vec3.cpp">
-      <Filter>Source Files\Math</Filter>
+      <Filter>Source Files\Clouds\Math</Filter>
     </ClCompile>
     <ClCompile Include="src\Vec4.cpp">
-      <Filter>Source Files\Math</Filter>
+      <Filter>Source Files\Clouds\Math</Filter>
     </ClCompile>
     <ClCompile Include="src\Mat3.cpp">
-      <Filter>Source Files\Math</Filter>
+      <Filter>Source Files\Clouds\Math</Filter>
     </ClCompile>
     <ClCompile Include="src\Mat4.cpp">
-      <Filter>Source Files\Math</Filter>
+      <Filter>Source Files\Clouds\Math</Filter>
     </ClCompile>
     <ClCompile Include="src\Quat.cpp">
-      <Filter>Source Files\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Application.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\OpenGLError.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Renderer.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Window.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Camera.cpp">
-      <Filter>Source Files\SceneRelated</Filter>
-    </ClCompile>
-    <ClCompile Include="src\SceneManager.cpp">
-      <Filter>Source Files\SceneRelated</Filter>
-    </ClCompile>
-    <ClCompile Include="src\SceneNode.cpp">
-      <Filter>Source Files\SceneRelated</Filter>
+      <Filter>Source Files\Clouds\Math</Filter>
     </ClCompile>
     <ClCompile Include="src\MathUtils.cpp">
-      <Filter>Source Files\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="src\OBJLoader.cpp">
-      <Filter>Source Files\Auxiliar</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Shader.cpp">
-      <Filter>Source Files\Auxiliar</Filter>
-    </ClCompile>
-    <ClCompile Include="src\StringUtils.cpp">
-      <Filter>Source Files\NotBeingUsed</Filter>
+      <Filter>Source Files\Clouds\Math</Filter>
     </ClCompile>
     <ClCompile Include="src\Keyboard.cpp">
-      <Filter>Source Files\Auxiliar</Filter>
+      <Filter>Source Files\LegacyCode</Filter>
     </ClCompile>
-    <ClCompile Include="src\Entity.cpp">
-      <Filter>Source Files\NotBeingUsed</Filter>
+    <ClCompile Include="src\OBJLoader.cpp">
+      <Filter>Source Files\LegacyCode</Filter>
     </ClCompile>
-    <ClCompile Include="src\Material.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Mesh.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Model.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Timer.cpp">
-      <Filter>Source Files\NotBeingUsed</Filter>
+    <ClCompile Include="src\Shader.cpp">
+      <Filter>Source Files\LegacyCode</Filter>
     </ClCompile>
     <ClCompile Include="src\Texture.cpp">
-      <Filter>Source Files\Auxiliar</Filter>
+      <Filter>Source Files\LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Application.cpp">
+      <Filter>Source Files\LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OpenGLError.cpp">
+      <Filter>Source Files\LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer.cpp">
+      <Filter>Source Files\LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window.cpp">
+      <Filter>Source Files\LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Entity.cpp">
+      <Filter>Source Files\LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\StringUtils.cpp">
+      <Filter>Source Files\LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Timer.cpp">
+      <Filter>Source Files\LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Material.cpp">
+      <Filter>Source Files\LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SceneManager.cpp">
+      <Filter>Source Files\LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SceneNode.cpp">
+      <Filter>Source Files\LegacyCode</Filter>
     </ClCompile>
     <ClCompile Include="src\Quad.cpp">
-      <Filter>Source Files\Objects\SpecificObjects</Filter>
+      <Filter>Source Files\LegacyCode</Filter>
     </ClCompile>
-    <ClCompile Include="src\SkyBox.cpp">
-      <Filter>Source Files\Objects\SpecificObjects</Filter>
+    <ClCompile Include="src\main.cpp">
+      <Filter>Source Files\Clouds</Filter>
     </ClCompile>
-    <ClCompile Include="RenderTarget.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Mesh.cpp">
+      <Filter>Source Files\LegacyCode</Filter>
     </ClCompile>
-    <ClCompile Include="src\imgui.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\imgui_demo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\imgui_draw.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\EditorGUI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\imgui_GLFW.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Simulation\Cloud.cpp">
-      <Filter>Source Files\SimulationManager</Filter>
+    <ClCompile Include="src\Model.cpp">
+      <Filter>Source Files\LegacyCode</Filter>
     </ClCompile>
     <ClCompile Include="src\Simulation\SimManager.cpp">
-      <Filter>Source Files\SimulationManager</Filter>
+      <Filter>Source Files\Clouds\Automata&amp;Data</Filter>
     </ClCompile>
     <ClCompile Include="src\Simulation\SimData.cpp">
-      <Filter>Source Files\SimulationManager</Filter>
+      <Filter>Source Files\Clouds\Automata&amp;Data</Filter>
     </ClCompile>
-    <ClCompile Include="src\Simulation\RenderTools.cpp">
-      <Filter>Source Files\SimulationManager</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Simulation\Cube.cpp">
-      <Filter>Source Files\SimulationManager</Filter>
+    <ClCompile Include="src\Simulation\Cloud.cpp">
+      <Filter>Source Files\Clouds\Automata&amp;Data</Filter>
     </ClCompile>
     <ClCompile Include="src\Simulation\CloudRenderManager.cpp">
-      <Filter>Source Files\SimulationManager</Filter>
+      <Filter>Source Files\Clouds\RenderStuff</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Camera.cpp">
+      <Filter>Source Files\Clouds\RenderStuff</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulation\Cube.cpp">
+      <Filter>Source Files\Clouds\RenderStuff</Filter>
     </ClCompile>
     <ClCompile Include="src\Simulation\Shader2.cpp">
-      <Filter>Source Files\SimulationManager</Filter>
+      <Filter>Source Files\Clouds\RenderStuff</Filter>
     </ClCompile>
-    <ClCompile Include="src\Simulation\Camera2.cpp">
-      <Filter>Source Files\SimulationManager</Filter>
+    <ClCompile Include="RenderTarget.cpp">
+      <Filter>Source Files\Other</Filter>
     </ClCompile>
     <ClCompile Include="src\LightShafts.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Application.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Camera.h">
-      <Filter>Header Files\SceneRelated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Entity.h">
-      <Filter>Header Files\NotBeingUsed</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Keyboard.h">
-      <Filter>Header Files\Auxiliar</Filter>
-    </ClInclude>
     <ClInclude Include="Mat2.h">
-      <Filter>Header Files\Math</Filter>
+      <Filter>Header Files\Clouds\Math</Filter>
     </ClInclude>
     <ClInclude Include="include\Mat4.h">
-      <Filter>Header Files\Math</Filter>
+      <Filter>Header Files\Clouds\Math</Filter>
     </ClInclude>
     <ClInclude Include="include\Mat3.h">
-      <Filter>Header Files\Math</Filter>
+      <Filter>Header Files\Clouds\Math</Filter>
     </ClInclude>
     <ClInclude Include="include\Quat.h">
-      <Filter>Header Files\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Renderer.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Shader.h">
-      <Filter>Header Files\Auxiliar</Filter>
+      <Filter>Header Files\Clouds\Math</Filter>
     </ClInclude>
     <ClInclude Include="include\Vec4.h">
-      <Filter>Header Files\Math</Filter>
+      <Filter>Header Files\Clouds\Math</Filter>
     </ClInclude>
     <ClInclude Include="include\Vec2.h">
-      <Filter>Header Files\Math</Filter>
+      <Filter>Header Files\Clouds\Math</Filter>
     </ClInclude>
     <ClInclude Include="include\Vec3.h">
-      <Filter>Header Files\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Window.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Material.h">
-      <Filter>Header Files\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Mesh.h">
-      <Filter>Header Files\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Model.h">
-      <Filter>Header Files\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="include\OBJLoader.h">
-      <Filter>Header Files\Auxiliar</Filter>
+      <Filter>Header Files\Clouds\Math</Filter>
     </ClInclude>
     <ClInclude Include="include\MathUtils.h">
-      <Filter>Header Files\Math</Filter>
+      <Filter>Header Files\Clouds\Math</Filter>
     </ClInclude>
-    <ClInclude Include="include\SceneManager.h">
-      <Filter>Header Files\SceneRelated</Filter>
+    <ClInclude Include="include\Application.h">
+      <Filter>Header Files\LegacyCode</Filter>
     </ClInclude>
-    <ClInclude Include="include\SceneNode.h">
-      <Filter>Header Files\SceneRelated</Filter>
+    <ClInclude Include="include\Window.h">
+      <Filter>Header Files\LegacyCode</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Renderer.h">
+      <Filter>Header Files\LegacyCode</Filter>
     </ClInclude>
     <ClInclude Include="include\OpenGLError.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="include\StringUtils.h">
-      <Filter>Header Files\NotBeingUsed</Filter>
+      <Filter>Header Files\LegacyCode</Filter>
     </ClInclude>
     <ClInclude Include="include\Timer.h">
-      <Filter>Header Files\NotBeingUsed</Filter>
+      <Filter>Header Files\LegacyCode</Filter>
     </ClInclude>
-    <ClInclude Include="include\stb_image.h">
-      <Filter>Header Files\NotOurs</Filter>
+    <ClInclude Include="include\Entity.h">
+      <Filter>Header Files\LegacyCode</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Keyboard.h">
+      <Filter>Header Files\LegacyCode</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OBJLoader.h">
+      <Filter>Header Files\LegacyCode</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Shader.h">
+      <Filter>Header Files\LegacyCode</Filter>
+    </ClInclude>
+    <ClInclude Include="include\StringUtils.h">
+      <Filter>Header Files\LegacyCode</Filter>
     </ClInclude>
     <ClInclude Include="include\Texture.h">
-      <Filter>Header Files\Auxiliar</Filter>
+      <Filter>Header Files\LegacyCode</Filter>
     </ClInclude>
     <ClInclude Include="include\Quad.h">
-      <Filter>Header Files\Objects\SpecificObject</Filter>
+      <Filter>Header Files\LegacyCode</Filter>
     </ClInclude>
-    <ClInclude Include="include\SkyBox.h">
-      <Filter>Header Files\Objects\SpecificObject</Filter>
+    <ClInclude Include="include\Material.h">
+      <Filter>Header Files\LegacyCode</Filter>
     </ClInclude>
-    <ClInclude Include="RenderTarget.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="include\Mesh.h">
+      <Filter>Header Files\LegacyCode</Filter>
     </ClInclude>
-    <ClInclude Include="include\imgui.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="include\Model.h">
+      <Filter>Header Files\LegacyCode</Filter>
     </ClInclude>
-    <ClInclude Include="include\imconfig.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="include\SceneManager.h">
+      <Filter>Header Files\LegacyCode</Filter>
     </ClInclude>
-    <ClInclude Include="include\imgui_internal.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\stb_rect_pack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\stb_textedit.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\stb_truetype.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\EditorGUI.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\imgui_GLFW.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Simulation\SimManager.h">
-      <Filter>Header Files\SimulationManager</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Simulation\Cloud.h">
-      <Filter>Header Files\SimulationManager</Filter>
+    <ClInclude Include="include\SceneNode.h">
+      <Filter>Header Files\LegacyCode</Filter>
     </ClInclude>
     <ClInclude Include="src\Simulation\SimData.h">
-      <Filter>Header Files\SimulationManager</Filter>
+      <Filter>Header Files\Clouds\Automata&amp;Data</Filter>
     </ClInclude>
-    <ClInclude Include="src\Simulation\RenderTools.h">
-      <Filter>Header Files\SimulationManager</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Simulation\SOIL.h">
-      <Filter>Source Files\SimulationManager</Filter>
+    <ClInclude Include="src\Simulation\SimManager.h">
+      <Filter>Header Files\Clouds\Automata&amp;Data</Filter>
     </ClInclude>
     <ClInclude Include="src\Simulation\CloudRenderManager.h">
-      <Filter>Header Files\SimulationManager</Filter>
+      <Filter>Header Files\Clouds\RenderStuff</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Camera.h">
+      <Filter>Header Files\Clouds\RenderStuff</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulation\Cloud.h">
+      <Filter>Header Files\Clouds\Automata&amp;Data</Filter>
     </ClInclude>
     <ClInclude Include="src\Simulation\Cube.h">
-      <Filter>Header Files\SimulationManager</Filter>
+      <Filter>Header Files\Clouds\RenderStuff</Filter>
     </ClInclude>
     <ClInclude Include="src\Simulation\Shader2.h">
-      <Filter>Header Files\SimulationManager</Filter>
+      <Filter>Header Files\Clouds\RenderStuff</Filter>
     </ClInclude>
-    <ClInclude Include="src\Simulation\Camera2.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="RenderTarget.h">
+      <Filter>Header Files\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulation\SOIL.h">
+      <Filter>Source Files\Other</Filter>
     </ClInclude>
     <ClInclude Include="include\LightShafts.h">
       <Filter>Header Files</Filter>

@@ -18,7 +18,6 @@ public:
 	unsigned int tex_id;
 
 	bool generateRTTexture();
-	bool loadTexture2D(std::string& filepath, bool generateMipMaps = true);
 
 	void bind(unsigned int unit);
 	void releaseTexture();

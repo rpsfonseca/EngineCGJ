@@ -2,22 +2,23 @@
 
 #include <iostream>
 
-#include "RenderTools.h"
 #include "Cube.h"
 /*
-#include "Globals.h"
 #include "Slider.h"
 
 */
-CloudRenderManager::CloudRenderManager() :
-	windowTitle("Real-timeish Cloud Renderer"),
-	nearPlane(0.001f),
-	farPlane(15000.0f),
-	fieldOfView(75.0f),
-	tanFOV(tan(fieldOfView / 2.0f / 360.0f * 2.0f * 3.14f)),
-	showVRC(false)
+
+
+
+CloudRenderManager::CloudRenderManager() :	windowTitle("CGJ - Final Delivery"), 
+											nearPlane(0.001f), farPlane(100.0f), 
+											fieldOfView(75.0f), 
+											tanFOV(tan(fieldOfView / 2.0f / 360.0f * 2.0f * 3.14f)),
+											showVRC(false)
 {
 	camera = Camera(math::Vec3(0.0f, 0.5f, 0.5f), math::Vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
+	perspectiveProjection = math::Mat4::perspective(fieldOfView, (float)1400.0 / (float)700.0, nearPlane, farPlane);
+
 };
 
 bool CloudRenderManager::initialize(const int gridX, const int gridY, const int gridZ) {
@@ -30,9 +31,7 @@ bool CloudRenderManager::initialize(const int gridX, const int gridY, const int 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3 );
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3 );
 	glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE );
-	/*
-	*/
-	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE); // not resizable
 	
 	window = glfwCreateWindow(1400, 700, windowTitle, NULL, NULL);
 	if (!window) {
@@ -42,8 +41,6 @@ bool CloudRenderManager::initialize(const int gridX, const int gridY, const int 
 
 	glfwMakeContextCurrent(window);
 
-
-
 	// Initialize GLEW
 	glewExperimental = GL_TRUE;
 	GLenum err = glewInit();
@@ -52,8 +49,6 @@ bool CloudRenderManager::initialize(const int gridX, const int gridY, const int 
 			glewGetErrorString(err) << "\n";
 		return false;
 	}
-	// Ignore the OpenGL error (1280) that glewInit() causes
-	glGetError();
 
 	std::cout << "Running OpenGL version " << glGetString(GL_VERSION) << "\n";
 
@@ -108,10 +103,6 @@ bool CloudRenderManager::initialize(const int gridX, const int gridY, const int 
 
 	//defineGUILayout(guiShaderProgram);
 
-	// Initialize the camera and the projetion matrices
-	//camera.initialize(gridX, gridY, gridZ);
-	perspectiveProjection = math::Mat4::perspective(fieldOfView,(float)1400.0 / (float)700.0 ,nearPlane, farPlane);
-
 	interpolatedData = new float **[gridX];
 	for (int i = 0; i != gridX; ++i) {
 		interpolatedData[i] = new float*[gridY];
@@ -144,30 +135,22 @@ bool CloudRenderManager::initialize(const int gridX, const int gridY, const int 
 
 void CloudRenderManager::defineRaycasterLayout(const GLuint raycasterShaderProgram) {
 
-	GLint posAttrib = glGetAttribLocation(raycasterShaderProgram,
-		"cubeVert");
+	GLint posAttrib = glGetAttribLocation(raycasterShaderProgram,"cubeVert");
 	glEnableVertexAttribArray(posAttrib);
-	glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE,
-		3 * sizeof(float), 0);
-
+	glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
 }
 
 void CloudRenderManager::defineGUILayout(const GLuint guiShaderProgram) {
 
 	GLint texAttrib = glGetAttribLocation(guiShaderProgram, "coord");
 	glEnableVertexAttribArray(texAttrib);
-	glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float),
-		0);
+	glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float),0);
 
 }
 
 void CloudRenderManager::draw(const SimData& data, std::mutex& simMutex, const double time) {
 	static int counter = 0, frames = 0;
 	static double fps = 0;
-	// Update the camera
-	//camera.updateCameraVectors();
-	/*rightButtonUpdates();
-	arrowUpdates();*/
 
 	// Clear the screen with background (sky) color
 	//glClearColor(67 / 256.0f, 128 / 256.0f, 183 / 256.0f, 1.0f);
@@ -209,8 +192,7 @@ void CloudRenderManager::draw(const SimData& data, std::mutex& simMutex, const d
 
 }
 
-void CloudRenderManager::interpolateCloudData(const SimData & data,
-	const double time) {
+void CloudRenderManager::interpolateCloudData(const SimData & data, const double time) {
 
 	int x = data.getGridLength();
 	int y = data.getGridWidth();
@@ -223,22 +205,22 @@ void CloudRenderManager::interpolateCloudData(const SimData & data,
 	for (int i = 0; i < x; ++i)
 		for (int j = 0; j < y; ++j)
 			for (int k = 0; k < z; ++k)
-				if (data.prevDen[i][j][k] > 0.0f)
+				if (data.prevDen[i][j][k] > 0.0f) {
 					// Lineary interpolate the density
-					interpolatedData[i][j][k] = data.prevDen[i][j][k] + relDiff
-					* (data.nextDen[i][j][k] - data.prevDen[i][j][k]);
-				else
+					interpolatedData[i][j][k] = data.prevDen[i][j][k] + relDiff * (data.nextDen[i][j][k] - data.prevDen[i][j][k]);
+				}
+				else {
 					interpolatedData[i][j][k] = 0.0f;
+				}
 }
 
 // Shade clouds by performing volume ray casting
-void CloudRenderManager::renderRayCastingClouds(const SimData & data,
-	const double time) {
+void CloudRenderManager::renderRayCastingClouds(const SimData & data, const double time) {
 
 	glBindVertexArray(VAOs[0]);
 	glUseProgram(raycasterShaderProgram);
 	setUniform("view", camera.getViewMatrix());
-	setUniform("viewInverse", camera.getViewMatrix()); //inverting it in shader
+	setUniform("viewInverse", camera.getViewMatrix()); //inverting this in shader
 	setUniform("proj", perspectiveProjection);
 	setUniform("tanFOV", tanFOV);
 	setUniform("screenSize", math::Vec2(1400.0,700.0));
@@ -247,7 +229,6 @@ void CloudRenderManager::renderRayCastingClouds(const SimData & data,
 	setUniform("far", farPlane);
 
 	glDisable(GL_CULL_FACE);
-	//glEnable( GL_DEPTH_TEST );
 
 	int x = data.getGridLength();
 	int y = data.getGridWidth();
@@ -265,8 +246,7 @@ void CloudRenderManager::renderRayCastingClouds(const SimData & data,
 
 	// Fill the data into 3D texture. A texture cell includes only one
 	// component (GL_RED = density, float). 
-	glTexImage3D(GL_TEXTURE_3D, 0, GL_R32F, x, y, z, 0, GL_RED,
-		GL_FLOAT, texData);
+	glTexImage3D(GL_TEXTURE_3D, 0, GL_R32F, x, y, z, 0, GL_RED,GL_FLOAT, texData);
 
 	delete[] texData;
 
@@ -316,28 +296,9 @@ void CloudRenderManager::rightButtonUpdates() {
 			double newMouseX, newMouseY;
 			glfwGetCursorPos(window, &newMouseX, &newMouseY);
 
-			double diffX = newMouseX - prevMouseX + 1;
+			double diffX = newMouseX - prevMouseX;
 			double diffY = newMouseY - prevMouseY;
-			camera.processMouseMovement(diffX, 0.0f);
-	//		math::Vec3 transVec = v4tov3(camera.lookAtPoint);
-	//		math::Mat4 translateMatrix = math::Mat4::TranslationMatrix(-transVec);
-	//		math::Mat4 minusTranslateMatrix = math::Mat4::TranslationMatrix(transVec);
-
-	//		// Difference in X - rotate around up vector in lookAt point
-	//		if (diffX) {
-	//			math::Vec3 rotAxis = v4tov3(camera.upAxis);
-	//			math::Mat4 rotMatrix = math::Mat4::RotationMatrixFromAxisAngle(rotAxis, diffX*rotationFactor);
-	//			camera.cameraPoint = minusTranslateMatrix * rotMatrix * translateMatrix * camera.cameraPoint;
-	//		}
-
-	//		// Difference in Y - rotate around DxY vector in lookAt point
-	//		// (D is a vector between camera and look-at point)
-	//		if (diffY) {
-	//			math::Vec3 rotAxis = math::Vec3::CrossProduct(v4tov3(camera.upAxis), v4tov3(camera.cameraPoint) - v4tov3(camera.lookAtPoint));
-	//			math::Mat4 rotMatrix = math::Mat4::RotationMatrixFromAxisAngle(rotAxis, diffY*rotationFactor);
-	//			camera.cameraPoint = minusTranslateMatrix * rotMatrix * translateMatrix * camera.cameraPoint;
-	//		}
-
+			camera.processMouseMovement(diffX, diffY);
 		}
 
 		prevMousePressed = true;
@@ -351,37 +312,147 @@ void CloudRenderManager::rightButtonUpdates() {
 
 void CloudRenderManager::arrowUpdates(float deltaTime)
 {
-	//float arrowFactor = 0.2f;
-	//math::Vec4 normD = (v4tov3(camera.cameraPoint) - v4tov3(camera.lookAtPoint)).Normalize();
-	//math::Vec4 normDY = v3tov4(math::Vec3::CrossProduct(v4tov3(normD), v4tov3(camera.upAxis)));
+
 	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS || glfwGetKey(window, 'W') == GLFW_PRESS)
 	{
-		//camera.cameraPoint = math::Vec4((camera.cameraPoint.x - normD.x)*arrowFactor, (camera.cameraPoint.y - normD.y)*arrowFactor, (camera.cameraPoint.z - normD.z)*arrowFactor, (camera.cameraPoint.w - normD.w)*arrowFactor);
-	//	camera.lookAtPoint = math::Vec4((camera.lookAtPoint.x - normD.x)*arrowFactor, (camera.lookAtPoint.y - normD.y)*arrowFactor, (camera.lookAtPoint.z - normD.z)*arrowFactor, (camera.lookAtPoint.w - normD.w)*arrowFactor);
 		camera.processKeyboard(Camera_Movement::FORWARD, deltaTime);
 	}
 	if (glfwGetKey(window,GLFW_KEY_DOWN) == GLFW_PRESS || glfwGetKey(window, 'S') == GLFW_PRESS)
 	{
-	//	camera.cameraPoint = math::Vec4((camera.cameraPoint.x + normD.x)*arrowFactor, (camera.cameraPoint.y + normD.y)*arrowFactor, (camera.cameraPoint.z + normD.z)*arrowFactor, (camera.cameraPoint.w + normD.w)*arrowFactor);
-	//	camera.lookAtPoint = math::Vec4((camera.lookAtPoint.x + normD.x)*arrowFactor, (camera.lookAtPoint.y + normD.y)*arrowFactor, (camera.lookAtPoint.z + normD.z)*arrowFactor, (camera.lookAtPoint.w + normD.w)*arrowFactor);
 		camera.processKeyboard(Camera_Movement::BACKWARD, deltaTime);
 	}
 	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS || glfwGetKey(window, 'A') == GLFW_PRESS)
 	{
-	//	camera.cameraPoint = math::Vec4((camera.cameraPoint.x + normDY.x)*arrowFactor, (camera.cameraPoint.y + normDY.y)*arrowFactor, (camera.cameraPoint.z + normDY.z)*arrowFactor, (camera.cameraPoint.w + normDY.w)*arrowFactor);
-	//	camera.lookAtPoint = math::Vec4((camera.lookAtPoint.x + normDY.x)*arrowFactor, (camera.lookAtPoint.y + normDY.y)*arrowFactor, (camera.lookAtPoint.z + normDY.z)*arrowFactor, (camera.lookAtPoint.w + normDY.w)*arrowFactor);
 		camera.processKeyboard(Camera_Movement::LEFT, deltaTime);
 	}
 	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS || glfwGetKey(window, 'D') == GLFW_PRESS)
 	{
-	//	camera.cameraPoint = math::Vec4((camera.cameraPoint.x - normDY.x)*arrowFactor, (camera.cameraPoint.y - normDY.y)*arrowFactor, (camera.cameraPoint.z - normDY.z)*arrowFactor, (camera.cameraPoint.w - normDY.w)*arrowFactor);
-	//	camera.lookAtPoint = math::Vec4((camera.lookAtPoint.x - normDY.x)*arrowFactor, (camera.lookAtPoint.y - normDY.y)*arrowFactor, (camera.lookAtPoint.z - normDY.z)*arrowFactor, (camera.lookAtPoint.w - normDY.w)*arrowFactor);
 		camera.processKeyboard(Camera_Movement::RIGHT, deltaTime);
 	}
 
-	//// We might have changed w components with vector additions and 
-	//// subtractions. Reset w to 1
-	//camera.cameraPoint.w = 1.0f;
-	//camera.lookAtPoint.w = 1.0f;
 }
 
+//----------------------------------------------
+
+//#include "SOIL.h"
+
+GLuint VBOs[5];
+GLuint numVBOs;
+GLuint EBOs[5];
+GLuint numEBOs;
+
+// Need to pass sizeof(vertices) as well because of dynamic arrays
+GLuint createVBO(float vertices[], int size) {
+
+	glGenBuffers(1, &VBOs[numVBOs]);
+	glBindBuffer(GL_ARRAY_BUFFER, VBOs[numVBOs]);
+	glBufferData(GL_ARRAY_BUFFER, size, vertices,
+		GL_STATIC_DRAW);
+	return VBOs[numVBOs++];
+
+}
+
+GLuint createEBO(int elements[], int size) {
+
+	glGenBuffers(1, &EBOs[numEBOs]);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBOs[numEBOs]);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, elements,
+		GL_STATIC_DRAW);
+	return EBOs[numEBOs++];
+
+}
+
+void deleteVBOs() {
+	glDeleteBuffers(numVBOs, VBOs);
+}
+
+void deleteEBOs() {
+	glDeleteBuffers(numEBOs, EBOs);
+}
+void initializeTextures(GLuint volumeTexture, GLuint * planarTextures) {
+	// We need one 3D texture and several 2D textures
+
+	/*
+	// Generate the 2D textures using pngs
+	glGenTextures(3, planarTextures);
+
+	int width, height;
+	unsigned char* image;
+
+	const char* files[] = { "SliderHandle.png", "SliderIndicator.png", "SliderNormal.png" };
+	for (int i = 0; i < 2; ++i) {
+	image = SOIL_load_image(files[i], &width, &height, 0, SOIL_LOAD_RGBA);
+	glBindTexture(GL_TEXTURE_2D, planarTextures[i]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
+	GL_UNSIGNED_BYTE, image);
+	SOIL_free_image_data(image);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	}
+
+	*/
+	// Generate the 3D textures
+	glGenTextures(1, &volumeTexture);
+	glBindTexture(GL_TEXTURE_3D, volumeTexture);
+
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glGenerateMipmap(GL_TEXTURE_3D);
+
+}
+
+void deleteTextures(GLuint volumeTexture, GLuint* planarTextures) {
+	glDeleteTextures(1, &volumeTexture);
+	glDeleteTextures(2, planarTextures);
+}
+
+void setUniform(const std::string name, const float value) {
+
+	GLuint program;
+	glGetIntegerv(GL_CURRENT_PROGRAM, (GLint*)&program);
+	GLint location = glGetUniformLocation(program, name.c_str());
+	glUniform1f(location, value);
+
+}
+
+
+
+void setUniform(const std::string name, const math::Vec2 vector) {
+
+	GLuint program;
+	glGetIntegerv(GL_CURRENT_PROGRAM, (GLint*)&program);
+	GLint location = glGetUniformLocation(program, name.c_str());
+	glUniform2f(location, vector.x, vector.y);
+
+}
+
+void setUniform(const std::string name, const math::Vec3 vector) {
+
+	GLuint program;
+	glGetIntegerv(GL_CURRENT_PROGRAM, (GLint*)&program);
+	GLint location = glGetUniformLocation(program, name.c_str());
+	glUniform3f(location, vector.x, vector.y, vector.z);
+
+}
+
+void setUniform(const std::string name, const math::Mat4 matrix) {
+
+	GLuint program;
+	glGetIntegerv(GL_CURRENT_PROGRAM, (GLint*)&program);
+	GLint location = glGetUniformLocation(program, name.c_str());
+	glUniformMatrix4fv(location, 1, GL_FALSE, matrix.matrix);
+}
+
+float convertXToRelative(const int x) {
+	return (static_cast<float>(x) / 1400.0) * 2.0f - 1.0f;
+}
+
+float convertYToRelative(const int y) {
+	return -((static_cast<float>(y) / 700.0) * 2.0f - 1.0f);
+}

@@ -32,9 +32,7 @@ SimManager::SimManager(const int x, const int y, const int z) :
 
 void SimManager::stepAsych(SimData* data) {
 
-	simulateCellular(data->hum,
-		data->act, data->cld, data->fAc, data->distSize);
-
+	simulateCellular(data->hum, data->act, data->cld, data->fAc, data->distSize);
 	calculateDensity(data->cld, data->workDen);
 
 }
@@ -65,7 +63,7 @@ void SimManager::simulateCellular(bool *** hum, bool *** act,
 	// Move the clouds
 	for (Cloud & c : clouds)
 	{
-		//c.move( 0.02f, 1.5f );
+		c.move( 0.02f, 1.5f );
 	}
 
 	// Recalculate
@@ -84,8 +82,7 @@ void SimManager::simulateCellular(bool *** hum, bool *** act,
 
 				// Compute clouds first, since they don't influence act/hum
 				cld[i][j][k] = cld[i][j][k] || act[i][j][k];
-				bool newAct = !act[i][j][k] && hum[i][j][k] &&
-					fAc[i][j][k];
+				bool newAct = !act[i][j][k] && hum[i][j][k] && fAc[i][j][k];
 				hum[i][j][k] = hum[i][j][k] && !act[i][j][k];
 				act[i][j][k] = newAct;
 
@@ -103,16 +100,12 @@ void SimManager::simulateCellular(bool *** hum, bool *** act,
 
 				// Cloud extinction
 				if (cld[i][j][k])
-					if ((float)(gen() % randomResolution) / randomResolution <
-						scaledPCldExt)
+					if ((float)(gen() % randomResolution) / randomResolution < scaledPCldExt)
 						cld[i][j][k] = false;
-				if ((float)(gen() % randomResolution) / randomResolution <
-					scaledPHumExt)
+				if ((float)(gen() % randomResolution) / randomResolution < scaledPHumExt)
 					hum[i][j][k] = true;
-				if ((float)(gen() % randomResolution) / randomResolution <
-					scaledPActExt)
+				if ((float)(gen() % randomResolution) / randomResolution < scaledPActExt)
 					act[i][j][k] = true;
-
 			}
 
 }
@@ -224,7 +217,6 @@ void computeFAc(bool *** fAc, bool *** act, int i, int j, int k,
 // Compute the distance of point x1 y1 z1 from point x2 y2 z2 (second norm)
 float distFrom(int x1, int y1, int z1, int x2, int y2, int z2) {
 
-	return static_cast<float>(sqrt(
-		(x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2) + (z1 - z2)*(z1 - z2)));
+	return static_cast<float>(sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2) + (z1 - z2)*(z1 - z2)));
 
 }

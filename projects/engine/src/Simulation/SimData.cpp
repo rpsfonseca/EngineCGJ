@@ -3,9 +3,7 @@
 #include <math.h>
 #include <time.h>
 
-SimData::SimData(const int gridLength, const int gridWidth,
-	const int gridHeight)
-	: x(gridLength), y(gridWidth), z(gridHeight) {
+SimData::SimData(const int gridLength, const int gridWidth, const int gridHeight): x(gridLength), y(gridWidth), z(gridHeight) {
 
 	// Allocation of grids
 	hum = new bool **[gridLength];

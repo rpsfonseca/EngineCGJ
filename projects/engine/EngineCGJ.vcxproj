@@ -22,12 +22,7 @@
     <ClCompile Include="RenderTarget.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\Camera.cpp" />
-    <ClCompile Include="src\EditorGUI.cpp" />
     <ClCompile Include="src\Entity.cpp" />
-    <ClCompile Include="src\imgui.cpp" />
-    <ClCompile Include="src\imgui_demo.cpp" />
-    <ClCompile Include="src\imgui_draw.cpp" />
-    <ClCompile Include="src\imgui_GLFW.cpp" />
     <ClCompile Include="src\Keyboard.cpp" />
     <ClCompile Include="src\LightShafts.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -45,15 +40,12 @@
     <ClCompile Include="src\SceneManager.cpp" />
     <ClCompile Include="src\SceneNode.cpp" />
     <ClCompile Include="src\Shader.cpp" />
-    <ClCompile Include="src\Simulation\Camera2.cpp" />
     <ClCompile Include="src\Simulation\Cloud.cpp" />
     <ClCompile Include="src\Simulation\CloudRenderManager.cpp" />
     <ClCompile Include="src\Simulation\Cube.cpp" />
-    <ClCompile Include="src\Simulation\RenderTools.cpp" />
     <ClCompile Include="src\Simulation\Shader2.cpp" />
     <ClCompile Include="src\Simulation\SimData.cpp" />
     <ClCompile Include="src\Simulation\SimManager.cpp" />
-    <ClCompile Include="src\SkyBox.cpp" />
     <ClCompile Include="src\StringUtils.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\Timer.cpp" />
@@ -65,12 +57,7 @@
   <ItemGroup>
     <ClInclude Include="include\Application.h" />
     <ClInclude Include="include\Camera.h" />
-    <ClInclude Include="include\EditorGUI.h" />
     <ClInclude Include="include\Entity.h" />
-    <ClInclude Include="include\imconfig.h" />
-    <ClInclude Include="include\imgui.h" />
-    <ClInclude Include="include\imgui_GLFW.h" />
-    <ClInclude Include="include\imgui_internal.h" />
     <ClInclude Include="include\Keyboard.h" />
     <ClInclude Include="include\LightShafts.h" />
     <ClInclude Include="include\Mat3.h" />
@@ -87,11 +74,6 @@
     <ClInclude Include="include\SceneManager.h" />
     <ClInclude Include="include\SceneNode.h" />
     <ClInclude Include="include\Shader.h" />
-    <ClInclude Include="include\SkyBox.h" />
-    <ClInclude Include="include\stb_image.h" />
-    <ClInclude Include="include\stb_rect_pack.h" />
-    <ClInclude Include="include\stb_textedit.h" />
-    <ClInclude Include="include\stb_truetype.h" />
     <ClInclude Include="include\StringUtils.h" />
     <ClInclude Include="include\Texture.h" />
     <ClInclude Include="include\Timer.h" />
@@ -101,11 +83,9 @@
     <ClInclude Include="include\Window.h" />
     <ClInclude Include="Mat2.h" />
     <ClInclude Include="RenderTarget.h" />
-    <ClInclude Include="src\Simulation\Camera2.h" />
     <ClInclude Include="src\Simulation\Cloud.h" />
     <ClInclude Include="src\Simulation\CloudRenderManager.h" />
     <ClInclude Include="src\Simulation\Cube.h" />
-    <ClInclude Include="src\Simulation\RenderTools.h" />
     <ClInclude Include="src\Simulation\Shader2.h" />
     <ClInclude Include="src\Simulation\SimData.h" />
     <ClInclude Include="src\Simulation\SimManager.h" />
