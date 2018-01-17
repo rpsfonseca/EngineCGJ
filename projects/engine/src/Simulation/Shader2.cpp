@@ -18,13 +18,17 @@ std::string loadShader(const char * const filename) {
 
 }
 
-GLuint Shader2::createFromFile(const char * const vertexFile,
-	const char * const fragmentFile) {
+GLuint Shader2::createFromFile(const char * const vertexFile, const char * const fragmentFile) {
+
+	std::string path_vs = SHADER2PATH;
+	path_vs.append(vertexFile);
+	std::string path_fs = SHADER2PATH;
+	path_fs.append(fragmentFile);
 
 	// Load shader source from file
-	std::string vstring = loadShader(vertexFile);
+	std::string vstring = loadShader(path_vs.c_str());
 	const char* vertexShaderSource = vstring.c_str();
-	std::string fstring = loadShader(fragmentFile);
+	std::string fstring = loadShader(path_fs.c_str());
 	const char* fragmentShaderSource = fstring.c_str();
 
 	// Create and compile the vertex shader

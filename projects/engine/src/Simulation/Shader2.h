@@ -3,6 +3,8 @@
 
 #include "GL\glew.h"
 
+#define SHADER2PATH "../../projects/engine/resources/shaders/"
+
 
 class Shader2 {
 public:
