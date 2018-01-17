@@ -29,6 +29,7 @@
     <ClCompile Include="src\imgui_draw.cpp" />
     <ClCompile Include="src\imgui_GLFW.cpp" />
     <ClCompile Include="src\Keyboard.cpp" />
+    <ClCompile Include="src\LightShafts.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Mat3.cpp" />
     <ClCompile Include="src\Mat4.cpp" />
@@ -71,6 +72,7 @@
     <ClInclude Include="include\imgui_GLFW.h" />
     <ClInclude Include="include\imgui_internal.h" />
     <ClInclude Include="include\Keyboard.h" />
+    <ClInclude Include="include\LightShafts.h" />
     <ClInclude Include="include\Mat3.h" />
     <ClInclude Include="include\Mat4.h" />
     <ClInclude Include="include\Material.h" />
