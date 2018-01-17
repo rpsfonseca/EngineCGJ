@@ -397,7 +397,7 @@ void initializeTextures(GLuint volumeTexture, GLuint * planarTextures) {
 	const char* files[] = { "SliderHandle.png", "SliderIndicator.png", "SliderNormal.png" };
 	for (int i = 0; i < 3; ++i) {
 		image = stbi_load(files[i], &width, &height, &channels, STBI_rgb);
-		if (image) std::cout << files[i] << std::endl;
+		if (image) std::cout << files[i] << " -- " << image << std::endl;
 		glBindTexture(GL_TEXTURE_2D, planarTextures[i]);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,GL_UNSIGNED_BYTE, image);
 		stbi_image_free(image);
