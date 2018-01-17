@@ -196,7 +196,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Console</SubSystem>
       <AdditionalLibraryDirectories>$(SolutionDir)\..\dependencies\Soil\;$(SolutionDir)\..\dependencies\glfw\lib;$(SolutionDir)..\dependencies\glew\lib\Release\x64;$(SolutionDir)..\dependencies\freeglut\lib\x64</AdditionalLibraryDirectories>
-      <AdditionalDependencies>;SOIL.lib;glew32.lib;freeglut.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>;glew32.lib;freeglut.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
