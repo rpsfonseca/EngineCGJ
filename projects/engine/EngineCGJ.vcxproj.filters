@@ -40,17 +40,11 @@
     <Filter Include="Header Files\Math">
       <UniqueIdentifier>{d30436a1-1841-46cc-835a-b43c979718cd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\NotBeingUsed">
-      <UniqueIdentifier>{9e188369-064e-4b29-b056-545510be791c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Objects">
       <UniqueIdentifier>{eeadce4a-ceee-4089-8e4a-bf81f9a1e90a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\SceneRelated">
       <UniqueIdentifier>{cf1fa361-1e17-4f9a-b51e-d36d249071f7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\NotOurs">
-      <UniqueIdentifier>{4cf1a532-a242-40b8-8b5e-58862d73a895}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Objects\SpecificObjects">
       <UniqueIdentifier>{37639aa8-7e0a-4ca0-ab85-8ab80dd36cb9}</UniqueIdentifier>
@@ -63,9 +57,6 @@
     </Filter>
     <Filter Include="Header Files\SimulationManager">
       <UniqueIdentifier>{0f8bec09-efbb-4841-8850-40673d3da2d9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Render">
-      <UniqueIdentifier>{02d643b5-ff17-469a-9eed-826c9701c913}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -147,9 +138,6 @@
     <ClCompile Include="src\Quad.cpp">
       <Filter>Source Files\Objects\SpecificObjects</Filter>
     </ClCompile>
-    <ClCompile Include="src\SkyBox.cpp">
-      <Filter>Source Files\Objects\SpecificObjects</Filter>
-    </ClCompile>
     <ClCompile Include="RenderTarget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -178,9 +166,6 @@
     </ClInclude>
     <ClInclude Include="include\Camera.h">
       <Filter>Header Files\SceneRelated</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Entity.h">
-      <Filter>Header Files\NotBeingUsed</Filter>
     </ClInclude>
     <ClInclude Include="include\Keyboard.h">
       <Filter>Header Files\Auxiliar</Filter>
@@ -239,22 +224,10 @@
     <ClInclude Include="include\OpenGLError.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="include\StringUtils.h">
-      <Filter>Header Files\NotBeingUsed</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Timer.h">
-      <Filter>Header Files\NotBeingUsed</Filter>
-    </ClInclude>
-    <ClInclude Include="include\stb_image.h">
-      <Filter>Header Files\NotOurs</Filter>
-    </ClInclude>
     <ClInclude Include="include\Texture.h">
       <Filter>Header Files\Auxiliar</Filter>
     </ClInclude>
     <ClInclude Include="include\Quad.h">
-      <Filter>Header Files\Objects\SpecificObject</Filter>
-    </ClInclude>
-    <ClInclude Include="include\SkyBox.h">
       <Filter>Header Files\Objects\SpecificObject</Filter>
     </ClInclude>
     <ClInclude Include="RenderTarget.h">
@@ -280,6 +253,15 @@
     </ClInclude>
     <ClInclude Include="src\Simulation\Shader2.h">
       <Filter>Header Files\SimulationManager</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Timer.h">
+      <Filter>Header Files\Auxiliar</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Entity.h">
+      <Filter>Header Files\Auxiliar</Filter>
+    </ClInclude>
+    <ClInclude Include="include\StringUtils.h">
+      <Filter>Header Files\Auxiliar</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
