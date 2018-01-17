@@ -17,6 +17,7 @@ CloudRenderManager::CloudRenderManager() :	windowTitle("CGJ - Final Delivery"),
 {
 	camera = Camera(math::Vec3(0.0f, 0.5f, 0.5f), math::Vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
 	perspectiveProjection = math::Mat4::perspective(fieldOfView, (float)1400.0 / (float)700.0, nearPlane, farPlane);
+	lightShaftsToggled = true;
 };
 
 bool CloudRenderManager::initialize(const int gridX, const int gridY, const int gridZ) {
@@ -167,15 +168,21 @@ void CloudRenderManager::draw(const SimData& data, std::mutex& simMutex, const d
 
 	interpolateCloudData(data, time);
 
-	lightShafts->StartDrawingNormal();
+	if (lightShaftsToggled)
+	{
+		lightShafts->StartDrawingNormal();
+	}
 	renderRayCastingClouds(data, time, false);
-	lightShafts->StartDrawingOcclusion();
-	renderRayCastingClouds(data, time, true);
-	lightShafts->DrawLightShafts(camera);
+	if (lightShaftsToggled)
+	{
+		lightShafts->StartDrawingOcclusion();
+		renderRayCastingClouds(data, time, true);
+		lightShafts->DrawLightShafts(camera);
+	}
 
 	simMutex.unlock();
 
-	//glUseProgram(raycasterShaderProgram);
+	glUseProgram(guiShaderProgram);
 	controls.update();
 
 	if (showVRC) renderGUI();
@@ -191,6 +198,11 @@ void CloudRenderManager::draw(const SimData& data, std::mutex& simMutex, const d
 
 	rightButtonUpdates();
 	arrowUpdates(1.0f/fps);
+
+	if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
+	{
+		lightShaftsToggled = lightShaftsToggled == true ? false : true;
+	}
 
 	// Check for errors
 	GLint glErr = glGetError();

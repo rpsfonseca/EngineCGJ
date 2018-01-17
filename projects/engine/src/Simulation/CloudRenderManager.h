@@ -102,6 +102,8 @@ public:
 	inline void changeShowVRC() { showVRC = !showVRC; };
 
 	LightShafts* lightShafts;
+
+	bool lightShaftsToggled;
 private:
 	const char * windowTitle;
 
