@@ -45,7 +45,7 @@ public:
 	Slider(const std::string text, const std::string shaderProperty,
 		const float min, const float max, const float intial,
 		const float sliderPositionY);
-	void update();
+	void update(GLFWwindow*);
 	void render(const GLuint * textures);
 	float getPercentage();
 private:
@@ -62,7 +62,7 @@ private:
 
 class GUIControls {
 public:
-	void update();
+	void update(GLFWwindow*);
 	void render(const GLuint * textures);
 	void addSlider(const std::string text, const std::string shaderProperty,
 		const float min, const float max, const float initial);
