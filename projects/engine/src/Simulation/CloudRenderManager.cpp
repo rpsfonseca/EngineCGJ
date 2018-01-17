@@ -396,10 +396,25 @@ void initializeTextures(GLuint volumeTexture, GLuint * planarTextures) {
 
 	const char* files[] = { "SliderHandle.png", "SliderIndicator.png", "SliderNormal.png" };
 	for (int i = 0; i < 3; ++i) {
-		image = stbi_load(files[i], &width, &height, &channels, STBI_rgb);
-		if (image) std::cout << files[i] << " --> " << image << std::endl;
+		image = stbi_load(files[i], &width, &height, &channels, STBI_rgb_alpha);
+		if (image)
+		{
+			std::cout << files[i] << " --> " << image << std::endl;
+		}
+		else
+		{
+			std::cout << "Texture failed to load at path: " << files[i] << std::endl;
+			stbi_image_free(image);
+		}
+		GLenum format;
+		if (channels == 1)
+			format = GL_RED;
+		else if (channels == 3)
+			format = GL_RGB;
+		else if (channels == 4)
+			format = GL_RGBA;
 		glBindTexture(GL_TEXTURE_2D, planarTextures[i]);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,GL_UNSIGNED_BYTE, image);
+		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format,GL_UNSIGNED_BYTE, image);
 		stbi_image_free(image);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -407,7 +422,6 @@ void initializeTextures(GLuint volumeTexture, GLuint * planarTextures) {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	}
-
 
 	// Generate the 3D textures
 	glGenTextures(1, &volumeTexture);
