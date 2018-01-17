@@ -60,9 +60,7 @@ bool IntersectRayBox(Ray r, out float t0, out float t1) {
 }
 
 void main() {
-	vec3 color;
-	if(occlusion == false)
-	{
+		vec3 color;
 		mat4 viewInverse2 = inverse(viewInverse);
 		
 		// Direction in view splace
@@ -112,8 +110,15 @@ void main() {
 
 				// Add color depending on cell density and attenuation
 				if( cellDensity > 0.001 ) {
+					if (occlusion == false)
+					{
 					color = mix( color, mix ( shadeColor, lightColor, attenuation ), 
 				         cellDensity * colorMultiplier);
+				    }
+				    else
+				    {
+				    	color = vec3(0.0,0.0,0.0);
+				    }
 				}
 			}
 
@@ -123,12 +128,8 @@ void main() {
 		outColor = vec4( color, 255 );
 		vec4 debug = vec4( viewRay.direction, 1.0 );
 		outColor = mix( outColor, debug, 0.0 );
-	}
-	else
-	{
-		color = vec3(0.0, 0.0, 0.0);
-	}
-	outColor = vec4( color, 255 );
 	
+	/*outColor = vec4( color, 255 );*/
+
 	/*outColor = vec4(1.0,0.0,0.0,1.0);*/
 }
