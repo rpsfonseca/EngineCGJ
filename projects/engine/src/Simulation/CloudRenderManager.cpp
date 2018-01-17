@@ -182,7 +182,7 @@ void CloudRenderManager::draw(const SimData& data, std::mutex& simMutex, const d
 
 	simMutex.unlock();
 
-	glUseProgram(guiShaderProgram);
+	glUseProgram(raycasterShaderProgram);
 	controls.update(window);
 
 	if (showVRC) renderGUI();
@@ -544,6 +544,7 @@ void Slider::update(GLFWwindow* window) {
 		buttonPressed = false;
 	}
 	else if (bigExpr) {
+		std::cout << "dibfdhfjhd" << std::endl;
 		buttonPressed = true;
 		buttonPosition.X = relativeMouseX;
 		float minPos = sliderPosition.X - slider_consts::sliderLength / 2;
@@ -557,6 +558,7 @@ void Slider::update(GLFWwindow* window) {
 
 		currentPercentage = (buttonPosition.X - minPos) / (maxPos - minPos);
 		setUniform(shaderProperty, min + currentPercentage * (max - min));
+		OpenGLError::checkOpenGLError("ERROR: before tex");
 	}
 
 }
