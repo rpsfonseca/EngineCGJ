@@ -10,6 +10,7 @@
 #include "Mat4.h"
 #include "Vec3.h"
 #include "Vec2.h"
+#include "LightShafts.h"
 
 
 
@@ -99,6 +100,8 @@ public:
 	void draw(const SimData& data, std::mutex& dataMutex,
 		const double frameTime);
 	inline void changeShowVRC() { showVRC = !showVRC; };
+
+	LightShafts* lightShafts;
 private:
 	const char * windowTitle;
 
@@ -121,7 +124,7 @@ private:
 	void interpolateCloudData(const SimData& data,
 		const double frameTime);
 	void renderRayCastingClouds(const SimData& data,
-		const double frameTime);
+		const double frameTime, bool occlusion);
 	void renderGUI();
 	void defineRaycasterLayout(const GLuint shaderProgram);
 	void defineGUILayout(const GLuint shaderProgram);
@@ -140,6 +143,7 @@ private:
 	math::Vec3 sunPosition;
 	math::Mat4 sunTransformation;
 };
+
 
 //------------------------------------------------------------------
 #endif

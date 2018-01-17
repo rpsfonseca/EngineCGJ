@@ -8,6 +8,7 @@ uniform float tanFOV;
 uniform vec3 eyePosition;
 uniform vec2 screenSize;
 uniform mat4 viewInverse;
+uniform bool occlusion;
 
 float near;
 float far;
@@ -59,68 +60,75 @@ bool IntersectRayBox(Ray r, out float t0, out float t1) {
 }
 
 void main() {
-
-	mat4 viewInverse2 = inverse(viewInverse);
-	
-	// Direction in view splace
-	vec3 viewDirection;
-	viewDirection.xy = 2.0f * gl_FragCoord.xy / screenSize - 1.0f;
-	viewDirection.z = -1.0f / tanFOV;
-	// FOV corresponds to Y axis, scale x accordingly
-	viewDirection.x *= screenSize.x / screenSize.y;
-
-	// Transform direction to world	space
-	viewDirection = ( viewInverse2 * vec4( viewDirection, 0 ) ).xyz;
-	
-	Ray viewRay = Ray( eyePosition, normalize( viewDirection ) );	
-
-	vec3 color = vec3( 67/256.0, 128/256.0, 183/256.0 );
-	vec3 pos = viewRay.origin;
-	float tmin, tmax;
-	IntersectRayBox( viewRay, tmin, tmax );
-	pos += tmax * viewRay.direction;
-	float viewStepSize = ( tmax - tmin ) / viewSamples;
-
-	vec3 shadeColor = vec3( shadeColorRed, shadeColorGreen, shadeColorBlue );
-	vec3 lightColor = vec3( lightColorRed, lightColorGreen, lightColorBlue );
-	vec3 sunPosition = vec3( sunPositionX, sunPositionY, sunPositionZ );
-
-	for( int i = 0; i < viewSamples; ++i ) {
+	vec3 color;
+	if(occlusion == false)
+	{
+		mat4 viewInverse2 = inverse(viewInverse);
 		
-		float cellDensity = texture( density, pos ).x;
-		if( cellDensity > densityCutoff ) {
-			
-			cellDensity *= densityFactor;
-		
-			Ray lightRay = Ray( pos, normalize( sunPosition ) );
+		// Direction in view splace
+		vec3 viewDirection;
+		viewDirection.xy = 2.0f * gl_FragCoord.xy / screenSize - 1.0f;
+		viewDirection.z = -1.0f / tanFOV;
+		// FOV corresponds to Y axis, scale x accordingly
+		viewDirection.x *= screenSize.x / screenSize.y;
 
-			float attenuation = 1;
-			vec3 lightPos = pos;
+		// Transform direction to world	space
+		viewDirection = ( viewInverse2 * vec4( viewDirection, 0 ) ).xyz;
+		
+		Ray viewRay = Ray( eyePosition, normalize( viewDirection ) );	
+
+		color = vec3( 67/256.0, 128/256.0, 183/256.0 );
+		vec3 pos = viewRay.origin;
+		float tmin, tmax;
+		IntersectRayBox( viewRay, tmin, tmax );
+		pos += tmax * viewRay.direction;
+		float viewStepSize = ( tmax - tmin ) / viewSamples;
+
+		vec3 shadeColor = vec3( shadeColorRed, shadeColorGreen, shadeColorBlue );
+		vec3 lightColor = vec3( lightColorRed, lightColorGreen, lightColorBlue );
+		vec3 sunPosition = vec3( sunPositionX, sunPositionY, sunPositionZ );
+
+		for( int i = 0; i < viewSamples; ++i ) {
 			
-			// Calculate light attenuation
-			for( int j = 0; j < lightSamples; ++j ) {
-				// Closer texture reads contribute more
-				attenuation *= 1 - 
-					texture( density, lightPos ).x	
-					* attenuationFactor				 
-					* ( 1 - j / lightSamples );
-				lightPos += lightRay.direction * lightStepSize;
+			float cellDensity = texture( density, pos ).x;
+			if( cellDensity > densityCutoff ) {
+				
+				cellDensity *= densityFactor;
+			
+				Ray lightRay = Ray( pos, normalize( sunPosition ) );
+
+				float attenuation = 1;
+				vec3 lightPos = pos;
+				
+				// Calculate light attenuation
+				for( int j = 0; j < lightSamples; ++j ) {
+					// Closer texture reads contribute more
+					attenuation *= 1 - 
+						texture( density, lightPos ).x	
+						* attenuationFactor				 
+						* ( 1 - j / lightSamples );
+					lightPos += lightRay.direction * lightStepSize;
+				}
+
+				// Add color depending on cell density and attenuation
+				if( cellDensity > 0.001 ) {
+					color = mix( color, mix ( shadeColor, lightColor, attenuation ), 
+				         cellDensity * colorMultiplier);
+				}
 			}
 
-			// Add color depending on cell density and attenuation
-			if( cellDensity > 0.001 ) {
-				color = mix( color, mix ( shadeColor, lightColor, attenuation ), 
-			         cellDensity * colorMultiplier);
-			}
+			pos -= viewRay.direction * viewStepSize;
+
 		}
-
-		pos -= viewRay.direction * viewStepSize;
-
+		outColor = vec4( color, 255 );
+		vec4 debug = vec4( viewRay.direction, 1.0 );
+		outColor = mix( outColor, debug, 0.0 );
 	}
-
+	else
+	{
+		color = vec3(0.0, 0.0, 0.0);
+	}
 	outColor = vec4( color, 255 );
-	vec4 debug = vec4( viewRay.direction, 1.0 );
-	outColor = mix( outColor, debug, 0.0 );
 	
 	/*outColor = vec4(1.0,0.0,0.0,1.0);*/
 }

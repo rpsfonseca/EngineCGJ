@@ -138,6 +138,12 @@ void Shader::setMat4(const GLchar* field, const math::Mat4& mat)
 	glUniformMatrix4fv(loc, 1, GL_FALSE, &mat.matrix[0]);
 }
 
+void Shader::setVec2(const GLchar* field, const math::Vec2& vector)
+{
+	GLint loc = glGetUniformLocation(shaderID, field);
+	glUniform2f(loc, vector.x, vector.y);
+}
+
 void Shader::setVec3(const GLchar* field, const math::Vec3& vector)
 {
 	GLint loc = glGetUniformLocation(shaderID, field);

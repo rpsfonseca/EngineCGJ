@@ -3,6 +3,7 @@
 #include "GL\glew.h"
 
 #include "Mat4.h"
+#include "Vec2.h"
 #include "Vec3.h"
 
 #include <string>
@@ -33,6 +34,7 @@ public:
 	void setInteger(const GLchar* field, GLint value);
 	void setFloat(const GLchar* field, GLfloat value);
 	void setMat4(const GLchar* field, const math::Mat4& matrix);
+	void setVec2(const GLchar* field, const math::Vec2& vector);
 	void setVec3(const GLchar* field, const math::Vec3& vector);
 	void setVec4(const GLchar* field, const math::Vec4& vector);
 

@@ -15,7 +15,6 @@ CloudRenderManager::CloudRenderManager() :	windowTitle("CGJ - Final Delivery"),
 {
 	camera = Camera(math::Vec3(0.0f, 0.5f, 0.5f), math::Vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
 	perspectiveProjection = math::Mat4::perspective(fieldOfView, (float)1400.0 / (float)700.0, nearPlane, farPlane);
-
 };
 
 bool CloudRenderManager::initialize(const int gridX, const int gridY, const int gridZ) {
@@ -126,6 +125,11 @@ bool CloudRenderManager::initialize(const int gridX, const int gridY, const int 
 	controls.addSlider("Light Samples", "lightSamplesF", 1.0f, 64.0f, 64.0f);
 	
 
+	lightShafts = new LightShafts(shaderManager.createFromFile("light_shafts_vs.glsl", "light_shafts_fs.glsl"));
+	// Update the buffer object of the lightshafts effect
+	// (because parameters can be changed)
+	lightShafts->UpdateUniformBuffer();
+
 	return true;
 
 }
@@ -158,7 +162,11 @@ void CloudRenderManager::draw(const SimData& data, std::mutex& simMutex, const d
 
 	interpolateCloudData(data, time);
 
-	renderRayCastingClouds(data, time);
+	lightShafts->StartDrawingNormal();
+	renderRayCastingClouds(data, time, false);
+	lightShafts->StartDrawingOcclusion();
+	renderRayCastingClouds(data, time, true);
+	lightShafts->DrawLightShafts(camera);
 
 	simMutex.unlock();
 
@@ -212,7 +220,8 @@ void CloudRenderManager::interpolateCloudData(const SimData & data, const double
 				}
 }
 
-void CloudRenderManager::renderRayCastingClouds(const SimData & data, const double time) {
+
+void CloudRenderManager::renderRayCastingClouds(const SimData & data, const double time, bool occlusion) {
 
 	glBindVertexArray(VAOs[0]);
 	glUseProgram(raycasterShaderProgram);
@@ -224,6 +233,7 @@ void CloudRenderManager::renderRayCastingClouds(const SimData & data, const doub
 	setUniform("eyePosition", camera.Position);
 	setUniform("near", nearPlane);
 	setUniform("far", farPlane);
+	setUniform("occlusion", occlusion);
 
 	glDisable(GL_CULL_FACE);
 
@@ -274,6 +284,7 @@ void CloudRenderManager::terminate() {
 	shaderManager.terminate();
 	glDeleteVertexArrays(2, VAOs);
 	deleteTextures(volumeTexture, planarTextures);
+	delete lightShafts;
 
 	// Terminate GLFW
 	glfwTerminate();
@@ -406,6 +417,15 @@ void initializeTextures(GLuint volumeTexture, GLuint * planarTextures) {
 void deleteTextures(GLuint volumeTexture, GLuint* planarTextures) {
 	glDeleteTextures(1, &volumeTexture);
 	glDeleteTextures(2, planarTextures);
+}
+
+void setUniform(const std::string name, const bool value) {
+
+	GLuint program;
+	glGetIntegerv(GL_CURRENT_PROGRAM, (GLint*)&program);
+	GLint location = glGetUniformLocation(program, name.c_str());
+	glUniform1i(location, value);
+
 }
 
 void setUniform(const std::string name, const float value) {
