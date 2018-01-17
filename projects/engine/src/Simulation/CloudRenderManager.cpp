@@ -7,6 +7,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
+#include "OpenGLError.h"
+
 CloudRenderManager::CloudRenderManager() :	windowTitle("CGJ - Final Delivery"), 
 											nearPlane(0.001f), farPlane(100.0f), 
 											fieldOfView(75.0f), 
@@ -54,6 +56,7 @@ bool CloudRenderManager::initialize(const int gridX, const int gridY, const int 
 	guiShaderProgram = shaderManager.createFromFile("GUIshader.vert", "GUIShader.frag");
 
 	initializeTextures(volumeTexture, planarTextures);
+	OpenGLError::checkOpenGLError("ERROR: init tex");
 
 	glGenVertexArrays(2, VAOs);
 
@@ -74,6 +77,7 @@ bool CloudRenderManager::initialize(const int gridX, const int gridY, const int 
 	//Define the GUI VAO
 	glBindVertexArray(VAOs[1]);
 	glBindTexture(GL_TEXTURE_2D, planarTextures[0]);
+	OpenGLError::checkOpenGLError("ERROR: planar tex");
 
 	float vertices[] = {
 		//   Pos, Texcoords
@@ -107,7 +111,8 @@ bool CloudRenderManager::initialize(const int gridX, const int gridY, const int 
 	}
 
 	// Initialize the sliders
-	
+	glUseProgram(guiShaderProgram);
+	OpenGLError::checkOpenGLError("ERROR: before tex");
 	controls.addSlider("Density Cutoff", "densityCutoff", 0.0f, 0.2f, 0.06f);
 	controls.addSlider("Density Factor", "densityFactor", 0.0f, 1.0f, 0.35f);
 	controls.addSlider("Color Multiplier", "colorMultiplier", 1.0f, 10.0f, 5.0f);
@@ -124,7 +129,7 @@ bool CloudRenderManager::initialize(const int gridX, const int gridY, const int 
 	controls.addSlider("View Samples", "viewSamplesF", 1.0f, 1024.0f, 128.0f);
 	controls.addSlider("Light Samples", "lightSamplesF", 1.0f, 64.0f, 64.0f);
 	
-
+	glUseProgram(0);
 	lightShafts = new LightShafts(shaderManager.createFromFile("light_shafts_vs.glsl", "light_shafts_fs.glsl"));
 	// Update the buffer object of the lightshafts effect
 	// (because parameters can be changed)
@@ -264,7 +269,9 @@ void CloudRenderManager::renderRayCastingClouds(const SimData & data, const doub
 void CloudRenderManager::renderGUI() {
 
 	glBindVertexArray(VAOs[1]);
+	OpenGLError::checkOpenGLError("ERROR: vao tex");
 	glUseProgram(guiShaderProgram);
+	OpenGLError::checkOpenGLError("ERROR: use tex");
 
 	glDisable(GL_DEPTH_TEST);
 	glDepthMask(GL_FALSE);
@@ -273,6 +280,7 @@ void CloudRenderManager::renderGUI() {
 
 	// Render the controls in orthographic mode
 	controls.render(planarTextures);
+	OpenGLError::checkOpenGLError("ERROR: render tex");
 
 	glDisable(GL_BLEND);
 	glDepthMask(GL_TRUE);
@@ -487,7 +495,10 @@ Slider::Slider(	const std::string text, const std::string shaderProperty,
 					buttonPosition(Position(sliderPosition.X + slider_consts::sliderLength * (-0.5f + currentPercentage), sliderPosition.Y)),
 					buttonPressed(false)
 {
+
+	OpenGLError::checkOpenGLError("ERROR: before tex");
 	setUniform(shaderProperty, min + currentPercentage * (max - min));
+	OpenGLError::checkOpenGLError("ERROR: controls tex");
 }
 
 void Slider::update() {
@@ -531,6 +542,7 @@ void Slider::render(const GLuint * textures) {
 	setUniform("sizeX", (buttonPosition.X - minPos) / 2);
 	setUniform("sizeY", slider_consts::sliderHeight);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	OpenGLError::checkOpenGLError("ERROR: render 1 tex");
 
 	// Render the right part of the slider
 	glBindTexture(GL_TEXTURE_2D, textures[2]);
@@ -540,6 +552,7 @@ void Slider::render(const GLuint * textures) {
 	setUniform("sizeX", (maxPos - buttonPosition.X) / 2);
 	setUniform("sizeY", slider_consts::sliderHeight);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	OpenGLError::checkOpenGLError("ERROR: render 2 tex");
 
 	// Render the handle
 	glBindTexture(GL_TEXTURE_2D, textures[0]);
@@ -548,6 +561,7 @@ void Slider::render(const GLuint * textures) {
 	setUniform("sizeX", slider_consts::buttonSize);
 	setUniform("sizeY", slider_consts::buttonSize);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	OpenGLError::checkOpenGLError("ERROR: render 3 tex");
 
 }
 
