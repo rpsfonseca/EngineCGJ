@@ -1,0 +1,229 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Application.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Entity.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Keyboard.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mat4.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mat3.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Quat.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulation\CloudRenderManager.cpp">
+      <Filter>Cloud</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LightShafts.cpp">
+      <Filter>GodRays</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulation\Cube.cpp">
+      <Filter>Cloud</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Material.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MathUtils.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mesh.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Model.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OBJLoader.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Quad.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SceneManager.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SceneNode.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Shader.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Texture.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Timer.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vec2.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vec3.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vec4.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\StringUtils.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Camera.cpp">
+      <Filter>Aux</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OpenGLError.cpp">
+      <Filter>Aux</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderTarget.cpp">
+      <Filter>Aux</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulation\Shader2.cpp">
+      <Filter>Aux</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulation\Cloud.cpp">
+      <Filter>Cloud\Automata</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulation\SimManager.cpp">
+      <Filter>Cloud\Automata</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Simulation\SimData.cpp">
+      <Filter>Cloud\Automata</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Application.h">
+      <Filter>LegacyCode</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Entity.h">
+      <Filter>LegacyCode</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Keyboard.h">
+      <Filter>LegacyCode</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Mat4.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Mat3.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Mat2.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MathUtils.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Quat.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulation\CloudRenderManager.h">
+      <Filter>Cloud</Filter>
+    </ClInclude>
+    <ClInclude Include="include\LightShafts.h">
+      <Filter>GodRays</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulation\Cube.h">
+      <Filter>Cloud</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Material.h">
+      <Filter>LegacyCode</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Mesh.h">
+      <Filter>LegacyCode</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Model.h">
+      <Filter>LegacyCode</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OBJLoader.h">
+      <Filter>LegacyCode</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Quad.h">
+      <Filter>LegacyCode</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SceneManager.h">
+      <Filter>LegacyCode</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SceneNode.h">
+      <Filter>LegacyCode</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Shader.h">
+      <Filter>LegacyCode</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Texture.h">
+      <Filter>LegacyCode</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Timer.h">
+      <Filter>LegacyCode</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vec2.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vec3.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vec4.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\StringUtils.h">
+      <Filter>LegacyCode</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Window.h">
+      <Filter>LegacyCode</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Renderer.h">
+      <Filter>LegacyCode</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Camera.h">
+      <Filter>Aux</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OpenGLError.h">
+      <Filter>Aux</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderTarget.h">
+      <Filter>Aux</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulation\Shader2.h">
+      <Filter>Aux</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulation\Cloud.h">
+      <Filter>Cloud\Automata</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulation\SimManager.h">
+      <Filter>Cloud\Automata</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Simulation\SimData.h">
+      <Filter>Cloud\Automata</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="LegacyCode">
+      <UniqueIdentifier>{f15c5877-7670-4731-8193-f01969b6e8e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{cac21025-4c3b-4138-89f0-89da3f7f0789}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Cloud">
+      <UniqueIdentifier>{b0a4f3d4-1e05-46d6-8fd3-2de49a737560}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GodRays">
+      <UniqueIdentifier>{06d8aeab-a5bc-49ff-bfaf-a9117f52d847}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Aux">
+      <UniqueIdentifier>{af70fc15-04a0-48c0-a2b4-5ac916769a64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Cloud\Automata">
+      <UniqueIdentifier>{8d79d046-3939-470d-9f1f-0e4ca63fb163}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
