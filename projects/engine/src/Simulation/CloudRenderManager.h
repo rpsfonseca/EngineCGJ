@@ -6,15 +6,91 @@
 #include "SimData.h"
 #include "Camera.h"
 #include <mutex>
-//#include "GUIControls.h"
 #include "Shader2.h"
 #include "Mat4.h"
 #include "Vec3.h"
 #include "Vec2.h"
 #include "LightShafts.h"
 
+
+
 #include "GLFW\glfw3.h"
 
+
+//-----------------------------------------------------------------------
+
+namespace slider_consts {
+	const float sliderLength = 0.30f;
+	const float sliderHeight = 0.008f;
+	const float buttonSize = 0.03f;
+	const float sliderOffsetY = 0.07f;
+	const float sliderPositionX = 0.65f;
+	const float sliderPositionY = 0.90f;
+}
+
+namespace {
+
+	// Hidden in unnamed namespace for internal use
+	struct Position {
+		Position() {};
+		Position(float x, float y) : X(x), Y(y) {};
+		float X;
+		float Y;
+	};
+
+}
+
+class Slider {
+public:
+	Slider(const std::string text, const std::string shaderProperty,
+		const float min, const float max, const float intial,
+		const float sliderPositionY);
+	void update();
+	void render(const GLuint * textures);
+	float getPercentage();
+private:
+	const std::string text;
+	const std::string shaderProperty;
+	const float min;
+	const float max;
+	float currentPercentage;
+	const Position sliderPosition;
+	Position buttonPosition;
+	bool buttonPressed;
+};
+
+
+class GUIControls {
+public:
+	void update();
+	void render(const GLuint * textures);
+	void addSlider(const std::string text, const std::string shaderProperty,
+		const float min, const float max, const float initial);
+private:
+	std::vector<Slider> sliders;
+};
+
+
+//---------------------------------------------------------------------
+
+
+GLuint createVBO(float vertices[], int size);
+GLuint createEBO(int elements[], int size);
+void deleteVBOs();
+void deleteEBOs();
+void initializeTextures(GLuint volumeTexture, GLuint* planarTextures);
+void deleteTextures(GLuint volumeTexture, GLuint* planarTextures);
+void setUniform(const std::string name, const float value);
+void setUniform(const std::string name, const math::Vec2 vector);
+void setUniform(const std::string name, const math::Vec3 vector);
+void setUniform(const std::string name, const math::Mat4 matrix);
+float convertXToRelative(const int x);
+float convertYToRelative(const int y);
+
+
+
+
+//-------------------------------------------------------------
 
 class CloudRenderManager {
 public:
@@ -62,24 +138,12 @@ private:
 	float*** interpolatedData;
 	GLFWwindow* window;
 	Camera camera;
-	//GUIControls controls;
+	GUIControls controls;
 	math::Mat4 perspectiveProjection;
 	math::Vec3 sunPosition;
 	math::Mat4 sunTransformation;
 };
 
-GLuint createVBO(float vertices[], int size);
-GLuint createEBO(int elements[], int size);
-void deleteVBOs();
-void deleteEBOs();
-void initializeTextures(GLuint volumeTexture, GLuint* planarTextures);
-void deleteTextures(GLuint volumeTexture, GLuint* planarTextures);
-void setUniform(const std::string name, const bool value);
-void setUniform(const std::string name, const float value);
-void setUniform(const std::string name, const math::Vec2 vector);
-void setUniform(const std::string name, const math::Vec3 vector);
-void setUniform(const std::string name, const math::Mat4 matrix);
-float convertXToRelative(const int x);
-float convertYToRelative(const int y);
 
+//------------------------------------------------------------------
 #endif

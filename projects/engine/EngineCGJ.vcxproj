@@ -89,7 +89,6 @@
     <ClInclude Include="src\Simulation\Shader2.h" />
     <ClInclude Include="src\Simulation\SimData.h" />
     <ClInclude Include="src\Simulation\SimManager.h" />
-    <ClInclude Include="src\Simulation\SOIL.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -196,8 +195,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>$(SolutionDir)\..\dependencies\glfw\lib;$(SolutionDir)..\dependencies\glew\lib\Release\x64;$(SolutionDir)..\dependencies\freeglut\lib\x64</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32.lib;freeglut.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\..\dependencies\Soil\;$(SolutionDir)\..\dependencies\glfw\lib;$(SolutionDir)..\dependencies\glew\lib\Release\x64;$(SolutionDir)..\dependencies\freeglut\lib\x64</AdditionalLibraryDirectories>
+      <AdditionalDependencies>;SOIL.lib;glew32.lib;freeglut.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
