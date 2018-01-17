@@ -183,7 +183,7 @@ void CloudRenderManager::draw(const SimData& data, std::mutex& simMutex, const d
 	simMutex.unlock();
 
 	glUseProgram(guiShaderProgram);
-	controls.update();
+	controls.update(window);
 
 	if (showVRC) renderGUI();
 
@@ -527,35 +527,38 @@ Slider::Slider(	const std::string text, const std::string shaderProperty,
 	OpenGLError::checkOpenGLError("ERROR: controls tex");
 }
 
-void Slider::update() {
-	/*
-	int newMouseX, newMouseY;
-	//glfwGetMousePos(&newMouseX, &newMouseY);
+void Slider::update(GLFWwindow* window) {
+	double newMouseX, newMouseY;
+	glfwGetCursorPos(window, &newMouseX, &newMouseY);
 
 	float relativeMouseX = convertXToRelative(newMouseX);
 	float relativeMouseY = convertYToRelative(newMouseY);
 
+
+	bool bigExpr =	(relativeMouseX - buttonPosition.X) * (relativeMouseX - buttonPosition.X) + 
+					(relativeMouseY - buttonPosition.Y) * (relativeMouseY - buttonPosition.Y)
+					< slider_consts::buttonSize * slider_consts::buttonSize || buttonPressed;
+
 	// Check if mouse press is on button
-	if (!glfwGetMouseButton(0)) {
+	if (!glfwGetMouseButton(window, 0)) {
 		buttonPressed = false;
 	}
-	else if ((relativeMouseX - buttonPosition.X) * (relativeMouseX - buttonPosition.X)
-		+ (relativeMouseY - buttonPosition.Y) * (relativeMouseY - buttonPosition.Y)
-		< slider_consts::buttonSize * slider_consts::buttonSize || buttonPressed) {
+	else if (bigExpr) {
 		buttonPressed = true;
 		buttonPosition.X = relativeMouseX;
 		float minPos = sliderPosition.X - slider_consts::sliderLength / 2;
 		float maxPos = sliderPosition.X + slider_consts::sliderLength / 2;
-		if (buttonPosition.X <  minPos)
+		if (buttonPosition.X < minPos) {
 			buttonPosition.X = minPos;
-		if (buttonPosition.X > maxPos)
+		}
+		if (buttonPosition.X > maxPos) {
 			buttonPosition.X = maxPos;
+		}
 
 		currentPercentage = (buttonPosition.X - minPos) / (maxPos - minPos);
 		setUniform(shaderProperty, min + currentPercentage * (max - min));
 	}
 
-	*/
 }
 
 void Slider::render(const GLuint * textures) {
@@ -604,9 +607,9 @@ void GUIControls::addSlider(const std::string text, const std::string shaderProp
 	sliders.push_back(slider);
 }
 
-void GUIControls::update() {
+void GUIControls::update(GLFWwindow* window) {
 	for (Slider &s : sliders) {
-		s.update();
+		s.update(window);
 	}
 }
 
